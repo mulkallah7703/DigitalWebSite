@@ -1,0 +1,264 @@
+You are a senior Frontend Engineer, Full-Stack Developer, and expert UI/UX designer.
+
+YOUR TASK:
+Build a COMPLETE, PRODUCTION-READY, MODERN personal portfolio website from A to Z for a software engineer.
+
+Important:
+- Output ONLY CODE inside markdown code blocks, separated by file name comments.
+- Do NOT explain anything unless I ask later.
+- The result must be a fully responsive, modern, beautiful portfolio that I can deploy directly (e.g., on Netlify, Vercel, GitHub Pages).
+
+
+1) GENERAL REQUIREMENTS
+
+- Technology stack: pure HTML5, modern CSS3, and vanilla JavaScript (no React/Angular/Vue).
+- Project structure:
+
+  /index.html
+  /assets/css/style.css
+  /assets/js/main.js
+  /assets/img/  (use placeholder paths; I’ll replace images later)
+
+- Responsive design: fully responsive for mobile, tablet, laptop, and large screens.
+- Design style:
+  - Clean, modern, minimal, premium look.
+  - Combination of a light/dark vibe (e.g., dark background with vibrant accent color).
+  - Use CSS variables for colors and typography to make it easy to customize.
+  - Smooth sections, plenty of whitespace, and elegant spacing.
+
+- Typography:
+  - Use modern Google Fonts (for example: "Poppins" for headings and "Inter" or "Open Sans" for body text).
+  - Define CSS variables for font sizes and weights for consistency.
+
+- Animations & interactions:
+  - Smooth scrolling navigation between sections.
+  - Subtle hover effects on buttons, cards, and links.
+  - Fade-in / slide-up animations when sections enter the viewport (implemented via JavaScript + CSS).
+  - Animated “typing effect” in the hero section for job titles.
+
+- SEO & meta:
+  - Proper <title>, <meta description>, and basic SEO tags.
+  - Open Graph tags (og:title, og:description, og:image, og:url).
+  - Favicon link (I will replace the file later).
+
+
+2) CONTENT & SECTIONS
+
+The portfolio should be a single, elegant one-page layout with these sections in this order:
+
+0. Sticky Header & Navigation
+1. Hero Section (Intro)
+2. About Section
+3. Skills Section
+4. Projects Section
+5. Experience / Timeline Section
+6. Services / What I Do
+7. Testimonials (optional but nice)
+8. Contact Section
+9. Footer
+
+Use IDs for sections for navigation (e.g., #home, #about, #skills, #projects, #experience, #services, #testimonials, #contact).
+
+
+0) HEADER & NAVBAR
+
+- Sticky header that stays at the top when scrolling.
+- Logo on the left (text logo with my name).
+- Navigation links on the right: Home, About, Skills, Projects, Experience, Services, Testimonials, Contact.
+- On mobile:
+  - Use a hamburger menu that opens/closes a slide-down nav.
+  - Implement with JavaScript (no external libraries).
+
+
+1) HERO SECTION (HOME)
+
+- Full viewport height hero.
+- Left side: Text content.
+- Right side: Circular or rounded image placeholder for my profile picture.
+
+Hero content (use placeholders that I can easily edit later):
+
+- Name: [YOUR_FULL_NAME]
+- Main title: "Software Engineer & Digital Entrepreneur"
+- Typing effect for multiple roles, e.g.:
+  - "Full-Stack Developer"
+  - "Prompt Engineer"
+  - "AI & Automation Enthusiast"
+  - "Digital Products Creator"
+
+- Short powerful summary (2–3 lines) that highlights:
+  - Building modern web applications.
+  - Working with AI tools & prompts.
+  - Creating digital products and automations.
+
+- Two main CTA buttons:
+  - "View My Work" → scroll to Projects section.
+  - "Download CV" → link to a placeholder PDF (e.g., assets/cv/my-cv.pdf).
+
+- Small social icons row (GitHub, LinkedIn, X/Twitter, Email) using SVG or icon fonts (if needed use simple inline SVG or text placeholders).
+
+
+2) ABOUT SECTION
+
+- Section title: "About Me".
+- A subheading like: "Who I Am" or "A bit about my journey".
+- A 2–3 paragraph text area where I can talk about myself. Use placeholder text but structured for a software engineer who:
+  - Studies Software Engineering.
+  - Loves AI, robotics, and building digital products.
+  - Works on hackathons, freelance projects, and content creation.
+
+- On the side, include a small “quick info” card or list:
+  - Name
+  - Location
+  - Main role
+  - Years of experience (as “X+ years of coding & projects”)
+  - Email (clickable mailto:[YOUR_EMAIL])
+
+
+3) SKILLS SECTION
+
+- Section title: "Skills".
+- Two or three categories, for example:
+  - "Frontend"
+  - "Backend & Databases"
+  - "Tools & Others"
+
+- For each category, show skills as badges or progress bars.
+  Example skills to include as placeholders:
+  - Frontend: HTML5, CSS3, JavaScript, Bootstrap/Tailwind (as text only), Responsive Design.
+  - Backend: Node.js, Express.js, REST APIs, MySQL, MongoDB.
+  - Tools: Git & GitHub, VS Code, n8n, Prompt Engineering, AI Tools (ChatGPT, Gemini, etc.).
+
+- Use a grid layout that looks modern and clean.
+
+
+4) PROJECTS SECTION
+
+- Section title: "Projects".
+- Subtitle: "Some of my favorite work".
+
+- Display projects as responsive cards (3–6 example cards) with:
+  - Project image placeholder.
+  - Project title.
+  - Short description (1–2 lines).
+  - Tags for technologies used.
+  - Buttons/links: "Live Demo" and "Source Code" (GitHub link).
+
+Example placeholder projects:
+  - "Smart Rescuer AI" – portable emergency assistant device.
+  - "Digital Products Hub" – platform to sell ebooks, prompts, and templates.
+  - "Portfolio Generator" – web app that builds portfolio pages from prompts.
+  - "Study Planner App" – tool for students to organize learning.
+
+Each project card must have a nice hover interaction (scale, shadow, subtle movement).
+
+
+5) EXPERIENCE / TIMELINE SECTION
+
+- Section title: "Experience & Education".
+- Use a vertical timeline with entries such as:
+  - Year + Title + Place + short description.
+  - Examples (as placeholders):
+    - "2023 – Present: Software Engineering Student – [YOUR UNIVERSITY]"
+    - "Freelance Web Developer – Remote"
+    - "Participant in multiple hackathons in Saudi Arabia & MENA region".
+
+- Timeline should look visual (dots + vertical line + cards).
+
+
+6) SERVICES SECTION
+
+- Section title: "What I Do".
+- Cards for services such as:
+  - "Web Development"
+  - "Digital Products & Ebooks"
+  - "Prompt Engineering & Automations"
+  - "Tech Content & Training"
+
+- Each card includes:
+  - Icon or simple graphic (can be just an emoji placeholder or SVG shape).
+  - Service name.
+  - Short description (2–3 lines) focusing on value to the client.
+
+
+7) TESTIMONIALS SECTION
+
+- Section title: "Testimonials".
+- Add 2–3 testimonial cards with:
+  - Client name (placeholder).
+  - Role (e.g., “Client from Upwork”).
+  - Short feedback quote.
+- Style them with cards and maybe a slight tilt/hover effect.
+
+
+8) CONTACT SECTION
+
+- Section title: "Contact Me".
+- Subtitle: "Let’s build something together".
+
+- Two parts:
+  1) Short text + contact details (email, maybe WhatsApp/phone placeholder, location).
+  2) Contact form with fields:
+     - Name
+     - Email
+     - Subject
+     - Message
+     - Submit button.
+
+- Form behavior:
+  - Use JavaScript to validate (required fields, valid email format).
+  - On submit, prevent actual sending but show a styled success message (e.g., a green alert that says “Your message has been sent! (This is a demo; integrate with backend later)”).
+
+
+9) FOOTER
+
+- Simple footer with:
+  - © [CURRENT_YEAR] [YOUR_NAME]. All rights reserved.
+  - Small links: Home, Projects, Contact (anchor links).
+  - Maybe a tiny note like: "Built with ❤️ using HTML, CSS & JS".
+
+
+3) DESIGN & UX DETAILS
+
+- Use a maximum width container so the content does not stretch too wide on large screens.
+- Use a consistent spacing system (e.g., multiples of 8px).
+- All buttons should have:
+  - Border radius (slightly rounded).
+  - Hover state (change background, slightly scale up, box-shadow).
+- Use a main accent color (e.g., a blue or purple) defined as a CSS variable: --accent-color.
+- Define light and dark sections alternating to make the page visually interesting.
+
+
+4) JAVASCRIPT FUNCTIONALITY
+
+In /assets/js/main.js implement:
+
+1) Mobile menu toggle:
+   - Toggle 'open' class for nav on click of hamburger icon.
+
+2) Smooth scrolling:
+   - When clicking on nav links, smoothly scroll to target sections.
+
+3) Active nav link on scroll:
+   - As the user scrolls, highlight the current section in the nav.
+
+4) Intersection animations:
+   - Use IntersectionObserver (or scroll event) to add 'visible' class to sections and cards when they appear in viewport.
+
+5) Typing effect:
+   - Implement a simple typing effect that loops through an array of titles (e.g., ["Full-Stack Developer", "Prompt Engineer", "Digital Products Creator"]).
+
+6) Contact form:
+   - Basic client-side validation.
+   - Show success or error messages below the form.
+
+
+5) OUTPUT FORMAT
+
+VERY IMPORTANT:
+
+- Output the code in this exact structure using markdown code fences:
+
+  ```html
+  <!-- index.html -->
+  ... full HTML code here ...

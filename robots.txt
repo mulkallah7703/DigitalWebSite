@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Sitemap: https://yourstore.com/sitemap.xml
+
+# لا تمنع محركات البحث من المحتوى الأساسي؛ تأكد من تحديث رابط sitemap ليتوافق مع النطاق الفعلي.

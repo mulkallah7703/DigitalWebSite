@@ -1,0 +1,98 @@
+You are an expert full-stack architect + AI systems engineer + UI/UX designer.
+
+Your task now:
+Build a complete project called **AutoBlog AI** — an automated AI blogging system that generates, schedules, publishes and manages SEO-optimized articles automatically.
+
+The generated output must include:
+1) System Requirements  
+2) Tech Stack Suggestions (multiple options)  
+3) Folder Structure for the entire project  
+4) Complete backend code  
+5) Complete frontend code with modern UI  
+6) AI content generation engine  
+7) SEO engine + meta tags + keywords auto-detection  
+8) Dashboard for controlling everything  
+9) Database design + schema + models  
+10) API endpoints + documentation  
+11) How to deploy (step-by-step)  
+12) Cron job for automation & scheduling  
+13) Admin features + publishing settings  
+14) Auto thumbnails generator using AI  
+15) Social media auto-share module  
+16) Optional: Multi-language article output  
+
+Your output must generate real usable code — not theoretical.
+
+
+SYSTEM DESCRIPTION to build:
+
+AutoBlog AI = Full automated blog generator.
+
+Features Required:
+- Generate blog posts automatically with adjustable writing style.
+- Every article must include Headlines, Sub-headlines, Metadata, Tags, Images.
+- AI auto research → produce unique text & SEO long-form content.
+- Add feature: Fetch news APIs & rewrite into original article.
+- Save articles into database + display history.
+- Offer "Instant Generate" + "Generate Daily" + "Scheduled Posting".
+- Generate Featured Image using AI Image API API (Midjourney/DALL-E/StableDiffusion).
+- One-Click publish to:
+    * Blogger
+    * WordPress
+    * Medium
+    * LinkedIn Articles (if possible)
+- Admin panel with analytics: number of posts, impressions, scheduled tasks.
+
+
+FRONTEND REQUIREMENTS:
+Design UI that feels modern, clean, beautiful.
+Use TailwindCSS + React or Next.js (preferred).
+Pages Required:
+1) Login/Register (JWT)
+2) Dashboard (Stats, Scheduled tasks, Quick-Generate button)
+3) Create Article (manual + AI autogen)
+4) AI Article Generator Page
+5) Article Preview Page
+6) Schedule Manager
+7) Settings (API Keys, Preferred writing tone, Length, Language)
+
+
+BACKEND REQUIREMENTS:
+Use Node.js + Express OR Django,
+Include modules:
+- User Auth + JWT
+- Article generator using OpenAI API
+- Auto SEO optimizer
+- Scheduler (cron jobs)
+- API to publish articles externally
+- MongoDB or PostgreSQL recommended
+
+
+DELIVERABLES YOU MUST OUTPUT NOW:
+(Organize clearly with clean formatting)
+
+1) Full Tech Stack Recommendation
+2) Project Architecture Diagram (text form)
+3) Database Schema (tables/collections)
+4) Folder Tree Structure
+5) Backend server.js (full code)
+6) Article AI generator module (full code)
+7) Frontend pages (full code)
+8) Dashboards + UI Components code
+9) API integration examples for publishing
+10) Deployment steps on VPS / Vercel / Netlify
+11) Example cron script for daily posting
+12) Example .ENV variables template
+
+
+Final Output Format:
+Produce code in chunks, labeled clearly:
+(Part A) Architecture  
+(Part B) Backend Code  
+(Part C) Frontend Code  
+(Part D) Database  
+(Part E) Deployment Guide  
+
+Generate everything at high quality — production ready — no placeholders.
+
+Now generate the full solution.

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[YOUR_FULL_NAME] | Software Engineer Portfolio</title>
+  <meta name="description" content="Portfolio of [YOUR_FULL_NAME], software engineer building modern web apps, AI automations, and digital products.">
+  <meta name="author" content="[YOUR_FULL_NAME]">
+  <meta name="keywords" content="software engineer, full-stack developer, portfolio, AI, prompts, digital products">
+  <meta property="og:title" content="[YOUR_FULL_NAME] | Software Engineer Portfolio">
+  <meta property="og:description" content="Building modern web apps, AI automations, and digital products.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://your-portfolio-url.com">
+  <meta property="og:image" content="assets/img/og-image.jpg">
+  <link rel="icon" type="image/png" href="assets/img/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container header__inner">
+      <div class="logo">[YOUR_FULL_NAME]</div>
+      <nav class="nav" id="nav-menu">
+        <a href="#home" class="nav__link active">Home</a>
+        <a href="#about" class="nav__link">About</a>
+        <a href="#skills" class="nav__link">Skills</a>
+        <a href="#projects" class="nav__link">Projects</a>
+        <a href="#experience" class="nav__link">Experience</a>
+        <a href="#services" class="nav__link">Services</a>
+        <a href="#testimonials" class="nav__link">Testimonials</a>
+        <a href="#contact" class="nav__link">Contact</a>
+      </nav>
+      <button class="nav__toggle" id="nav-toggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="container hero__inner">
+        <div class="hero__content reveal">
+          <p class="eyebrow">Hello, I'm</p>
+          <h1 class="hero__title">[YOUR_FULL_NAME]</h1>
+          <h2 class="hero__subtitle">Software Engineer &amp; Digital Entrepreneur</h2>
+          <p class="typing">I am a <span id="typing-text"></span><span class="cursor">|</span></p>
+          <p class="hero__summary">
+            Building modern web applications with delightful UX, leveraging AI tools &amp; prompts to automate workflows,
+            and crafting digital products that solve real problems.
+          </p>
+          <div class="hero__cta">
+            <a href="#projects" class="btn btn--primary">View My Work</a>
+            <a href="assets/cv/my-cv.pdf" class="btn btn--ghost" target="_blank" rel="noopener">Download CV</a>
+          </div>
+          <div class="socials">
+            <a href="https://github.com/yourusername" aria-label="GitHub" class="socials__link">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill="currentColor" d="M12 .5C5.648.5.5 5.648.5 12c0 5.085 3.292 9.387 7.863 10.907.575.103.787-.25.787-.556 0-.274-.01-1-.016-1.963-3.2.695-3.878-1.544-3.878-1.544-.523-1.33-1.278-1.684-1.278-1.684-1.044-.714.079-.699.079-.699 1.153.081 1.76 1.184 1.76 1.184 1.027 1.76 2.695 1.252 3.351.958.103-.743.402-1.252.731-1.54-2.554-.29-5.238-1.277-5.238-5.684 0-1.256.448-2.283 1.183-3.088-.119-.29-.513-1.454.113-3.03 0 0 .965-.309 3.164 1.18a11.03 11.03 0 0 1 2.881-.388c.977.004 1.962.132 2.881.388 2.198-1.49 3.162-1.18 3.162-1.18.628 1.576.234 2.74.115 3.03.737.805 1.182 1.832 1.182 3.088 0 4.42-2.688 5.39-5.251 5.676.413.355.781 1.052.781 2.122 0 1.532-.014 2.767-.014 3.142 0 .309.207.666.793.553C20.213 21.383 23.5 17.082 23.5 12 23.5 5.648 18.352.5 12 .5Z"/>
+              </svg>
+            </a>
+            <a href="https://www.linkedin.com/in/yourusername" aria-label="LinkedIn" class="socials__link">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill="currentColor" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.446-2.136 2.94v5.666H9.352V9h3.414v1.561h.049c.476-.9 1.637-1.85 3.37-1.85 3.606 0 4.274 2.373 4.274 5.459v6.282ZM5.337 7.433a2.065 2.065 0 1 1 0-4.13 2.065 2.065 0 0 1 0 4.13ZM3.56 20.452h3.553V9H3.56v11.452ZM22.225 0H1.771C.792 0 0 .775 0 1.729v20.542C0 23.225.792 24 1.771 24h20.451C23.2 24 24 23.225 24 22.271V1.729C24 .775 23.2 0 22.222 0h.003Z"/>
+              </svg>
+            </a>
+            <a href="https://twitter.com/yourusername" aria-label="Twitter" class="socials__link">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill="currentColor" d="M21.543 7.104c.015.214.015.428.015.642 0 6.552-4.987 14.105-14.105 14.105-2.803 0-5.408-.82-7.594-2.23.397.046.779.061 1.19.061a9.938 9.938 0 0 0 6.15-2.12 4.968 4.968 0 0 1-4.64-3.445c.305.046.61.076.93.076.443 0 .886-.061 1.3-.168a4.958 4.958 0 0 1-3.974-4.872v-.061c.66.366 1.427.594 2.242.625A4.95 4.95 0 0 1 1.64 4.842a14.067 14.067 0 0 0 10.216 5.184 5.605 5.605 0 0 1-.122-1.137 4.958 4.958 0 0 1 8.574-3.39 9.769 9.769 0 0 0 3.147-1.19 4.93 4.93 0 0 1-2.18 2.72 9.884 9.884 0 0 0 2.86-.764 10.553 10.553 0 0 1-2.592 2.676Z"/>
+              </svg>
+            </a>
+            <a href="mailto:[YOUR_EMAIL]" aria-label="Email" class="socials__link">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill="currentColor" d="M20 4H4C2.897 4 2.01 4.897 2.01 6L2 18c0 1.103.887 2 1.99 2h16c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2Zm0 4.236-8 5.01-8-5.01V6l8 5.01L20 6v2.236Z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div class="hero__image reveal">
+          <div class="hero__photo">
+            <img src="assets/img/profile-placeholder.jpg" alt="Profile picture placeholder">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="container section__inner about">
+        <div class="section__header">
+          <p class="eyebrow">Who I Am</p>
+          <h3 class="section__title">About Me</h3>
+        </div>
+        <div class="about__content">
+          <div class="about__text reveal">
+            <p>
+              I am a software engineering student passionate about merging code with creativity. From building scalable web apps to exploring the edges of AI and robotics, I love turning bold ideas into real-world products.
+            </p>
+            <p>
+              My journey spans hackathons, freelance collaborations, and crafting digital products that help others move faster. I enjoy architecting robust backends, designing smooth interfaces, and automating workflows with prompts and AI tooling.
+            </p>
+            <p>
+              Beyond code, I share knowledge through content, workshops, and open-source contributions - always aiming to make tech approachable and impactful.
+            </p>
+          </div>
+          <div class="about__card reveal">
+            <h4>Quick Info</h4>
+            <ul>
+              <li><span>Name</span> <strong>[YOUR_FULL_NAME]</strong></li>
+              <li><span>Location</span> <strong>[YOUR_CITY], [YOUR_COUNTRY]</strong></li>
+              <li><span>Main Role</span> <strong>Software Engineer</strong></li>
+              <li><span>Experience</span> <strong>X+ years of coding &amp; projects</strong></li>
+              <li><span>Email</span> <a href="mailto:[YOUR_EMAIL]">[YOUR_EMAIL]</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--alt" id="skills">
+      <div class="container section__inner">
+        <div class="section__header">
+          <p class="eyebrow">Capabilities</p>
+          <h3 class="section__title">Skills</h3>
+        </div>
+        <div class="skills__grid">
+          <div class="card reveal">
+            <h4>Frontend</h4>
+            <div class="badge__group">
+              <span class="badge">HTML5</span>
+              <span class="badge">CSS3</span>
+              <span class="badge">JavaScript</span>
+              <span class="badge">Bootstrap / Tailwind</span>
+              <span class="badge">Responsive Design</span>
+            </div>
+          </div>
+          <div class="card reveal">
+            <h4>Backend &amp; Databases</h4>
+            <div class="badge__group">
+              <span class="badge">Node.js</span>
+              <span class="badge">Express.js</span>
+              <span class="badge">REST APIs</span>
+              <span class="badge">MySQL</span>
+              <span class="badge">MongoDB</span>
+            </div>
+          </div>
+          <div class="card reveal">
+            <h4>Tools &amp; Others</h4>
+            <div class="badge__group">
+              <span class="badge">Git &amp; GitHub</span>
+              <span class="badge">VS Code</span>
+              <span class="badge">n8n</span>
+              <span class="badge">Prompt Engineering</span>
+              <span class="badge">AI Tools (ChatGPT, Gemini)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="projects">
+      <div class="container section__inner">
+        <div class="section__header">
+          <p class="eyebrow">Portfolio</p>
+          <h3 class="section__title">Projects</h3>
+          <p class="section__subtitle">Some of my favorite work</p>
+        </div>
+        <div class="projects__grid">
+          <article class="project-card reveal">
+            <div class="project-card__img">
+              <img src="assets/img/project1.jpg" alt="Project cover">
+            </div>
+            <div class="project-card__body">
+              <h4>Smart Rescuer AI</h4>
+              <p>Portable emergency assistant device leveraging AI for rapid response.</p>
+              <div class="tags">
+                <span>AI</span><span>IoT</span><span>Node.js</span>
+              </div>
+              <div class="project-card__links">
+                <a href="#" class="link">Live Demo</a>
+                <a href="#" class="link">Source Code</a>
+              </div>
+            </div>
+          </article>
+          <article class="project-card reveal">
+            <div class="project-card__img">
+              <img src="assets/img/project2.jpg" alt="Project cover">
+            </div>
+            <div class="project-card__body">
+              <h4>Digital Products Hub</h4>
+              <p>Platform to sell ebooks, prompts, templates, and automations.</p>
+              <div class="tags">
+                <span>Next.js</span><span>Stripe</span><span>CMS</span>
+              </div>
+              <div class="project-card__links">
+                <a href="#" class="link">Live Demo</a>
+                <a href="#" class="link">Source Code</a>
+              </div>
+            </div>
+          </article>
+          <article class="project-card reveal">
+            <div class="project-card__img">
+              <img src="assets/img/project3.jpg" alt="Project cover">
+            </div>
+            <div class="project-card__body">
+              <h4>Portfolio Generator</h4>
+              <p>Web app that crafts polished portfolio pages from prompts.</p>
+              <div class="tags">
+                <span>React</span><span>AI</span><span>UI/UX</span>
+              </div>
+              <div class="project-card__links">
+                <a href="#" class="link">Live Demo</a>
+                <a href="#" class="link">Source Code</a>
+              </div>
+            </div>
+          </article>
+          <article class="project-card reveal">
+            <div class="project-card__img">
+              <img src="assets/img/project4.jpg" alt="Project cover">
+            </div>
+            <div class="project-card__body">
+              <h4>Study Planner App</h4>
+              <p>Tool for students to organize learning with reminders and streaks.</p>
+              <div class="tags">
+                <span>Vue</span><span>Firebase</span><span>PWA</span>
+              </div>
+              <div class="project-card__links">
+                <a href="#" class="link">Live Demo</a>
+                <a href="#" class="link">Source Code</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--alt" id="experience">
+      <div class="container section__inner">
+        <div class="section__header">
+          <p class="eyebrow">Journey</p>
+          <h3 class="section__title">Experience &amp; Education</h3>
+        </div>
+        <div class="timeline">
+          <div class="timeline__item reveal">
+            <div class="timeline__dot"></div>
+            <div class="timeline__content">
+              <p class="timeline__date">2023 - Present</p>
+              <h4>Software Engineering Student</h4>
+              <p class="timeline__place">[YOUR UNIVERSITY]</p>
+              <p>Diving deep into software architecture, systems design, and building projects that solve real problems.</p>
+            </div>
+          </div>
+          <div class="timeline__item reveal">
+            <div class="timeline__dot"></div>
+            <div class="timeline__content">
+              <p class="timeline__date">2021 - Present</p>
+              <h4>Freelance Web Developer</h4>
+              <p class="timeline__place">Remote</p>
+              <p>Delivering end-to-end web solutions, from API integrations to polished frontends and landing pages.</p>
+            </div>
+          </div>
+          <div class="timeline__item reveal">
+            <div class="timeline__dot"></div>
+            <div class="timeline__content">
+              <p class="timeline__date">Ongoing</p>
+              <h4>Hackathon Participant</h4>
+              <p class="timeline__place">Saudi Arabia &amp; MENA</p>
+              <p>Rapid prototyping AI-driven products, collaborating with teams, and pitching tech solutions.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="services">
+      <div class="container section__inner">
+        <div class="section__header">
+          <p class="eyebrow">Offerings</p>
+          <h3 class="section__title">What I Do</h3>
+        </div>
+        <div class="services__grid">
+          <div class="service-card reveal">
+            <div class="service-card__icon">&lt;/&gt;</div>
+            <h4>Web Development</h4>
+            <p>Designing and shipping responsive, high-performance websites and web apps tailored to business goals.</p>
+          </div>
+          <div class="service-card reveal">
+            <div class="service-card__icon">DP</div>
+            <h4>Digital Products &amp; Ebooks</h4>
+            <p>Creating actionable guides, templates, and resources that help creators and teams move faster.</p>
+          </div>
+          <div class="service-card reveal">
+            <div class="service-card__icon">AI</div>
+            <h4>Prompt Engineering &amp; Automations</h4>
+            <p>Building AI workflows, chatbots, and automations that streamline processes and unlock insights.</p>
+          </div>
+          <div class="service-card reveal">
+            <div class="service-card__icon">TX</div>
+            <h4>Tech Content &amp; Training</h4>
+            <p>Workshops, tutorials, and content that demystify technology and empower teams to ship faster.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--alt" id="testimonials">
+      <div class="container section__inner">
+        <div class="section__header">
+          <p class="eyebrow">Feedback</p>
+          <h3 class="section__title">Testimonials</h3>
+        </div>
+        <div class="testimonials__grid">
+          <div class="testimonial-card reveal">
+            <p class="testimonial__quote">"Delivered a polished product under a tight deadline - great communication and solid engineering."</p>
+            <div class="testimonial__meta">
+              <h4>Alex Johnson</h4>
+              <span>Client from Upwork</span>
+            </div>
+          </div>
+          <div class="testimonial-card reveal">
+            <p class="testimonial__quote">"Understood our requirements fast and built an automation that saved our team hours every week."</p>
+            <div class="testimonial__meta">
+              <h4>Sara Lee</h4>
+              <span>Operations Lead</span>
+            </div>
+          </div>
+          <div class="testimonial-card reveal">
+            <p class="testimonial__quote">"Creative, reliable, and great with user experience - our users love the new dashboard."</p>
+            <div class="testimonial__meta">
+              <h4>Mohammed Al-Zahrani</h4>
+              <span>Product Manager</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="container section__inner contact">
+        <div class="section__header">
+          <p class="eyebrow">Get in Touch</p>
+          <h3 class="section__title">Contact Me</h3>
+          <p class="section__subtitle">Let's build something together</p>
+        </div>
+        <div class="contact__grid">
+          <div class="contact__info reveal">
+            <h4>Let's collaborate</h4>
+            <p>
+              Looking for a developer to bring your idea to life or automate a workflow? Drop a message and let's talk possibilities.
+            </p>
+            <ul>
+              <li><strong>Email:</strong> <a href="mailto:[YOUR_EMAIL]">[YOUR_EMAIL]</a></li>
+              <li><strong>WhatsApp:</strong> <a href="https://wa.me/1234567890">+123 456 7890</a></li>
+              <li><strong>Location:</strong> [YOUR CITY], [YOUR COUNTRY]</li>
+            </ul>
+          </div>
+          <div class="contact__form reveal">
+            <form id="contact-form" novalidate>
+              <div class="form__group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Your name" required>
+              </div>
+              <div class="form__group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="you@example.com" required>
+              </div>
+              <div class="form__group">
+                <label for="subject">Subject</label>
+                <input type="text" id="subject" name="subject" placeholder="Project or idea" required>
+              </div>
+              <div class="form__group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="4" placeholder="Tell me about your project" required></textarea>
+              </div>
+              <button type="submit" class="btn btn--primary">Send Message</button>
+              <p class="form__feedback" id="form-feedback" role="alert"></p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p>&copy; <span id="year"></span> [YOUR_FULL_NAME]. All rights reserved.</p>
+      <div class="footer__links">
+        <a href="#home">Home</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <p class="footer__note">Built with love using HTML, CSS &amp; JS</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
