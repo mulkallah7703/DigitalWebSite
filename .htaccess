@@ -1,3 +1,11 @@
+# Canonical domain (force HTTPS + non-www)
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} off [OR]
+  RewriteCond %{HTTP_HOST} ^www\.alsadidigital\.com$ [NC]
+  RewriteRule ^(.*)$ https://alsadidigital.com/$1 [L,R=301]
+</IfModule>
+
 # Caching for static assets
 <IfModule mod_expires.c>
   ExpiresActive On
