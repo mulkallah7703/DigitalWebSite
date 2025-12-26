@@ -4,10 +4,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>دليل الذكاء الاصطناعي للمصمم — السعدي ديجيتال</title>
+    <title>AI Agent — السعدي ديجيتال</title>
     <meta name="description"
-        content="كتاب إلكتروني يشرح كيفية استخدام تقنيات الذكاء الاصطناعي في التصميم العملي. نصائح، أدوات، وقوالب جاهزة.">
-    <meta name="keywords" content="كتاب الذكاء الاصطناعي للمصمم, AI للتصميم, أدوات تصميم آلي">
+        content="أداة مفتوحة المصدر لإنشاء وكلاء ذكاء اصطناعي ذاتيين باستخدام بايثون مع إعدادات بسيطة وسريعة.">
+    <meta name="keywords" content="وكيل ذكاء اصطناعي, أدوات AI, بايثون, عملاء ذاتيون, السعدي ديجيتال">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/styles.css">
 </head>
@@ -18,16 +18,30 @@
         <!-- Header -->
         <header class="header d-flex justify-content-between align-items-center py-3">
             <div class="logo d-flex align-items-center gap-2">
-                <img class="rounded-circle" src="../assets/mypic.jpg" alt="شعار المتجر" width="44" height="44">
+                <img class="rounded-circle" src="../assets/mypic.webp" alt="شعار متجر السعدي ديجيتال" width="44" height="44">
                 <div>
                     <div class="fw-bold text-primary">السعدي ديجيتال</div>
                     <div class="small text-white-50">حلول رقمية ذكية</div>
                 </div>
             </div>
 
-            <nav class="nav">
-                <a class="nav-link d-inline-block text-primary" href="/">الرئيسية</a>
-                <a class="nav-link d-inline-block text-primary" href="../products/index.html">المنتجات</a>
+            <button class="nav-toggle" type="button" aria-controls="primary-nav" aria-expanded="false" aria-label="فتح القائمة">
+
+              <span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+
+              <span class="nav-toggle-text">القائمة</span>
+
+            </button>
+            <nav class="main-nav" id="primary-nav" aria-label="التنقل الرئيسي">
+                <ul class="nav-list">
+                    <li><a class="nav-link" href="/index.html">الرئيسية</a></li>
+                    <li><a class="nav-link is-active" href="/products/index.html">المنتجات</a></li>
+                    <li><a class="nav-link" href="/blog/index.html">المدونة</a></li>
+                    <li><a class="nav-link" href="/about/index.html">من نحن</a></li>
+                    <li><a class="nav-link" href="/contact.html">اتصل بنا</a></li>
+                    <li><a class="nav-link" href="/privacy.html">سياسة الخصوصية</a></li>
+                    <li><a class="nav-link" href="/terms.html">شروط الاستخدام</a></li>
+                </ul>
             </nav>
         </header>
 
@@ -38,7 +52,7 @@
 
                 <!-- Image Place -->
                 <div class="col-lg-5 text-center">
-                    <img src="../assets/my digital products/pic/aiagent.png" alt="غلاف دليل الذكاء الاصطناعي للمصمم"
+                    <img src="../assets/my digital products/pic/aiagent.webp" alt="غلاف منتج AI Agent"
                         class="img-fluid rounded-4 shadow-sm">
                 </div>
 
@@ -79,6 +93,8 @@
     <footer class="footer">© 2025 السعدي ديجيتال</footer>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/nav.js"></script>
+  <script src="../assets/cookie.js"></script>
 </body>
 
 </html>

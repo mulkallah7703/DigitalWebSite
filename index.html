@@ -7,6 +7,7 @@
   <title>متجر السعدي ديجيتال — مكتبة منتجات رقمية ذكية</title>
   <meta name="description"
     content="متجر رقمي لشراء كتب إلكترونية، قوالب، أدوات وكورسات. تحميل فوري، تراخيص واضحة، ودعم احترافي.">
+  <meta name="keywords" content="السعدي ديجيتال, منتجات رقمية, كتب إلكترونية, قوالب احترافية, أدوات إنتاجية, دورات رقمية">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="assets/styles.css">
 </head>
@@ -18,18 +19,29 @@
 
     <header class="header sticky-top bg-dark "> <!-- Header content -->
       <div class="logo">
-        <img class="rounded-circle" src="assets/mypic.jpg" alt="شعار المتجر">
+        <img class="rounded-circle" src="assets/mypic.webp" alt="شعار متجر السعدي ديجيتال">
         <div>
           <div style="font-weight:700;font-size:1.05rem">السعدي ديجيتال</div>
           <div class="small ">حلول رقمية ذكية</div>
         </div>
       </div>
-      <nav class="nav">
-        <a href="/">الرئيسية</a>
-        <a href="products/index.html">المنتجات</a>
-        <a href="/blog/index.html">المدونة</a>
-        <a href="about.html">من نحن</a>
-        <a href="contact.html">تواصل</a>
+      <button class="nav-toggle" type="button" aria-controls="primary-nav" aria-expanded="false" aria-label="فتح القائمة">
+
+        <span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+
+        <span class="nav-toggle-text">القائمة</span>
+
+      </button>
+      <nav class="main-nav" id="primary-nav" aria-label="التنقل الرئيسي">
+        <ul class="nav-list">
+          <li><a class="nav-link is-active" href="/index.html">الرئيسية</a></li>
+          <li><a class="nav-link" href="/products/index.html">المنتجات</a></li>
+          <li><a class="nav-link" href="/blog/index.html">المدونة</a></li>
+          <li><a class="nav-link" href="/about/index.html">من نحن</a></li>
+          <li><a class="nav-link" href="/contact.html">اتصل بنا</a></li>
+          <li><a class="nav-link" href="/privacy.html">سياسة الخصوصية</a></li>
+          <li><a class="nav-link" href="/terms.html">شروط الاستخدام</a></li>
+        </ul>
       </nav>
     </header>
 
@@ -44,7 +56,7 @@
             <div class="col-lg-4">
               <div class="card-client">
                 <div class="user-picture">
-                  <img src="assets/mypic.jpg" alt="picture" style="width:100px; height:70px;">
+                  <img src="assets/mypic.webp" alt="صورة مؤسس متجر السعدي ديجيتال" style="width:100px; height:70px;">
                 </div>
 
                 <p class="name-client">
@@ -129,7 +141,7 @@
       <div class="grid" style="margin-top:12px">
 
         <article class="product card d-flex flex-column h-100">
-          <img class="product-image rounded-5" src="assets/my digital products/gumroad new/design1.jpg" alt=""
+          <img class="product-image rounded-5" src="assets/my digital products/gumroad new/design1.webp" alt="غلاف دليل العمل على منصة جمرود"
             style="width:100%;height:180px;object-fit:cover">
 
           <h3 class="text-light">Gumroad</h3>
@@ -144,8 +156,8 @@
 
 
         <article class="product card d-flex flex-column h-100">
-          <img class="product-image rounded-5" src="assets/my digital products/payhip/Screenshot 2025-12-15 002042.png"
-            alt="" style="width:100%;height:180px;object-fit:cover">
+          <img class="product-image rounded-5" src="assets/my digital products/payhip/Screenshot 2025-12-15 002042.webp"
+            alt="غلاف كتاب كيف تسوق أي منتج رقمي بنجاح" style="width:100%;height:180px;object-fit:cover">
 
           <h3 class="text-light">كيف تسوق اي منتج رقمي بنجاح</h3>
           <p class="small">دليلك العملي لتحقيق مبيعات قياسية عبر الانترنت </p>
@@ -158,8 +170,8 @@
 
 
          <article class="product card d-flex flex-column h-100">
-          <img class="product-image rounded-5" src="assets/my digital products/pic/FreeCourses.png"
-            alt="" style="width:100%;height:180px;object-fit:cover">
+          <img class="product-image rounded-5" src="assets/my digital products/pic/FreeCourses.webp"
+            alt="غلاف مجموعة 100 كورس مجاني" style="width:100%;height:180px;object-fit:cover">
 
           <h3 class="text-light">100 كورس مجاني</h3>
           <p class="small">دورات مجانية في 10 تخصصات محتلفة </p>
@@ -172,7 +184,7 @@
 
 
         <article class="product card d-flex flex-column h-100">
-          <img class="product-image rounded-5" src="assets/my digital products/pic/aiagent2.png" alt=""
+          <img class="product-image rounded-5" src="assets/my digital products/pic/aiagent2.webp" alt="غلاف منتج وكيل ذكاء اصطناعي مفتوح المصدر"
             style="width:100%;height:180px;object-fit:cover">
 
           <h3 class="text-light">AI Agent</h3>
@@ -202,7 +214,7 @@
 
       <footer class="footer">
         <div class="meta">© 2025 السعدي ديجيتال — كل الحقوق محفوظة</div>
-        <div class="meta">سياسات: <a href="privacy-policy.html">الخصوصية</a> — <a href="terms.html">الشروط</a> — <a
+        <div class="meta">سياسات: <a href="/privacy.html">الخصوصية</a> — <a href="/terms.html">الشروط</a> — <a
             href="refund-policy.html">الاسترجاع</a></div>
       </footer>
   </div>
@@ -211,6 +223,8 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="assets/main.js"></script>
+  <script src="assets/nav.js"></script>
+  <script src="assets/cookie.js"></script>
 </body>
 
 </html>

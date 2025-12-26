@@ -132,7 +132,15 @@ body{font-family: 'Segoe UI', Tahoma, Arial, sans-serif;background:var(--bg);col
 .header{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
 .logo{display:flex;align-items:center;gap:12px}
 .logo img{width:44px;height:44px}
-.nav a{color:var(--muted);text-decoration:none;margin-left:16px}
+.main-nav{margin-inline-start:auto}
+.nav-list{list-style:none;display:flex;gap:12px;flex-wrap:wrap;padding:0;margin:0}
+.nav-link{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:8px;font-weight:600;transition:background 0.2s ease,color 0.2s ease}
+.nav-link:hover{color:var(--text);background:rgba(14,165,160,0.12)}
+.nav-link.is-active{color:var(--text);background:rgba(14,165,160,0.18);border:1px solid rgba(14,165,160,0.35)}
+.nav-toggle{display:none;align-items:center;gap:8px;border:1px solid rgba(255,255,255,0.2);background:transparent;color:var(--text);padding:8px 12px;border-radius:10px;font-weight:600;cursor:pointer}
+.nav-toggle-bars{display:inline-flex;flex-direction:column;gap:4px}
+.nav-toggle-bars span{display:block;width:18px;height:2px;background:var(--text);border-radius:2px}
+.nav-toggle-text{font-size:0.9rem}
 .hero{display:flex;gap:24px;align-items:center;padding:28px 0}
 .hero .left{flex:1}
 .hero .right{width:360px}
@@ -148,6 +156,29 @@ body{font-family: 'Segoe UI', Tahoma, Arial, sans-serif;background:var(--bg);col
 .small{font-size:0.9rem;color:var(--muted)}
 /* استجابة */
 @media(max-width:700px){.hero{flex-direction:column}.hero .right{width:100%}}
+@media(max-width:800px){
+  .header{flex-direction:row;align-items:center;justify-content:flex-start !important;gap:12px;flex-wrap:wrap}
+  .nav-toggle{display:inline-flex;order:1;margin-inline-start:0}
+  .main-nav{width:100%;order:2;margin-inline-start:0}
+  .nav-list{flex-direction:column;align-items:flex-start;width:100%;max-height:0;overflow:hidden;transition:max-height 0.25s ease;padding-top:0}
+  body.nav-open .nav-list{max-height:600px;padding-top:8px}
+}
+
+/* شريط إشعار ملفات تعريف الارتباط */
+.cookie-banner{position:fixed;left:0;right:0;bottom:0;padding:16px 20px;background:rgba(7,16,41,0.95);color:var(--text);display:flex;gap:16px;align-items:center;justify-content:space-between;border-top:1px solid rgba(255,255,255,0.08);z-index:9999}
+.cookie-banner p{margin:0;color:var(--muted)}
+.cookie-banner .cookie-actions{display:flex;gap:10px;flex-wrap:wrap}
+.cookie-banner .cookie-accept{background:var(--accent);color:#012;border:none;padding:8px 14px;border-radius:8px;font-weight:700;cursor:pointer}
+.cookie-banner .cookie-accept:hover{filter:brightness(1.05)}
+
+/* تخطيط مقالات المدونة */
+.article-meta{color:var(--muted);font-size:0.95rem;margin:6px 0 16px}
+.article-section{margin-top:16px}
+.article-section h2{margin-top:24px}
+.article-section h3{margin-top:16px}
+.comment-list{margin-top:16px;display:grid;gap:12px}
+.comment-item{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);padding:12px;border-radius:10px}
+.comment-status{color:var(--muted);font-size:0.9rem}
 
 /* -------------- خلفية ذكية متحركة (AI-themed) -------------- */
 html,body{height:100%}
