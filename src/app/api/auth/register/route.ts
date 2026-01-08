@@ -3,8 +3,6 @@ export const runtime = 'nodejs'
 export const revalidate = 0
 
 import { NextResponse } from 'next/server'
-import bcrypt from 'bcryptjs'
-import { db } from '@/lib/db'
 import { z } from 'zod'
 
 const registerSchema = z.object({
@@ -20,6 +18,9 @@ export async function POST(req: Request) {
   }
 
   try {
+    const { db } = await import('@/lib/db')
+    const bcrypt = (await import('bcryptjs')).default
+    
     const body = await req.json()
     const { name, email, password } = registerSchema.parse(body)
 

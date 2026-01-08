@@ -3,7 +3,6 @@ export const runtime = 'nodejs'
 export const revalidate = 0
 
 import { NextResponse } from 'next/server'
-import { db } from '@/lib/db'
 
 export async function GET(
   req: Request,
@@ -15,6 +14,8 @@ export async function GET(
   }
 
   try {
+    const { db } = await import('@/lib/db')
+    
     const product = await db.product.findUnique({
       where: { slug: params.slug },
       include: {

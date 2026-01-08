@@ -4,16 +4,17 @@ export const revalidate = 0
 
 import { NextResponse } from 'next/server'
 import { headers } from 'next/headers'
-import Stripe from 'stripe'
-import { stripe } from '@/lib/stripe'
-import { db } from '@/lib/db'
-import { generateOrderNumber } from '@/lib/utils'
 
 export async function POST(req: Request) {
   // Prevent execution during build phase
   if (process.env.NEXT_PHASE === 'phase-production-build') {
     return NextResponse.json({ received: false, error: 'Service unavailable during build' }, { status: 503 })
   }
+
+  const { stripe } = await import('@/lib/stripe')
+  const { db } = await import('@/lib/db')
+  const { generateOrderNumber } = await import('@/lib/utils')
+  const Stripe = (await import('stripe')).default
 
   const body = await req.text()
   const signature = headers().get('stripe-signature')!

@@ -3,9 +3,6 @@ export const runtime = 'nodejs'
 export const revalidate = 0
 
 import { NextResponse } from 'next/server'
-import { requireAuth } from '@/lib/auth'
-import { createCheckoutSession } from '@/lib/stripe'
-import { db } from '@/lib/db'
 import { z } from 'zod'
 
 const checkoutSchema = z.object({
@@ -24,6 +21,10 @@ export async function POST(req: Request) {
   }
 
   try {
+    const { requireAuth } = await import('@/lib/auth')
+    const { createCheckoutSession } = await import('@/lib/stripe')
+    const { db } = await import('@/lib/db')
+    
     const session = await requireAuth()
     const body = await req.json()
     const { items } = checkoutSchema.parse(body)
