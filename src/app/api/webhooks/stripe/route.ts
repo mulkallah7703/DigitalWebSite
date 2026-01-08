@@ -10,6 +10,11 @@ import { db } from '@/lib/db'
 import { generateOrderNumber } from '@/lib/utils'
 
 export async function POST(req: Request) {
+  // Prevent execution during build phase
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    return NextResponse.json({ received: false, error: 'Service unavailable during build' }, { status: 503 })
+  }
+
   const body = await req.text()
   const signature = headers().get('stripe-signature')!
 

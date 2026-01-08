@@ -7,6 +7,11 @@ import { db } from '@/lib/db'
 import { Prisma } from '@prisma/client'
 
 export async function GET(req: Request) {
+  // Prevent execution during build phase
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    return NextResponse.json({ data: [], pagination: { page: 1, limit: 12, total: 0, totalPages: 0 } }, { status: 503 })
+  }
+
   try {
     const { searchParams } = new URL(req.url)
     

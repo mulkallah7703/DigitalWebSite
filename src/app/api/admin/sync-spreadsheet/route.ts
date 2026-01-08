@@ -7,6 +7,11 @@ import { requireAdmin } from '@/lib/auth'
 import { syncProductsFromSpreadsheet } from '@/lib/spreadsheet'
 
 export async function POST() {
+  // Prevent execution during build phase
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    return NextResponse.json({ message: 'Service unavailable during build' }, { status: 503 })
+  }
+
   try {
     await requireAdmin()
 

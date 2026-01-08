@@ -9,6 +9,11 @@ export async function GET(
   req: Request,
   { params }: { params: { slug: string } }
 ) {
+  // Prevent execution during build phase
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    return NextResponse.json({ error: 'Service unavailable during build' }, { status: 503 })
+  }
+
   try {
     const product = await db.product.findUnique({
       where: { slug: params.slug },

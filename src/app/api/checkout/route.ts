@@ -18,6 +18,11 @@ const checkoutSchema = z.object({
 })
 
 export async function POST(req: Request) {
+  // Prevent execution during build phase
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    return NextResponse.json({ error: 'Service unavailable during build' }, { status: 503 })
+  }
+
   try {
     const session = await requireAuth()
     const body = await req.json()

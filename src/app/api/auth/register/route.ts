@@ -14,6 +14,11 @@ const registerSchema = z.object({
 })
 
 export async function POST(req: Request) {
+  // Prevent execution during build phase
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    return NextResponse.json({ error: 'Service unavailable during build' }, { status: 503 })
+  }
+
   try {
     const body = await req.json()
     const { name, email, password } = registerSchema.parse(body)
