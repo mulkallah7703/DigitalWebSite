@@ -1,9 +1,10 @@
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+export const revalidate = 0
+
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { Prisma } from '@prisma/client'
-
-// Mark as dynamic since we use req.url for searchParams
-export const dynamic = 'force-dynamic'
 
 export async function GET(req: Request) {
   try {
