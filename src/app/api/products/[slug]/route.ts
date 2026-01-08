@@ -6,15 +6,16 @@ import { NextResponse } from 'next/server'
 
 export async function GET(
   req: Request,
-  { params }: { params: { slug: string } }
+  context: { params: { slug: string } }
 ) {
-  return handler(req, params);
+  return handler(req, context);
 }
 
 async function handler(
   req: Request,
-  { params }: { params: { slug: string } }
+  context: { params: { slug: string } }
 ) {
+  const { params } = context;
   if (process.env.NEXT_PHASE === 'phase-production-build') {
     return NextResponse.json({ error: 'Service unavailable during build' }, { status: 503 })
   }

@@ -3,7 +3,7 @@ import { ProductCard } from './product-card'
 import { ProductsGridEmpty } from './products-grid-empty'
 import { ProductsGridHeader } from './products-grid-header'
 import { Pagination } from '@/components/ui/pagination'
-import { Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 
 interface ProductsGridProps {
   searchParams: {

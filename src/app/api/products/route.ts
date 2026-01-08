@@ -3,6 +3,7 @@ export const runtime = 'nodejs'
 export const revalidate = 0
 
 import { NextResponse } from 'next/server'
+import type { Prisma } from '@prisma/client'
 
 export async function GET(req: Request) {
   return handler(req);
@@ -15,7 +16,6 @@ async function handler(req: Request) {
 
   try {
     const { db } = await import('@/lib/db')
-    const { Prisma } = await import('@prisma/client')
     
     const { searchParams } = new URL(req.url)
     

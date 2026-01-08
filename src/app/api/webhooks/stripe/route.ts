@@ -3,6 +3,7 @@ export const runtime = 'nodejs'
 export const revalidate = 0
 
 import { NextResponse } from 'next/server'
+import type Stripe from 'stripe'
 
 export async function POST(req: Request) {
   return handler(req);
@@ -17,7 +18,6 @@ async function handler(req: Request) {
   const { stripe } = await import('@/lib/stripe')
   const { db } = await import('@/lib/db')
   const { generateOrderNumber } = await import('@/lib/utils')
-  const Stripe = (await import('stripe')).default
 
   const body = await req.text()
   const signature = headers().get('stripe-signature')!

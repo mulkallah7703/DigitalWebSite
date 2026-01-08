@@ -1,21 +1,27 @@
-import { NextAuthOptions, getServerSession } from 'next-auth'
-import { PrismaAdapter } from '@auth/prisma-adapter'
-import GoogleProvider from 'next-auth/providers/google'
-import GitHubProvider from 'next-auth/providers/github'
-import CredentialsProvider from 'next-auth/providers/credentials'
-import bcrypt from 'bcryptjs'
-import { db } from './db'
+import type { NextAuthOptions } from 'next-auth'
 import type { Adapter } from 'next-auth/adapters'
 
 // Lazy initialization to prevent build-time execution
 let _authOptions: NextAuthOptions | null = null
 
-function getAuthOptions(): NextAuthOptions {
+async function getAuthOptions(): Promise<NextAuthOptions> {
   if (_authOptions) {
     return _authOptions
   }
   
+  const { PrismaAdapter } = await import('@auth/prisma-adapter')
+  const GoogleProvider = (await import('next-auth/providers/google')).default
+  const GitHubProvider = (await import('next-auth/providers/github')).default
+  const CredentialsProvider = (await import('next-auth/providers/credentials')).default
+  const bcrypt = (await import('bcryptjs')).default
+  const { db } = await import('./db')
+  
+  if (!process.env.NEXTAUTH_SECRET) {
+    throw new Error('NEXTAUTH_SECRET environment variable is required')
+  }
+
   _authOptions = {
+    secret: process.env.NEXTAUTH_SECRET,
     adapter: PrismaAdapter(db) as Adapter,
     session: {
       strategy: 'jwt',
@@ -26,12 +32,12 @@ function getAuthOptions(): NextAuthOptions {
     },
     providers: [
       GoogleProvider({
-        clientId: process.env.GOOGLE_CLIENT_ID!,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+        clientId: process.env.GOOGLE_CLIENT_ID || '',
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
       }),
       GitHubProvider({
-        clientId: process.env.GITHUB_CLIENT_ID!,
-        clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+        clientId: process.env.GITHUB_CLIENT_ID || '',
+        clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
       }),
       CredentialsProvider({
         name: 'credentials',
@@ -41,62 +47,77 @@ function getAuthOptions(): NextAuthOptions {
         },
         async authorize(credentials) {
           if (!credentials?.email || !credentials?.password) {
-            throw new Error('Invalid credentials')
+            return null
           }
 
-          const user = await db.user.findUnique({
-            where: { email: credentials.email },
-          })
+          try {
+            const user = await db.user.findUnique({
+              where: { email: credentials.email },
+            })
 
-          if (!user || !user.password) {
-            throw new Error('Invalid credentials')
-          }
+            if (!user || !user.password) {
+              return null
+            }
 
-          const isValid = await bcrypt.compare(credentials.password, user.password)
+            const isValid = await bcrypt.compare(credentials.password, user.password)
 
-          if (!isValid) {
-            throw new Error('Invalid credentials')
-          }
+            if (!isValid) {
+              return null
+            }
 
-          return {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            image: user.image,
-            role: user.role,
+            return {
+              id: user.id,
+              email: user.email,
+              name: user.name,
+              image: user.image,
+              role: user.role,
+            }
+          } catch (error) {
+            console.error('Auth error:', error)
+            return null
           }
         },
       }),
     ],
     callbacks: {
       async session({ session, token }) {
-        if (token) {
-          session.user.id = token.id as string
-          session.user.role = token.role as string
+        try {
+          if (token && session.user) {
+            session.user.id = token.id as string
+            session.user.role = token.role as string
+          }
+          return session
+        } catch (error) {
+          console.error('Session callback error:', error)
+          return session
         }
-        return session
       },
       async jwt({ token, user }) {
-        if (user) {
-          token.id = user.id
-          token.role = user.role
+        try {
+          if (user) {
+            token.id = user.id
+            token.role = user.role
+          }
+          return token
+        } catch (error) {
+          console.error('JWT callback error:', error)
+          return token
         }
-        return token
       },
     },
+    debug: process.env.NODE_ENV === 'development',
   }
   
   return _authOptions
 }
 
-// Proxy to prevent build-time execution
-export const authOptions: NextAuthOptions = new Proxy({} as NextAuthOptions, {
-  get(_target, prop) {
-    return (getAuthOptions() as any)[prop]
-  },
-})
+export { getAuthOptions as authOptions }
 
-export const getAuth = () => getServerSession(authOptions)
+export const getAuth = async () => {
+  const { getServerSession } = await import('next-auth')
+  const options = await getAuthOptions()
+  return getServerSession(options)
+}
 
 export const requireAuth = async () => {
   const session = await getAuth()
