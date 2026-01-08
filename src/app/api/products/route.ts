@@ -5,7 +5,10 @@ export const revalidate = 0
 import { NextResponse } from 'next/server'
 
 export async function GET(req: Request) {
-  // Prevent execution during build phase
+  return handler(req);
+}
+
+async function handler(req: Request) {
   if (process.env.NEXT_PHASE === 'phase-production-build') {
     return NextResponse.json({ data: [], pagination: { page: 1, limit: 12, total: 0, totalPages: 0 } }, { status: 503 })
   }
@@ -27,7 +30,6 @@ export async function GET(req: Request) {
 
     const skip = (page - 1) * limit
 
-    // Build where clause
     const where: Prisma.ProductWhereInput = {
       status: 'PUBLISHED',
     }
@@ -53,7 +55,6 @@ export async function GET(req: Request) {
       where.featured = true
     }
 
-    // Build orderBy
     let orderBy: Prisma.ProductOrderByWithRelationInput = { createdAt: 'desc' }
     
     switch (sortBy) {
@@ -74,7 +75,6 @@ export async function GET(req: Request) {
         orderBy = { createdAt: 'desc' }
     }
 
-    // Get products and count
     const [products, total] = await Promise.all([
       db.product.findMany({
         where,

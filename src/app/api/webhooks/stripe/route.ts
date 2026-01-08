@@ -3,14 +3,17 @@ export const runtime = 'nodejs'
 export const revalidate = 0
 
 import { NextResponse } from 'next/server'
-import { headers } from 'next/headers'
 
 export async function POST(req: Request) {
-  // Prevent execution during build phase
+  return handler(req);
+}
+
+async function handler(req: Request) {
   if (process.env.NEXT_PHASE === 'phase-production-build') {
     return NextResponse.json({ received: false, error: 'Service unavailable during build' }, { status: 503 })
   }
 
+  const { headers } = await import('next/headers')
   const { stripe } = await import('@/lib/stripe')
   const { db } = await import('@/lib/db')
   const { generateOrderNumber } = await import('@/lib/utils')
@@ -45,18 +48,15 @@ export async function POST(req: Request) {
 
     const items = JSON.parse(itemsJson) as { productId: string; quantity: number }[]
 
-    // Get product details
     const products = await db.product.findMany({
       where: { id: { in: items.map((i) => i.productId) } },
     })
 
-    // Calculate totals
     const subtotal = items.reduce((sum, item) => {
       const product = products.find((p) => p.id === item.productId)
       return sum + (product ? Number(product.price) * item.quantity : 0)
     }, 0)
 
-    // Create order
     const order = await db.order.create({
       data: {
         orderNumber: generateOrderNumber(),
@@ -83,7 +83,6 @@ export async function POST(req: Request) {
       },
     })
 
-    // Update product sales count
     for (const item of items) {
       await db.product.update({
         where: { id: item.productId },
@@ -91,7 +90,6 @@ export async function POST(req: Request) {
       })
     }
 
-    // Create notification
     await db.notification.create({
       data: {
         userId,

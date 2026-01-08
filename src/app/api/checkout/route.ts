@@ -3,33 +3,35 @@ export const runtime = 'nodejs'
 export const revalidate = 0
 
 import { NextResponse } from 'next/server'
-import { z } from 'zod'
-
-const checkoutSchema = z.object({
-  items: z.array(
-    z.object({
-      productId: z.string(),
-      quantity: z.number().min(1),
-    })
-  ),
-})
 
 export async function POST(req: Request) {
-  // Prevent execution during build phase
+  return handler(req);
+}
+
+async function handler(req: Request) {
   if (process.env.NEXT_PHASE === 'phase-production-build') {
     return NextResponse.json({ error: 'Service unavailable during build' }, { status: 503 })
   }
 
   try {
+    const { z } = await import('zod')
     const { requireAuth } = await import('@/lib/auth')
     const { createCheckoutSession } = await import('@/lib/stripe')
     const { db } = await import('@/lib/db')
+
+    const checkoutSchema = z.object({
+      items: z.array(
+        z.object({
+          productId: z.string(),
+          quantity: z.number().min(1),
+        })
+      ),
+    })
     
     const session = await requireAuth()
     const body = await req.json()
     const { items } = checkoutSchema.parse(body)
 
-    // Get product details
     const productIds = items.map((item) => item.productId)
     const products = await db.product.findMany({
       where: { id: { in: productIds }, status: 'PUBLISHED' },
@@ -42,7 +44,6 @@ export async function POST(req: Request) {
       )
     }
 
-    // Prepare line items
     const lineItems = items.map((item) => {
       const product = products.find((p) => p.id === item.productId)!
       return {
@@ -53,7 +54,6 @@ export async function POST(req: Request) {
       }
     })
 
-    // Create Stripe checkout session
     const checkoutSession = await createCheckoutSession({
       items: lineItems,
       userId: session.user.id,
@@ -63,6 +63,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ url: checkoutSession.url })
   } catch (error) {
     console.error('Checkout error:', error)
+    const { z } = await import('zod')
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: 'Invalid request data' }, { status: 400 })
     }

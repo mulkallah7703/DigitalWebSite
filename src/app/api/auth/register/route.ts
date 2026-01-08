@@ -3,28 +3,31 @@ export const runtime = 'nodejs'
 export const revalidate = 0
 
 import { NextResponse } from 'next/server'
-import { z } from 'zod'
-
-const registerSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
-})
 
 export async function POST(req: Request) {
-  // Prevent execution during build phase
+  return handler(req);
+}
+
+async function handler(req: Request) {
   if (process.env.NEXT_PHASE === 'phase-production-build') {
     return NextResponse.json({ error: 'Service unavailable during build' }, { status: 503 })
   }
 
+  const { z } = await import('zod')
+
   try {
     const { db } = await import('@/lib/db')
     const bcrypt = (await import('bcryptjs')).default
+
+    const registerSchema = z.object({
+      name: z.string().min(2, 'Name must be at least 2 characters'),
+      email: z.string().email('Invalid email address'),
+      password: z.string().min(8, 'Password must be at least 8 characters'),
+    })
     
     const body = await req.json()
     const { name, email, password } = registerSchema.parse(body)
 
-    // Check if user exists
     const existingUser = await db.user.findUnique({
       where: { email },
     })
@@ -36,10 +39,8 @@ export async function POST(req: Request) {
       )
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 12)
 
-    // Create user
     const user = await db.user.create({
       data: {
         name,

@@ -8,7 +8,13 @@ export async function GET(
   req: Request,
   { params }: { params: { slug: string } }
 ) {
-  // Prevent execution during build phase
+  return handler(req, params);
+}
+
+async function handler(
+  req: Request,
+  { params }: { params: { slug: string } }
+) {
   if (process.env.NEXT_PHASE === 'phase-production-build') {
     return NextResponse.json({ error: 'Service unavailable during build' }, { status: 503 })
   }
@@ -52,7 +58,6 @@ export async function GET(
       )
     }
 
-    // Increment view count
     await db.product.update({
       where: { id: product.id },
       data: { viewCount: { increment: 1 } },

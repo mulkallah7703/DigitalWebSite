@@ -5,7 +5,10 @@ export const revalidate = 0;
 import { NextResponse } from 'next/server';
 
 export async function POST() {
-  // ⛔️ منع التنفيذ أثناء مرحلة build في Vercel
+  return handler();
+}
+
+async function handler() {
   if (process.env.NEXT_PHASE === 'phase-production-build') {
     return NextResponse.json(
       { skipped: true, message: 'Skipped during build' },
@@ -14,7 +17,6 @@ export async function POST() {
   }
 
   try {
-    // ✅ استيراد الخدمات الثقيلة فقط وقت التشغيل (runtime)
     const { requireAdmin } = await import('@/lib/auth');
     const { syncProductsFromSpreadsheet } = await import('@/lib/spreadsheet');
 
