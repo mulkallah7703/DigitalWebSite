@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server'
 import { requireAdmin } from '@/lib/auth'
 import { syncProductsFromSpreadsheet } from '@/lib/spreadsheet'
