@@ -9,6 +9,10 @@ export async function POST(req: Request) {
   return handler(req)
 }
 
+export async function DELETE(req: Request) {
+  return deleteHandler(req)
+}
+
 async function handler(req: Request) {
   if (process.env.NEXT_PHASE === 'phase-production-build') {
     return NextResponse.json({ error: 'Service unavailable during build' }, { status: 503 })
@@ -31,6 +35,7 @@ async function handler(req: Request) {
       categoryId: z.string().min(1, 'Category is required'),
       productType: z.enum(['course', 'video', 'audio', 'ebook']),
       status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']),
+      isFeatured: z.boolean().optional().default(false),
       videoUrl: z.string().optional().nullable(), // Can be local path or URL
       imageUrls: z.array(z.string()).optional().nullable(),
     })
@@ -69,6 +74,7 @@ async function handler(req: Request) {
         price: data.price,
         categoryId: data.categoryId,
         status: data.status,
+        isFeatured: data.isFeatured ?? false,
         videoUrl: data.videoUrl && data.videoUrl.trim().length > 0 ? data.videoUrl.trim() : null,
         aiTags: [data.productType], // Store product type in aiTags
       },
@@ -118,6 +124,44 @@ async function handler(req: Request) {
 
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to create product' },
+      { status: 500 }
+    )
+  }
+}
+
+async function deleteHandler(req: Request) {
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    return NextResponse.json({ error: 'Service unavailable during build' }, { status: 503 })
+  }
+
+  try {
+    const { requireAdmin } = await import('@/lib/auth')
+    const { db } = await import('@/lib/db')
+
+    await requireAdmin()
+
+    const { searchParams } = new URL(req.url)
+    const productId = searchParams.get('id')
+
+    if (!productId) {
+      return NextResponse.json({ error: 'Product ID is required' }, { status: 400 })
+    }
+
+    // Delete product (cascade will handle related records)
+    await db.product.delete({
+      where: { id: productId },
+    })
+
+    // Revalidate cache
+    revalidateTag('products')
+    revalidateTag('featured-products')
+
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    console.error('Product deletion error:', error)
+
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : 'Failed to delete product' },
       { status: 500 }
     )
   }

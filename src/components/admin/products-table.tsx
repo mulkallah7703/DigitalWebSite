@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { SafeImage } from '@/components/ui/safe-image'
 import { MoreHorizontal, Pencil, Trash2, Eye, Package } from 'lucide-react'
@@ -23,6 +24,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { formatPrice, formatDate } from '@/lib/utils'
 import { useLanguage } from '@/components/providers/language-provider'
+import { useToast } from '@/hooks/use-toast'
 import type { Product, Category, ProductImage } from '@prisma/client'
 
 type ProductWithRelations = Product & {
@@ -43,13 +45,53 @@ const statusColors: Record<string, 'default' | 'secondary' | 'success' | 'warnin
 
 export function ProductsTable({ products }: ProductsTableProps) {
   const { t } = useLanguage()
+  const router = useRouter()
+  const { toast } = useToast()
   const [search, setSearch] = useState('')
+  const [deletingId, setDeletingId] = useState<string | null>(null)
 
   const filteredProducts = products.filter(
     (product) =>
       product.name.toLowerCase().includes(search.toLowerCase()) ||
       product.category.name.toLowerCase().includes(search.toLowerCase())
   )
+
+  const handleDelete = async (productId: string) => {
+    if (!confirm(t('admin.confirmDelete') || 'Are you sure you want to delete this product?')) {
+      return
+    }
+
+    setDeletingId(productId)
+    try {
+      const response = await fetch(`/api/admin/products?id=${productId}`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to delete product')
+      }
+
+      toast({
+        title: t('admin.productDeleted') || 'Product Deleted',
+        description: t('admin.productDeletedDesc') || 'Product has been deleted successfully',
+      })
+
+      router.refresh()
+    } catch (error) {
+      toast({
+        title: t('admin.error') || 'Error',
+        description: error instanceof Error ? error.message : 'Failed to delete product',
+        variant: 'destructive',
+      })
+    } finally {
+      setDeletingId(null)
+    }
+  }
+
+  const handleEdit = (productId: string) => {
+    router.push(`/admin/products/new?edit=${productId}`)
+  }
 
   return (
     <div className="space-y-4">
@@ -138,15 +180,20 @@ export function ProductsTable({ products }: ProductsTableProps) {
                             {t('admin.view')}
                           </Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <Link href={`/admin/products?edit=${product.id}`}>
-                            <Pencil className="w-4 h-4 mr-2" />
-                            {t('admin.edit')}
-                          </Link>
+                        <DropdownMenuItem
+                          onClick={() => handleEdit(product.id)}
+                          disabled={deletingId === product.id}
+                        >
+                          <Pencil className="w-4 h-4 mr-2" />
+                          {t('admin.edit')}
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive focus:text-destructive">
+                        <DropdownMenuItem
+                          onClick={() => handleDelete(product.id)}
+                          disabled={deletingId === product.id}
+                          className="text-destructive focus:text-destructive"
+                        >
                           <Trash2 className="w-4 h-4 mr-2" />
-                          {t('admin.delete')}
+                          {deletingId === product.id ? t('admin.deleting') || 'Deleting...' : t('admin.delete')}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

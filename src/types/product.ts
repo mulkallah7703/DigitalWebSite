@@ -7,6 +7,7 @@ export type FeaturedProduct = {
   price: Decimal
   comparePrice: Decimal | null
   featured: boolean
+  isFeatured: boolean
   rating: Decimal
   reviewCount: number
   images: {

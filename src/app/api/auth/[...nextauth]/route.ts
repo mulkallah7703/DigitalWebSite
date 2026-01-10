@@ -21,11 +21,11 @@ async function getAuthHandler() {
 }
 
 export async function GET(req: Request) {
-  return handler(req);
+  return handler(req)
 }
 
 export async function POST(req: Request) {
-  return handler(req);
+  return handler(req)
 }
 
 async function handler(req: Request) {
@@ -37,8 +37,8 @@ async function handler(req: Request) {
   }
 
   try {
-    const handler = await getAuthHandler()
-    return handler(req)
+    const authHandlerInstance = await getAuthHandler()
+    return authHandlerInstance(req)
   } catch (error) {
     console.error('NextAuth handler error:', error)
     return new Response(JSON.stringify({ 

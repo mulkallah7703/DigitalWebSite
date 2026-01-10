@@ -15,7 +15,7 @@ export const getFeaturedProducts = unstable_cache(
     const products = await db.product.findMany({
       where: {
         status: 'PUBLISHED',
-        featured: true,
+        isFeatured: true,
       },
       select: {
         id: true,
@@ -26,6 +26,7 @@ export const getFeaturedProducts = unstable_cache(
         rating: true,
         reviewCount: true,
         featured: true,
+        isFeatured: true,
         category: {
           select: {
             id: true,

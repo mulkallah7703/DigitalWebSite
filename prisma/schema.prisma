@@ -119,6 +119,7 @@ model Product {
 
   // Product metadata
   featured   Boolean           @default(false)
+  isFeatured Boolean           @default(false)
   status     ProductStatus     @default(DRAFT)
   visibility ProductVisibility @default(PUBLIC)
   videoUrl   String?
@@ -149,6 +150,7 @@ model Product {
   @@index([categoryId])
   @@index([status])
   @@index([featured])
+  @@index([isFeatured])
   @@index([salesCount])
   @@index([rating])
 }

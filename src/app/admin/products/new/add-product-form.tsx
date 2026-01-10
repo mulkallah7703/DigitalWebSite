@@ -33,6 +33,7 @@ const productSchema = z.object({
   categoryId: z.string().min(1, 'Category is required'),
   productType: z.enum(['course', 'video', 'audio', 'ebook']),
   status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']),
+  isFeatured: z.boolean().default(false),
   videoUrl: z.string().optional().nullable(),
   imageUrls: z.array(z.string()).optional(),
 })
@@ -64,6 +65,7 @@ export function AddProductForm({ categories }: AddProductFormProps) {
     defaultValues: {
       status: 'DRAFT',
       productType: 'course',
+      isFeatured: false,
       videoUrl: null,
       imageUrls: [],
     },
@@ -72,6 +74,7 @@ export function AddProductForm({ categories }: AddProductFormProps) {
   const categoryId = watch('categoryId')
   const status = watch('status')
   const productType = watch('productType')
+  const isFeatured = watch('isFeatured')
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
@@ -165,6 +168,7 @@ export function AddProductForm({ categories }: AddProductFormProps) {
           videoUrl: videoUrl || null,
           imageUrls: imageUrls.length > 0 ? imageUrls : null,
           productType: data.productType,
+          isFeatured: data.isFeatured,
         }),
       })
 
@@ -355,6 +359,20 @@ export function AddProductForm({ categories }: AddProductFormProps) {
               <SelectItem value="ARCHIVED">{t('admin.archived') || 'Archived'}</SelectItem>
             </SelectContent>
           </Select>
+        </div>
+
+        {/* Featured Product */}
+        <div className="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            id="isFeatured"
+            checked={isFeatured}
+            onChange={(e) => setValue('isFeatured', e.target.checked)}
+            className="h-4 w-4 rounded border-input text-primary focus:ring-2 focus:ring-ring focus:ring-offset-2 cursor-pointer"
+          />
+          <Label htmlFor="isFeatured" className="cursor-pointer font-normal">
+            {t('admin.featuredProduct') || 'Featured Product'}
+          </Label>
         </div>
 
         {/* Product Images */}

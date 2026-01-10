@@ -52,7 +52,7 @@ async function handler(req: Request) {
     }
 
     if (featured === 'true') {
-      where.featured = true
+      where.isFeatured = true
     }
 
     let orderBy: Prisma.ProductOrderByWithRelationInput = { createdAt: 'desc' }
