@@ -8,7 +8,20 @@ interface SafeImageProps extends Omit<ImageProps, 'onError' | 'onLoadingComplete
   fallbackIcon?: React.ReactNode
 }
 
-export function SafeImage({ src, alt, fallbackIcon, className, fill, ...props }: SafeImageProps) {
+// Check if URL is external and might not be in Next.js allowlist
+function isExternalUrl(url: string): boolean {
+  if (!url) return false
+  // Local paths (starting with /) should not be unoptimized
+  if (url.startsWith('/')) return false
+  try {
+    const urlObj = new URL(url)
+    return urlObj.protocol === 'http:' || urlObj.protocol === 'https:'
+  } catch {
+    return false
+  }
+}
+
+export function SafeImage({ src, alt, fallbackIcon, className, fill, unoptimized, ...props }: SafeImageProps) {
   const [hasError, setHasError] = useState(false)
   const [imageSrc, setImageSrc] = useState(src)
 
@@ -50,6 +63,9 @@ export function SafeImage({ src, alt, fallbackIcon, className, fill, ...props }:
     )
   }
 
+  // Use unoptimized for external URLs to avoid domain allowlist issues
+  const shouldUnoptimize = unoptimized !== undefined ? unoptimized : isExternalUrl(String(imageSrc))
+
   return (
     <Image
       {...props}
@@ -57,6 +73,7 @@ export function SafeImage({ src, alt, fallbackIcon, className, fill, ...props }:
       src={imageSrc}
       alt={alt}
       className={className}
+      unoptimized={shouldUnoptimize}
       onError={handleError}
       onLoadingComplete={handleLoadingComplete}
     />

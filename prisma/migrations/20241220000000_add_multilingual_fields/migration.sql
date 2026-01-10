@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "nameAr" TEXT,
+ADD COLUMN IF NOT EXISTS "descriptionAr" TEXT;

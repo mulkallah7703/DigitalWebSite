@@ -79,13 +79,14 @@ export interface AIRecommendation {
 
 export interface SpreadsheetProduct {
   rowId: string
-  name: string
-  description: string
+  slug: string
+  titleEn: string
+  titleAr?: string
+  descriptionEn: string
+  descriptionAr?: string
   price: number
-  comparePrice?: number
+  imageUrl: string
+  videoUrl?: string
   category: string
-  tags: string[]
-  images: string[]
-  fileUrl: string
   status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'
 }

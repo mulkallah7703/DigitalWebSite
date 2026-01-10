@@ -133,8 +133,10 @@ export const getProductBySlug = unstable_cache(
     
     if (!product) return null
     
+    // Explicitly include videoUrl and all fields
     return {
       ...product,
+      videoUrl: product.videoUrl, // Explicitly include videoUrl
       price: Number(product.price),
       comparePrice: product.comparePrice ? Number(product.comparePrice) : null,
       rating: Number(product.rating),

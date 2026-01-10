@@ -27,23 +27,26 @@ export async function fetchSpreadsheetProducts(): Promise<SpreadsheetProduct[]> 
 
   const response = await sheets.spreadsheets.values.get({
     spreadsheetId,
-    range: 'Products!A2:K', // Assumes headers in row 1
+    range: 'Products!A2:J', // Columns: slug, title_en, title_ar, description_en, description_ar, price, image_url, video_url, category, status
   })
 
   const rows = response.data.values || []
 
-  return rows.map((row, index) => ({
-    rowId: `row_${index + 2}`,
-    name: row[0] || '',
-    description: row[1] || '',
-    price: parseFloat(row[2]) || 0,
-    comparePrice: row[3] ? parseFloat(row[3]) : undefined,
-    category: row[4] || 'Uncategorized',
-    tags: row[5] ? row[5].split(',').map((t: string) => t.trim()) : [],
-    images: row[6] ? row[6].split(',').map((url: string) => url.trim()) : [],
-    fileUrl: row[7] || '',
-    status: (row[8] as 'DRAFT' | 'PUBLISHED' | 'ARCHIVED') || 'DRAFT',
-  }))
+  return rows
+    .filter((row) => row[0] && row[1]) // Must have slug and title_en
+    .map((row, index) => ({
+      rowId: `row_${index + 2}`,
+      slug: (row[0] || '').trim().toLowerCase(),
+      titleEn: (row[1] || '').trim(),
+      titleAr: row[2] ? (row[2] as string).trim() : undefined,
+      descriptionEn: (row[3] || '').trim(),
+      descriptionAr: row[4] ? (row[4] as string).trim() : undefined,
+      price: parseFloat(row[5] || '0') || 0,
+      imageUrl: (row[6] || '').trim(),
+      videoUrl: row[7] ? (row[7] as string).trim() : undefined,
+      category: (row[8] || 'Uncategorized').trim(),
+      status: (row[9]?.toUpperCase() as 'DRAFT' | 'PUBLISHED' | 'ARCHIVED') || 'DRAFT',
+    }))
 }
 
 export async function syncProductsFromSpreadsheet() {
@@ -58,49 +61,66 @@ export async function syncProductsFromSpreadsheet() {
     const spreadsheetProducts = await fetchSpreadsheetProducts()
     rowsProcessed = spreadsheetProducts.length
 
-    // Get existing products synced from spreadsheet
-    const existingProducts = await db.product.findMany({
+    // Get all existing products (to track which ones are in spreadsheet)
+    const allProducts = await db.product.findMany({
       where: { spreadsheetRowId: { not: null } },
-      select: { id: true, spreadsheetRowId: true },
+      select: { id: true, slug: true, spreadsheetRowId: true },
     })
 
-    const existingRowIds = new Set(existingProducts.map((p) => p.spreadsheetRowId))
-    const newRowIds = new Set(spreadsheetProducts.map((p) => p.rowId))
+    const spreadsheetSlugs = new Set(spreadsheetProducts.map((p) => p.slug))
+    const existingSlugMap = new Map(allProducts.map((p) => [p.slug, p]))
 
     // Process each product from spreadsheet
     for (const product of spreadsheetProducts) {
       try {
+        // Validate required fields
+        if (!product.slug || !product.titleEn) {
+          errors.push({
+            row: product.rowId,
+            error: 'Missing required fields: slug or title_en',
+          })
+          continue
+        }
+
+        if (product.price <= 0) {
+          errors.push({
+            row: product.rowId,
+            error: 'Price must be greater than 0',
+          })
+          continue
+        }
+
         // Find or create category
+        const categorySlug = slugify(product.category)
         let category = await db.category.findUnique({
-          where: { slug: slugify(product.category) },
+          where: { slug: categorySlug },
         })
 
         if (!category) {
           category = await db.category.create({
             data: {
               name: product.category,
-              slug: slugify(product.category),
+              slug: categorySlug,
             },
           })
         }
 
         const productData = {
-          name: product.name,
-          slug: slugify(product.name),
-          description: product.description,
+          name: product.titleEn,
+          nameAr: product.titleAr || null,
+          slug: product.slug,
+          description: product.descriptionEn,
+          descriptionAr: product.descriptionAr || null,
           price: product.price,
-          comparePrice: product.comparePrice,
           categoryId: category.id,
           status: product.status,
+          videoUrl: product.videoUrl || null,
           spreadsheetRowId: product.rowId,
           lastSyncedAt: new Date(),
-          aiTags: product.tags,
         }
 
-        // Check if product exists
-        const existingProduct = await db.product.findFirst({
-          where: { spreadsheetRowId: product.rowId },
-        })
+        // Check if product exists by slug
+        const existingProduct = existingSlugMap.get(product.slug)
 
         if (existingProduct) {
           // Update existing product
@@ -108,6 +128,22 @@ export async function syncProductsFromSpreadsheet() {
             where: { id: existingProduct.id },
             data: productData,
           })
+
+          // Update images - delete old and create new
+          if (product.imageUrl) {
+            await db.productImage.deleteMany({
+              where: { productId: existingProduct.id },
+            })
+
+            await db.productImage.create({
+              data: {
+                url: product.imageUrl,
+                productId: existingProduct.id,
+                order: 0,
+              },
+            })
+          }
+
           rowsUpdated++
         } else {
           // Create new product
@@ -115,67 +151,18 @@ export async function syncProductsFromSpreadsheet() {
             data: productData,
           })
 
-          // Add images
-          if (product.images.length > 0) {
-            await db.productImage.createMany({
-              data: product.images.map((url, index) => ({
-                url,
-                productId: newProduct.id,
-                order: index,
-              })),
-            })
-          }
-
-          // Add file if provided
-          if (product.fileUrl) {
-            await db.productFile.create({
+          // Add image if provided
+          if (product.imageUrl) {
+            await db.productImage.create({
               data: {
-                name: `${product.name} - Download`,
-                url: product.fileUrl,
-                size: 0,
-                type: 'application/octet-stream',
+                url: product.imageUrl,
                 productId: newProduct.id,
+                order: 0,
               },
             })
           }
 
           rowsCreated++
-        }
-
-        // Handle tags
-        for (const tagName of product.tags) {
-          let tag = await db.tag.findUnique({
-            where: { slug: slugify(tagName) },
-          })
-
-          if (!tag) {
-            tag = await db.tag.create({
-              data: {
-                name: tagName,
-                slug: slugify(tagName),
-              },
-            })
-          }
-
-          const productRecord = await db.product.findFirst({
-            where: { spreadsheetRowId: product.rowId },
-          })
-
-          if (productRecord) {
-            await db.productTag.upsert({
-              where: {
-                productId_tagId: {
-                  productId: productRecord.id,
-                  tagId: tag.id,
-                },
-              },
-              create: {
-                productId: productRecord.id,
-                tagId: tag.id,
-              },
-              update: {},
-            })
-          }
         }
       } catch (error) {
         errors.push({
@@ -185,13 +172,22 @@ export async function syncProductsFromSpreadsheet() {
       }
     }
 
-    // Delete products that are no longer in spreadsheet
-    const rowsToDelete = Array.from(existingRowIds).filter((id) => id && !newRowIds.has(id))
-    if (rowsToDelete.length > 0) {
-      await db.product.deleteMany({
-        where: { spreadsheetRowId: { in: rowsToDelete as string[] } },
+    // Soft-delete products that are no longer in spreadsheet (set status to ARCHIVED)
+    const productsToArchive = allProducts.filter(
+      (p) => p.spreadsheetRowId && !spreadsheetSlugs.has(p.slug)
+    )
+
+    if (productsToArchive.length > 0) {
+      await db.product.updateMany({
+        where: {
+          id: { in: productsToArchive.map((p) => p.id) },
+        },
+        data: {
+          status: 'ARCHIVED',
+          lastSyncedAt: new Date(),
+        },
       })
-      rowsDeleted = rowsToDelete.length
+      rowsDeleted = productsToArchive.length
     }
 
     // Log sync result

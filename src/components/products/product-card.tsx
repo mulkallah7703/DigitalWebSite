@@ -61,7 +61,7 @@ export function ProductCard({ product }: ProductCardProps) {
       <Link href={`/products/${product.slug}`}>
         {/* Image Container */}
         <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
-          {product.images?.[0] ? (
+          {product.images?.[0]?.url ? (
             <SafeImage
               src={product.images[0].url}
               alt={product.name}

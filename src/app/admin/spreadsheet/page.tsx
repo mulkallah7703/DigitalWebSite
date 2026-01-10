@@ -86,6 +86,7 @@ export default function SpreadsheetSyncPage() {
                 <li>• {t('spreadsheet.columnG')}</li>
                 <li>• {t('spreadsheet.columnH')}</li>
                 <li>• {t('spreadsheet.columnI')}</li>
+                <li>• {t('spreadsheet.columnJ')}</li>
               </ul>
             </div>
 

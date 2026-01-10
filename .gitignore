@@ -44,3 +44,9 @@ next-env.d.ts
 # Prisma
 prisma/*.db
 prisma/*.db-journal
+
+# Uploads (ignore files but keep directory structure)
+public/uploads/images/*
+public/uploads/videos/*
+!public/uploads/images/.gitkeep
+!public/uploads/videos/.gitkeep

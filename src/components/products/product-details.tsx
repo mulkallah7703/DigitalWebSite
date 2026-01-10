@@ -40,6 +40,7 @@ interface SerializedProduct {
   reviewCount: number
   salesCount: number
   viewCount: number
+  videoUrl: string | null
   category: {
     id: string
     name: string
@@ -141,7 +142,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
         {/* Main Image */}
         <div className="relative aspect-square rounded-2xl overflow-hidden bg-secondary">
           <AnimatePresence mode="wait">
-            {product.images[selectedImage] ? (
+            {product.images && product.images.length > 0 && product.images[selectedImage] && product.images[selectedImage].url ? (
               <motion.div
                 key={selectedImage}
                 initial={{ opacity: 0 }}
@@ -166,7 +167,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
           </AnimatePresence>
 
           {/* Navigation Arrows */}
-          {product.images.length > 1 && (
+          {product.images && product.images.length > 1 && (
             <>
               <Button
                 variant="secondary"
@@ -195,24 +196,44 @@ export function ProductDetails({ product }: ProductDetailsProps) {
         </div>
 
         {/* Thumbnails */}
-        {product.images.length > 1 && (
+        {product.images && product.images.length > 1 && (
           <div className="flex gap-2 overflow-x-auto pb-2">
             {product.images.map((image, index) => (
-              <button
-                key={image.id}
-                onClick={() => setSelectedImage(index)}
-                className={`relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-colors ${
-                  selectedImage === index ? 'border-primary' : 'border-transparent'
-                }`}
-              >
-                <SafeImage
-                  src={image.url}
-                  alt={image.alt || `${product.name} ${index + 1}`}
-                  fill
-                  className="object-cover"
-                />
-              </button>
+              image.url ? (
+                <button
+                  key={image.id}
+                  onClick={() => setSelectedImage(index)}
+                  className={`relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-colors ${
+                    selectedImage === index ? 'border-primary' : 'border-transparent'
+                  }`}
+                >
+                  <SafeImage
+                    src={image.url}
+                    alt={image.alt || `${product.name} ${index + 1}`}
+                    fill
+                    className="object-cover"
+                  />
+                </button>
+              ) : null
             ))}
+          </div>
+        )}
+
+        {/* Video */}
+        {product.videoUrl && product.videoUrl.trim().length > 0 && (
+          <div className="relative aspect-video rounded-2xl overflow-hidden bg-secondary">
+            <video
+              src={product.videoUrl}
+              controls
+              className="w-full h-full object-contain"
+              preload="metadata"
+              playsInline
+            >
+              <source src={product.videoUrl} type="video/mp4" />
+              <source src={product.videoUrl} type="video/webm" />
+              <source src={product.videoUrl} type="video/ogg" />
+              Your browser does not support the video tag.
+            </video>
           </div>
         )}
       </div>
