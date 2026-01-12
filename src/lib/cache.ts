@@ -60,7 +60,10 @@ export const getFeaturedProducts = unstable_cache(
 export const getCategories = unstable_cache(
   async () => {
     return db.category.findMany({
-      where: { parentId: null },
+      where: { 
+        parentId: null,
+        visible: true,
+      },
       select: {
         id: true,
         name: true,
@@ -71,7 +74,10 @@ export const getCategories = unstable_cache(
           select: { products: { where: { status: 'PUBLISHED' } } },
         },
       },
-      orderBy: { name: 'asc' },
+      orderBy: [
+        { order: 'asc' },
+        { name: 'asc' },
+      ],
     })
   },
   ['categories'],
@@ -85,13 +91,19 @@ export const getCategories = unstable_cache(
 export const getCategoriesForFilter = unstable_cache(
   async () => {
     return db.category.findMany({
-      where: { parentId: null },
+      where: { 
+        parentId: null,
+        visible: true,
+      },
       select: {
         id: true,
         name: true,
         slug: true,
       },
-      orderBy: { name: 'asc' },
+      orderBy: [
+        { order: 'asc' },
+        { name: 'asc' },
+      ],
     })
   },
   ['categories-filter'],

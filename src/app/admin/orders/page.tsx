@@ -1,28 +1,60 @@
+import { Suspense } from 'react'
 import { Metadata } from 'next'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
+import { db } from '@/lib/db'
+import { OrdersContent } from './orders-content'
 
 export const metadata: Metadata = {
   title: 'Orders',
   description: 'View and manage orders',
 }
 
-export default function AdminOrdersPage() {
-  return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Orders</h1>
-        <p className="text-muted-foreground">View and manage customer orders</p>
-      </div>
+async function getOrders() {
+  return db.order.findMany({
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+      items: {
+        include: {
+          product: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+            },
+          },
+        },
+      },
+      _count: {
+        select: { items: true },
+      },
+    },
+    orderBy: { createdAt: 'desc' },
+    take: 100,
+  })
+}
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Orders Management</CardTitle>
-          <CardDescription>This feature is coming soon</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">Order management functionality will be available here.</p>
-        </CardContent>
-      </Card>
+function TableSkeleton() {
+  return (
+    <div className="space-y-4">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Skeleton key={i} className="h-16 w-full" />
+      ))}
     </div>
+  )
+}
+
+export default async function AdminOrdersPage() {
+  const orders = await getOrders()
+
+  return (
+    <Suspense fallback={<TableSkeleton />}>
+      <OrdersContent orders={orders} />
+    </Suspense>
   )
 }

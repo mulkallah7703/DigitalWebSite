@@ -10,13 +10,19 @@ export const metadata: Metadata = {
 
 async function getCategories() {
   return db.category.findMany({
-    where: { parentId: null },
+    where: { 
+      parentId: null,
+      visible: true,
+    },
     include: {
       _count: {
         select: { products: { where: { status: 'PUBLISHED' } } },
       },
     },
-    orderBy: { name: 'asc' },
+    orderBy: [
+      { order: 'asc' },
+      { name: 'asc' },
+    ],
   })
 }
 
