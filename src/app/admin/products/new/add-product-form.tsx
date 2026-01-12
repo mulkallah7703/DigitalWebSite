@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/select'
 import { useToast } from '@/hooks/use-toast'
 import { useLanguage } from '@/components/providers/language-provider'
-import type { Category } from '@prisma/client'
+import type { Category, Product, ProductImage } from '@prisma/client'
 
 const productSchema = z.object({
   name: z.string().min(1, 'Product title (EN) is required'),
@@ -40,11 +40,18 @@ const productSchema = z.object({
 
 type ProductForm = z.infer<typeof productSchema>
 
-interface AddProductFormProps {
-  categories: Category[]
+type ProductWithImages = Product & {
+  images: ProductImage[]
+  category: Category
 }
 
-export function AddProductForm({ categories }: AddProductFormProps) {
+interface AddProductFormProps {
+  categories: Category[]
+  product?: ProductWithImages | null
+}
+
+export function AddProductForm({ categories, product }: AddProductFormProps) {
+  const isEditMode = !!product
   const router = useRouter()
   const { toast } = useToast()
   const { t } = useLanguage()
@@ -59,6 +66,7 @@ export function AddProductForm({ categories }: AddProductFormProps) {
     handleSubmit,
     setValue,
     watch,
+    reset,
     formState: { errors },
   } = useForm<ProductForm>({
     resolver: zodResolver(productSchema),
@@ -70,6 +78,28 @@ export function AddProductForm({ categories }: AddProductFormProps) {
       imageUrls: [],
     },
   })
+
+  // Load product data into form when in edit mode
+  useEffect(() => {
+    if (product) {
+      const productType = (product.aiTags && product.aiTags[0]) || 'course'
+      reset({
+        name: product.name,
+        nameAr: product.nameAr || '',
+        description: product.description,
+        descriptionAr: product.descriptionAr || '',
+        price: Number(product.price).toString(),
+        categoryId: product.categoryId,
+        productType: productType as 'course' | 'video' | 'audio' | 'ebook',
+        status: product.status,
+        isFeatured: product.isFeatured,
+        videoUrl: product.videoUrl,
+        imageUrls: product.images.map((img) => img.url),
+      })
+      setImageUrls(product.images.map((img) => img.url))
+      setVideoUrl(product.videoUrl)
+    }
+  }, [product, reset])
 
   const categoryId = watch('categoryId')
   const status = watch('status')
@@ -157,8 +187,13 @@ export function AddProductForm({ categories }: AddProductFormProps) {
   const onSubmit = async (data: ProductForm) => {
     setIsLoading(true)
     try {
-      const response = await fetch('/api/admin/products', {
-        method: 'POST',
+      const url = isEditMode 
+        ? `/api/admin/products?id=${product?.id}`
+        : '/api/admin/products'
+      const method = isEditMode ? 'PUT' : 'POST'
+
+      const response = await fetch(url, {
+        method,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -175,12 +210,16 @@ export function AddProductForm({ categories }: AddProductFormProps) {
       const result = await response.json()
 
       if (!response.ok) {
-        throw new Error(result.error || 'Failed to create product')
+        throw new Error(result.error || `Failed to ${isEditMode ? 'update' : 'create'} product`)
       }
 
       toast({
-        title: t('admin.productCreated') || 'Product Created',
-        description: t('admin.productCreatedDesc') || 'Product has been created successfully',
+        title: isEditMode 
+          ? (t('admin.productUpdated') || 'Product Updated')
+          : (t('admin.productCreated') || 'Product Created'),
+        description: isEditMode
+          ? (t('admin.productUpdatedDesc') || 'Product has been updated successfully')
+          : (t('admin.productCreatedDesc') || 'Product has been created successfully'),
       })
 
       router.push('/admin/products')
@@ -188,7 +227,7 @@ export function AddProductForm({ categories }: AddProductFormProps) {
     } catch (error) {
       toast({
         title: t('admin.error') || 'Error',
-        description: error instanceof Error ? error.message : 'Failed to create product',
+        description: error instanceof Error ? error.message : `Failed to ${isEditMode ? 'update' : 'create'} product`,
         variant: 'destructive',
       })
     } finally {
@@ -205,9 +244,17 @@ export function AddProductForm({ categories }: AddProductFormProps) {
           </Link>
         </Button>
         <div>
-          <h1 className="text-3xl font-bold">{t('admin.addProduct') || 'Add Product'}</h1>
+          <h1 className="text-3xl font-bold">
+            {isEditMode 
+              ? (t('admin.editProduct') || 'Edit Product')
+              : (t('admin.addProduct') || 'Add Product')
+            }
+          </h1>
           <p className="text-muted-foreground">
-            {t('admin.createNewProduct') || 'Create a new digital product'}
+            {isEditMode
+              ? (t('admin.editProductDesc') || 'Update product information')
+              : (t('admin.createNewProduct') || 'Create a new digital product')
+            }
           </p>
         </div>
       </div>
@@ -465,7 +512,10 @@ export function AddProductForm({ categories }: AddProductFormProps) {
           </Button>
           <Button type="submit" variant="gradient" loading={isLoading}>
             <Save className="w-4 h-4 mr-2" />
-            {t('admin.saveProduct') || 'Save Product'}
+            {isEditMode
+              ? (t('admin.saveChanges') || 'Save Changes')
+              : (t('admin.saveProduct') || 'Save Product')
+            }
           </Button>
         </div>
       </form>

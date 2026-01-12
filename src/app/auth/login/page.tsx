@@ -49,13 +49,19 @@ export default function LoginPage() {
       })
 
       if (result?.error) {
+        // Handle authentication errors gracefully
+        const errorMessage = result.error === 'CredentialsSignin' 
+          ? t('auth.invalidCredentials') || 'Invalid email or password'
+          : t('auth.invalidEmail') || 'Authentication failed'
+        
         toast({
-          title: t('auth.error'),
-          description: t('auth.invalidEmail'),
+          title: t('auth.error') || 'Error',
+          description: errorMessage,
           variant: 'destructive',
         })
-      } else {
-        router.push(callbackUrl)
+      } else if (result?.ok) {
+        // Successful login - redirect to homepage
+        router.push('/')
         router.refresh()
       }
     } catch {

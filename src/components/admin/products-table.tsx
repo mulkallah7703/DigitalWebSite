@@ -90,7 +90,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
   }
 
   const handleEdit = (productId: string) => {
-    router.push(`/admin/products/new?edit=${productId}`)
+    router.push(`/admin/products/${productId}/edit`)
   }
 
   return (
