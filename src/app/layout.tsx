@@ -11,12 +11,14 @@ import { CartDrawer } from '@/components/layout/cart-drawer'
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://nexus-digital-store.vercel.app'
+// Default store name (English) - individual pages can override with generateMetadata
+const defaultStoreName = 'Alsadi Digital Store'
 
 export const metadata: Metadata = {
   metadataBase: new URL(appUrl),
   title: {
-    default: 'Nexus Digital Store - Premium Digital Products',
-    template: '%s | Nexus Digital Store',
+    default: `${defaultStoreName} - Premium Digital Products`,
+    template: `%s | ${defaultStoreName}`,
   },
   description:
     'Discover premium digital products powered by AI. Software, templates, courses, and more. Fast delivery, secure downloads.',
@@ -29,27 +31,27 @@ export const metadata: Metadata = {
     'digital downloads',
     'AI powered',
   ],
-  authors: [{ name: 'Nexus Digital Store' }],
-  creator: 'Nexus Digital Store',
+  authors: [{ name: defaultStoreName }],
+  creator: defaultStoreName,
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: appUrl,
-    siteName: 'Nexus Digital Store',
-    title: 'Nexus Digital Store - Premium Digital Products',
+    siteName: defaultStoreName,
+    title: `${defaultStoreName} - Premium Digital Products`,
     description: 'Discover premium digital products powered by AI.',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Nexus Digital Store',
+        alt: defaultStoreName,
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Nexus Digital Store - Premium Digital Products',
+    title: `${defaultStoreName} - Premium Digital Products`,
     description: 'Discover premium digital products powered by AI.',
     images: ['/og-image.png'],
   },

@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Terms of Service',
-  description: 'Terms of service for Nexus Digital Store',
+  description: 'Terms of service for Alsadi Digital Store',
 }
 
 export default function TermsPage() {
@@ -18,7 +18,7 @@ export default function TermsPage() {
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">1. Acceptance of Terms</h2>
           <p className="text-muted-foreground">
-            By accessing and using Nexus Digital Store, you accept and agree to be bound by 
+            By accessing and using Alsadi Digital Store, you accept and agree to be bound by 
             these Terms of Service. If you do not agree to these terms, please do not use our services.
           </p>
         </section>
@@ -78,7 +78,7 @@ export default function TermsPage() {
           <h2 className="text-2xl font-semibold mb-4">6. Intellectual Property</h2>
           <p className="text-muted-foreground">
             All content on this platform, including but not limited to text, graphics, logos, 
-            and software, is the property of Nexus Digital Store or its content suppliers and 
+            and software, is the property of Alsadi Digital Store or its content suppliers and 
             is protected by intellectual property laws.
           </p>
         </section>
@@ -86,7 +86,7 @@ export default function TermsPage() {
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">7. Limitation of Liability</h2>
           <p className="text-muted-foreground">
-            Nexus Digital Store shall not be liable for any indirect, incidental, special, 
+            Alsadi Digital Store shall not be liable for any indirect, incidental, special, 
             consequential, or punitive damages resulting from your use of or inability to use 
             our services or products.
           </p>

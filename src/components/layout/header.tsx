@@ -76,7 +76,7 @@ export function Header() {
               </div>
               <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 blur-lg opacity-50 group-hover:opacity-75 transition-opacity" />
             </div>
-            <span className="text-xl font-bold gradient-text hidden sm:block">Nexus</span>
+            <span className="text-xl font-bold gradient-text hidden sm:block">{t('store.name')}</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -176,25 +176,25 @@ export function Header() {
                     </>
                   )}
                   <DropdownMenuItem asChild>
-                    <Link href="/admin" className="cursor-pointer">
+                    <Link href="/account" className="cursor-pointer">
                       <User className="w-4 h-4 mr-2" />
                       {t('nav.account')}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/admin" className="cursor-pointer">
+                    <Link href="/account/orders" className="cursor-pointer">
                       <Package className="w-4 h-4 mr-2" />
                       {t('nav.orders')}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/admin" className="cursor-pointer">
+                    <Link href="/account/wishlist" className="cursor-pointer">
                       <Heart className="w-4 h-4 mr-2" />
                       {t('nav.wishlist')}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/admin" className="cursor-pointer">
+                    <Link href="/account?tab=preferences" className="cursor-pointer">
                       <Settings className="w-4 h-4 mr-2" />
                       {t('nav.settings')}
                     </Link>

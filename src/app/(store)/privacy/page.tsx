@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
-  description: 'Privacy policy for Nexus Digital Store',
+  description: 'Privacy policy for Alsadi Digital Store',
 }
 
 export default function PrivacyPage() {

@@ -41,7 +41,7 @@ export function AdminSidebar() {
         <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center">
           <Sparkles className="w-4 h-4 text-white" />
         </div>
-        <span className="font-bold gradient-text">Nexus Admin</span>
+        <span className="font-bold gradient-text">{t('store.name')} {t('admin.dashboard')}</span>
       </div>
 
       {/* Navigation */}

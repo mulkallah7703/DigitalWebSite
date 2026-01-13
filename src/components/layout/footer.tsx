@@ -51,7 +51,7 @@ export function Footer() {
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center">
                 <Sparkles className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold gradient-text">Nexus</span>
+              <span className="text-xl font-bold gradient-text">{t('store.name')}</span>
             </Link>
             <p className="text-sm text-muted-foreground mb-6 max-w-xs">
               {t('footer.description')}
@@ -145,7 +145,7 @@ export function Footer() {
 
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Nexus Digital Store. {t('footer.copyright')}
+            © {new Date().getFullYear()} {t('store.name')}. {t('footer.copyright')}
           </p>
           <div className="flex items-center gap-4">
             <span className="text-xs text-muted-foreground">
