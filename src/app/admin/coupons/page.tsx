@@ -1,28 +1,41 @@
+import { Suspense } from 'react'
 import { Metadata } from 'next'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
+import { db } from '@/lib/db'
+import { CouponsContent } from './coupons-content'
 
 export const metadata: Metadata = {
   title: 'Coupons',
   description: 'Manage discount coupons',
 }
 
-export default function AdminCouponsPage() {
-  return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Coupons</h1>
-        <p className="text-muted-foreground">Manage discount coupons and promotions</p>
-      </div>
+async function getCoupons() {
+  return db.coupon.findMany({
+    include: {
+      _count: {
+        select: { orders: true },
+      },
+    },
+    orderBy: { createdAt: 'desc' },
+  })
+}
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Coupon Management</CardTitle>
-          <CardDescription>This feature is coming soon</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">Coupon management functionality will be available here.</p>
-        </CardContent>
-      </Card>
+function TableSkeleton() {
+  return (
+    <div className="space-y-4">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Skeleton key={i} className="h-16 w-full" />
+      ))}
     </div>
+  )
+}
+
+export default async function AdminCouponsPage() {
+  const coupons = await getCoupons()
+
+  return (
+    <Suspense fallback={<TableSkeleton />}>
+      <CouponsContent coupons={coupons} />
+    </Suspense>
   )
 }
