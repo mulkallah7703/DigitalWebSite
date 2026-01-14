@@ -1,5 +1,5 @@
 'use client'
-
+import Image from 'next/image'
 import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
 import { useTheme } from 'next-themes'
@@ -62,19 +62,24 @@ export function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'glass shadow-lg' : 'bg-transparent'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'glass shadow-lg' : 'bg-transparent'
+        }`}
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
             <div className="relative">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-white" />
-              </div>
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 blur-lg opacity-50 group-hover:opacity-75 transition-opacity" />
+              <Image
+                src="/mylogo.jpg"
+                alt="Alsadi Digital Store Logo"
+                width={40}
+                height={40}
+                className="rounded-xl object-contain"
+              />
+
+
+              <div className="absolute inset-0 rounded-xl from-indigo-500 via-purple-500 to-pink-500 group-hover:opacity-75 transition-opacity" />
             </div>
             <span className="text-xl font-bold gradient-text hidden sm:block">{t('store.name')}</span>
           </Link>
