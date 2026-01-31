@@ -34,6 +34,7 @@ interface SerializedProduct {
   shortDescription: string | null
   price: number
   comparePrice: number | null
+  externalPurchaseLink: string | null
   categoryId: string
   featured: boolean
   rating: number
@@ -112,6 +113,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
       slug: product.slug,
       price,
       comparePrice,
+      externalPurchaseLink: product.externalPurchaseLink ?? null,
       images: product.images.map(img => ({
         id: img.id,
         url: img.url,

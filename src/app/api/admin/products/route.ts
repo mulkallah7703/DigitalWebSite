@@ -36,6 +36,7 @@ async function handler(req: Request) {
       description: z.string().min(1, 'Product description is required'),
       descriptionAr: z.string().optional().nullable(),
       price: z.number().positive('Price must be greater than 0'),
+      externalPurchaseLink: z.string().optional().nullable(),
       categoryId: z.string().min(1, 'Category is required'),
       productType: z.enum(['course', 'video', 'audio', 'ebook']),
       status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']),
@@ -76,6 +77,9 @@ async function handler(req: Request) {
         description: data.description,
         descriptionAr: data.descriptionAr || null,
         price: data.price,
+        externalPurchaseLink: data.externalPurchaseLink && data.externalPurchaseLink.trim().length > 0
+          ? data.externalPurchaseLink.trim()
+          : null,
         categoryId: data.categoryId,
         status: data.status,
         isFeatured: data.isFeatured ?? false,
@@ -179,6 +183,7 @@ async function updateHandler(req: Request) {
         }
         return num
       }),
+      externalPurchaseLink: z.string().optional().nullable(),
       categoryId: z.string().min(1, 'Category is required'),
       productType: z.enum(['course', 'video', 'audio', 'ebook']),
       status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']),
@@ -296,6 +301,9 @@ async function updateHandler(req: Request) {
         descriptionAr: data.descriptionAr || null,
         price: normalizedPrice,
         comparePrice: normalizedComparePrice,
+        externalPurchaseLink: data.externalPurchaseLink && data.externalPurchaseLink.trim().length > 0
+          ? data.externalPurchaseLink.trim()
+          : null,
         categoryId: data.categoryId,
         status: data.status,
         isFeatured: data.isFeatured ?? false,

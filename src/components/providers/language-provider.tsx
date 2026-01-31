@@ -90,7 +90,8 @@ const translations: Record<Language, Record<string, string>> = {
     'checkout.desc': 'Review your order and complete payment',
     'checkout.empty': 'Your cart is empty',
     'checkout.emptyDesc': 'Looks like you haven\'t added anything to your cart yet.',
-    'checkout.payStripe': 'Pay with Stripe',
+    'checkout.payStripe': 'Buy Now',
+    'checkout.missingLink': 'External purchase link is not set',
     'checkout.secure': 'Secure checkout powered by Stripe',
     'checkout.remove': 'Remove',
     'checkout.failed': 'Checkout failed',
@@ -108,6 +109,7 @@ const translations: Record<Language, Record<string, string>> = {
     'admin.settings': 'Settings',
     'admin.viewStore': 'View Store',
     'admin.profileSettings': 'Profile Settings',
+    'admin.externalPurchaseLink': 'External Purchase Link',
     // Success
     'success.payment': 'Payment Successful!',
     'success.thankYou': 'Thank you for your purchase. Your order has been confirmed and your downloads are ready.',
@@ -443,7 +445,8 @@ const translations: Record<Language, Record<string, string>> = {
     'checkout.desc': 'راجع طلبك وأكمل الدفع',
     'checkout.empty': 'سلة التسوق فارغة',
     'checkout.emptyDesc': 'يبدو أنك لم تضيف أي شيء إلى سلة التسوق بعد.',
-    'checkout.payStripe': 'الدفع عبر Stripe',
+    'checkout.payStripe': 'اشتر الآن',
+    'checkout.missingLink': 'رابط الشراء الخارجي غير محدد',
     'checkout.secure': 'دفع آمن مدعوم من Stripe',
     'checkout.remove': 'إزالة',
     'checkout.failed': 'فشل الدفع',
@@ -461,6 +464,7 @@ const translations: Record<Language, Record<string, string>> = {
     'admin.settings': 'الإعدادات',
     'admin.viewStore': 'عرض المتجر',
     'admin.profileSettings': 'إعدادات الملف الشخصي',
+    'admin.externalPurchaseLink': 'رابط الشراء الخارجي',
     // Success
     'success.payment': 'تم الدفع بنجاح!',
     'success.thankYou': 'شكراً لك على الشراء. تم تأكيد طلبك وتحميلاتك جاهزة.',
@@ -765,7 +769,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // Sync with global state
     languageState = language
-    
+
     // Update DOM attributes
     try {
       if (typeof window !== 'undefined' && document?.documentElement) {
@@ -788,7 +792,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       }
     }
     languageListeners.add(listener)
-    
+
     return () => {
       languageListeners.delete(listener)
     }
@@ -815,17 +819,17 @@ export function getTranslation(language: Language, key: string): string {
 export function useLanguage() {
   const context = useContext(LanguageContext)
   // Context is always defined (has default value), so no error needed
-  
+
   // Create translation function locally using the language from context
   const t = (key: string): string => {
     return getTranslation(context.language, key)
   }
-  
+
   // Create setLanguage function locally (not from context)
   const setLanguage = (lang: Language) => {
     setLanguageState(lang)
   }
-  
+
   return {
     language: context.language,
     setLanguage,

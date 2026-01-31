@@ -113,6 +113,7 @@ model Product {
   shortDescription String?
   price            Decimal        @db.Decimal(10, 2)
   comparePrice     Decimal?       @db.Decimal(10, 2)
+  externalPurchaseLink String?
   categoryId       String
   category         Category       @relation(fields: [categoryId], references: [id])
   images           ProductImage[]

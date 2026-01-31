@@ -22,6 +22,34 @@ export default function CheckoutPage() {
   const [isLoading, setIsLoading] = useState(false)
   const total = getTotal()
 
+  const getExternalPurchaseLink = () => {
+    const match = items.find((item) => item.product.externalPurchaseLink?.trim())
+    return match?.product.externalPurchaseLink?.trim() || null
+  }
+
+  const handleExternalPurchase = () => {
+    if (items.length === 0) {
+      toast({
+        title: t('checkout.cartEmpty'),
+        description: t('checkout.addProducts'),
+        variant: 'destructive',
+      })
+      return
+    }
+
+    const purchaseLink = getExternalPurchaseLink()
+    if (!purchaseLink) {
+      toast({
+        title: t('checkout.failed'),
+        description: t('checkout.missingLink'),
+        variant: 'destructive',
+      })
+      return
+    }
+
+    window.location.href = purchaseLink
+  }
+
   const handleCheckout = async () => {
     if (items.length === 0) {
       toast({
@@ -185,7 +213,7 @@ export default function CheckoutPage() {
                 </div>
 
                 <Button
-                  onClick={handleCheckout}
+                  onClick={handleExternalPurchase}
                   className="w-full"
                   variant="gradient"
                   size="lg"

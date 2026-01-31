@@ -23,6 +23,7 @@ interface WishlistItem {
     slug: string
     price: number
     comparePrice: number | null
+    externalPurchaseLink?: string | null
     status: ProductStatus
     images: Array<{ id: string; url: string; alt?: string | null }>
     category: {
@@ -76,6 +77,7 @@ export function WishlistPageContent() {
             slug: string
             price: number
             comparePrice: number | null
+            externalPurchaseLink?: string | null
             status: ProductStatus
             images: Array<{ url: string }>
             category: {
@@ -144,6 +146,7 @@ export function WishlistPageContent() {
       slug: product.slug,
       price: product.price,
       comparePrice: product.comparePrice,
+      externalPurchaseLink: product.externalPurchaseLink ?? null,
       images: product.images,
       category: product.category,
     }

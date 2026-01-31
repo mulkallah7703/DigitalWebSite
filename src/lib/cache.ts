@@ -27,6 +27,7 @@ export const getFeaturedProducts = unstable_cache(
         reviewCount: true,
         featured: true,
         isFeatured: true,
+        externalPurchaseLink: true,
         category: {
           select: {
             id: true,
@@ -150,6 +151,7 @@ export const getProductBySlug = unstable_cache(
     return {
       ...product,
       videoUrl: product.videoUrl, // Explicitly include videoUrl
+      externalPurchaseLink: product.externalPurchaseLink ?? null,
       price: Number(product.price),
       comparePrice: product.comparePrice ? Number(product.comparePrice) : null,
       rating: Number(product.rating),
@@ -180,6 +182,7 @@ export const getRelatedProducts = unstable_cache(
         rating: true,
         reviewCount: true,
         featured: true,
+        externalPurchaseLink: true,
         category: {
           select: {
             id: true,

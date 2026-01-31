@@ -30,6 +30,7 @@ const productSchema = z.object({
     const num = parseFloat(val)
     return !isNaN(num) && num > 0
   }, 'Price must be a valid number greater than 0'),
+  externalPurchaseLink: z.string().optional().nullable(),
   categoryId: z.string().min(1, 'Category is required'),
   productType: z.enum(['course', 'video', 'audio', 'ebook']),
   status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']),
@@ -89,6 +90,7 @@ export function AddProductForm({ categories, product }: AddProductFormProps) {
         description: product.description,
         descriptionAr: product.descriptionAr || '',
         price: Number(product.price).toString(),
+        externalPurchaseLink: product.externalPurchaseLink || '',
         categoryId: product.categoryId,
         productType: productType as 'course' | 'video' | 'audio' | 'ebook',
         status: product.status,
@@ -200,6 +202,7 @@ export function AddProductForm({ categories, product }: AddProductFormProps) {
         body: JSON.stringify({
           ...data,
           price: parseFloat(data.price),
+          externalPurchaseLink: data.externalPurchaseLink?.trim() || null,
           videoUrl: videoUrl || null,
           imageUrls: imageUrls.length > 0 ? imageUrls : null,
           productType: data.productType,
@@ -361,6 +364,20 @@ export function AddProductForm({ categories, product }: AddProductFormProps) {
               </SelectContent>
             </Select>
           </div>
+        </div>
+
+        {/* External Purchase Link */}
+        <div className="space-y-2">
+          <Label htmlFor="externalPurchaseLink">
+            {t('admin.externalPurchaseLink') || 'External Purchase Link'}
+          </Label>
+          <Input
+            id="externalPurchaseLink"
+            type="url"
+            placeholder="https://payhip.com/..."
+            error={errors.externalPurchaseLink?.message}
+            {...register('externalPurchaseLink')}
+          />
         </div>
 
         {/* Category */}

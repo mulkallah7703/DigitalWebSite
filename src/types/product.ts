@@ -10,6 +10,7 @@ export type FeaturedProduct = {
   isFeatured: boolean
   rating: Decimal
   reviewCount: number
+  externalPurchaseLink?: string | null
   images: {
     id: string
     url: string

@@ -8,6 +8,7 @@ export interface CartProduct {
   slug: string
   price: number
   comparePrice?: number | null
+  externalPurchaseLink?: string | null
   images: { id: string; url: string; alt?: string | null }[]
   category: { id: string; name: string; slug: string }
 }

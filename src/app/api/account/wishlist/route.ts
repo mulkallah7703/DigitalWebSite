@@ -25,6 +25,7 @@ export async function GET(req: Request) {
             slug: true,
             price: true,
             comparePrice: true,
+            externalPurchaseLink: true,
             status: true,
             images: {
               select: {

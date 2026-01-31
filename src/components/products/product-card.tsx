@@ -21,6 +21,7 @@ export interface ProductCardData {
   featured?: boolean
   rating: Decimal | number
   reviewCount: number
+  externalPurchaseLink?: string | null
   images: { id: string; url: string; alt?: string | null }[]
   category: { id: string; name: string; slug: string }
 }
@@ -46,6 +47,7 @@ export function ProductCard({ product }: ProductCardProps) {
       slug: product.slug,
       price,
       comparePrice,
+      externalPurchaseLink: product.externalPurchaseLink ?? null,
       images: product.images,
       category: product.category,
     }
