@@ -1,6 +1,8 @@
 import { db } from '@/lib/db'
 import { AddProductForm } from './add-product-form'
 
+export const dynamic = 'force-dynamic'
+
 async function getCategories() {
   return db.category.findMany({
     orderBy: { name: 'asc' },
