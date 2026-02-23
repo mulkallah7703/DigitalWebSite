@@ -32,7 +32,7 @@ const productSchema = z.object({
   }, 'Price must be a valid number greater than 0'),
   externalPurchaseLink: z.string().optional().nullable(),
   categoryId: z.string().min(1, 'Category is required'),
-  productType: z.enum(['course', 'video', 'audio', 'ebook']),
+  productType: z.enum(['course', 'video', 'audio', 'ebook', 'software']),
   status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']),
   isFeatured: z.boolean().default(false),
   videoUrl: z.string().optional().nullable(),
@@ -92,7 +92,7 @@ export function AddProductForm({ categories, product }: AddProductFormProps) {
         price: Number(product.price).toString(),
         externalPurchaseLink: product.externalPurchaseLink || '',
         categoryId: product.categoryId,
-        productType: productType as 'course' | 'video' | 'audio' | 'ebook',
+        productType: productType as 'course' | 'video' | 'audio' | 'ebook' | 'software',
         status: product.status,
         isFeatured: product.isFeatured,
         videoUrl: product.videoUrl,
@@ -351,7 +351,9 @@ export function AddProductForm({ categories, product }: AddProductFormProps) {
             </Label>
             <Select
               value={productType}
-              onValueChange={(value) => setValue('productType', value as 'course' | 'video' | 'audio' | 'ebook')}
+            onValueChange={(value) =>
+              setValue('productType', value as 'course' | 'video' | 'audio' | 'ebook' | 'software')
+            }
             >
               <SelectTrigger id="productType">
                 <SelectValue />
@@ -361,6 +363,7 @@ export function AddProductForm({ categories, product }: AddProductFormProps) {
                 <SelectItem value="video">{t('admin.typeVideo') || 'Video'}</SelectItem>
                 <SelectItem value="audio">{t('admin.typeAudio') || 'Audio'}</SelectItem>
                 <SelectItem value="ebook">{t('admin.typeEbook') || 'Ebook'}</SelectItem>
+                <SelectItem value="software">{t('admin.typeSoftware') || 'Software'}</SelectItem>
               </SelectContent>
             </Select>
           </div>

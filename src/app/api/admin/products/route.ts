@@ -38,7 +38,7 @@ async function handler(req: Request) {
       price: z.number().positive('Price must be greater than 0'),
       externalPurchaseLink: z.string().optional().nullable(),
       categoryId: z.string().min(1, 'Category is required'),
-      productType: z.enum(['course', 'video', 'audio', 'ebook']),
+      productType: z.enum(['course', 'video', 'audio', 'ebook', 'software']),
       status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']),
       isFeatured: z.boolean().optional().default(false),
       videoUrl: z.string().optional().nullable(), // Can be local path or URL
@@ -185,7 +185,7 @@ async function updateHandler(req: Request) {
       }),
       externalPurchaseLink: z.string().optional().nullable(),
       categoryId: z.string().min(1, 'Category is required'),
-      productType: z.enum(['course', 'video', 'audio', 'ebook']),
+      productType: z.enum(['course', 'video', 'audio', 'ebook', 'software']),
       status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']),
       isFeatured: z.boolean().optional().default(false),
       videoUrl: z.string().optional().nullable(),
