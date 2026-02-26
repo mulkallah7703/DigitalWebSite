@@ -12,17 +12,16 @@ const nextConfig = {
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256],
     minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
-    unoptimized: false, // Keep optimization enabled for allowed domains
+    unoptimized: true, // Keep optimization enabled for allowed domains
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
-  
   // Compression
   compress: true,
-  
+
   // Production optimizations
   poweredByHeader: false,
-  
+
   // Experimental features for performance
   experimental: {
     serverActions: {
@@ -51,7 +50,7 @@ const nextConfig = {
       'date-fns',
     ],
   },
-  
+
   // Headers for caching
   async headers() {
     return [
