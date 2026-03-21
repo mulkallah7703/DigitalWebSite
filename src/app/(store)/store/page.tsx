@@ -6,7 +6,6 @@ import { CategoriesSection } from '@/components/home/categories-section'
 import { Skeleton } from '@/components/ui/skeleton'
 import { getFeaturedProducts, getCategories } from '@/lib/cache'
 
-// Lazy load non-critical sections
 const FeaturesSection = dynamic(() => import('@/components/home/features-section').then(mod => ({ default: mod.FeaturesSection })), {
   loading: () => <div className="py-16 lg:py-24" />,
 })
@@ -15,7 +14,6 @@ const CTASection = dynamic(() => import('@/components/home/cta-section').then(mo
   loading: () => <div className="py-16 lg:py-24" />,
 })
 
-// ISR - revalidate every 5 minutes
 export const revalidate = 300
 
 function ProductsSkeleton() {
@@ -38,8 +36,7 @@ function ProductsSkeleton() {
   )
 }
 
-export default async function HomePage() {
-  // Parallel data fetching with caching
+export default async function StoreHomePage() {
   const [products, categories] = await Promise.all([
     getFeaturedProducts(),
     getCategories(),
@@ -48,15 +45,11 @@ export default async function HomePage() {
   return (
     <>
       <HeroSection />
-      
       <Suspense fallback={<ProductsSkeleton />}>
         <FeaturedProducts products={products} />
       </Suspense>
-      
       <CategoriesSection categories={categories} />
-      
       <FeaturesSection />
-      
       <CTASection />
     </>
   )

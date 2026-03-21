@@ -37,7 +37,13 @@ import { getInitials } from '@/lib/utils'
 import { LanguageSwitcher } from '@/components/layout/language-switcher'
 import { useLanguage } from '@/components/providers/language-provider'
 
-export function Header() {
+type HeaderVariant = 'company' | 'store'
+
+interface HeaderProps {
+  variant?: HeaderVariant
+}
+
+export function Header({ variant = 'store' }: HeaderProps) {
   const { data: session } = useSession()
   const { theme, setTheme } = useTheme()
   const { t } = useLanguage()
@@ -47,10 +53,19 @@ export function Header() {
   const { openCart, getItemCount } = useCartStore()
   const itemCount = getItemCount()
 
-  const navLinks = [
-    { href: '/products', label: t('nav.products') },
-    { href: '/categories', label: t('nav.categories') },
-  ]
+  const navLinks =
+    variant === 'company'
+      ? [
+          { href: '/', label: t('nav.home') },
+          { href: '/#services', label: t('nav.services') },
+          { href: '/#about', label: t('nav.about') },
+          { href: '/store', label: t('nav.digitalEcommerce') },
+        ]
+      : [
+          { href: '/store', label: t('nav.digitalEcommerce') },
+          { href: '/products', label: t('nav.products') },
+          { href: '/categories', label: t('nav.categories') },
+        ]
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10)
@@ -98,28 +113,32 @@ export function Header() {
             ))}
           </nav>
 
-          {/* Search Bar - Desktop */}
-          <div className="hidden lg:flex flex-1 max-w-md mx-8">
-            <div className="relative w-full">
-              <Input
-                placeholder={t('common.search')}
-                className="pl-10 pr-4 h-10 bg-secondary/50 border-0 focus-visible:ring-1"
-                icon={<Search className="w-4 h-4" />}
-              />
+          {/* Search Bar - Desktop (store only) */}
+          {variant === 'store' && (
+            <div className="hidden lg:flex flex-1 max-w-md mx-8">
+              <div className="relative w-full">
+                <Input
+                  placeholder={t('common.search')}
+                  className="pl-10 pr-4 h-10 bg-secondary/50 border-0 focus-visible:ring-1"
+                  icon={<Search className="w-4 h-4" />}
+                />
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Actions */}
           <div className="flex items-center gap-2">
-            {/* Mobile Search Toggle */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="lg:hidden"
-              onClick={() => setIsSearchOpen(!isSearchOpen)}
-            >
-              <Search className="w-5 h-5" />
-            </Button>
+            {/* Mobile Search Toggle (store only) */}
+            {variant === 'store' && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="lg:hidden"
+                onClick={() => setIsSearchOpen(!isSearchOpen)}
+              >
+                <Search className="w-5 h-5" />
+              </Button>
+            )}
 
             {/* Language Switcher */}
             <LanguageSwitcher />
@@ -135,18 +154,20 @@ export function Header() {
               <span className="sr-only">Toggle theme</span>
             </Button>
 
-            {/* Cart */}
-            <Button variant="ghost" size="icon" className="relative" onClick={openCart}>
-              <ShoppingCart className="w-5 h-5" />
-              {itemCount > 0 && (
-                <Badge
-                  variant="gradient"
-                  className="absolute -top-1 -right-1 w-5 h-5 p-0 flex items-center justify-center text-[10px]"
-                >
-                  {itemCount}
-                </Badge>
-              )}
-            </Button>
+            {/* Cart (store only) */}
+            {variant === 'store' && (
+              <Button variant="ghost" size="icon" className="relative" onClick={openCart}>
+                <ShoppingCart className="w-5 h-5" />
+                {itemCount > 0 && (
+                  <Badge
+                    variant="gradient"
+                    className="absolute -top-1 -right-1 w-5 h-5 p-0 flex items-center justify-center text-[10px]"
+                  >
+                    {itemCount}
+                  </Badge>
+                )}
+              </Button>
+            )}
 
             {/* User Menu */}
             {session ? (
@@ -232,7 +253,8 @@ export function Header() {
           </div>
         </div>
 
-        {/* Mobile Search */}
+        {/* Mobile Search (store only) */}
+        {variant === 'store' && (
         <AnimatePresence>
           {isSearchOpen && (
             <motion.div
@@ -251,6 +273,7 @@ export function Header() {
             </motion.div>
           )}
         </AnimatePresence>
+        )}
       </div>
 
       {/* Mobile Menu */}
