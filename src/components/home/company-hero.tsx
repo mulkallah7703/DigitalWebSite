@@ -11,6 +11,14 @@ export function CompanyHero() {
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-pink-500/10 dark:from-indigo-500/5 dark:via-purple-500/5 dark:to-pink-500/5" />
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+        src="/herobackground.mp4"
+      />
       <div className="absolute inset-0">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/30 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/30 rounded-full blur-3xl animate-pulse delay-1000" />
@@ -29,6 +37,15 @@ export function CompanyHero() {
             <Sparkles className="w-4 h-4 text-primary" />
             <span className="text-sm font-medium">{t('company.tagline')}</span>
           </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.05 }}
+            className="text-6xl sm:text-7xl font-bold mb-6"
+          >
+            {t('company.name')}
+          </motion.h2>
 
           <motion.h1
             initial={{ opacity: 0, y: 20 }}

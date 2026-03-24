@@ -1,7 +1,9 @@
 'use client'
 
+import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Target, Eye, Zap } from 'lucide-react'
+import { Target, Eye, Zap, ArrowRight } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { useLanguage } from '@/components/providers/language-provider'
 
 export function CompanyAbout() {
@@ -59,6 +61,20 @@ function CompanyAboutContent() {
           </motion.div>
         ))}
       </div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.4 }}
+        className="mt-12 flex justify-center"
+      >
+        <Button asChild size="xl" variant="gradient" className="group">
+          <Link href="/about">
+            {t('company.aboutCta')}
+            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </Button>
+      </motion.div>
     </div>
   )
 }
