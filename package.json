@@ -50,6 +50,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.0",
     "recharts": "^2.12.2",
+    "resend": "^6.9.4",
     "sharp": "^0.33.2",
     "stripe": "^14.18.0",
     "tailwind-merge": "^2.2.1",

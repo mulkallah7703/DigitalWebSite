@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -56,10 +55,10 @@ export function CompanyHero() {
             transition={{ duration: 0.5, delay: 0.3 }}
           >
             <Button asChild size="xl" variant="gradient" className="group">
-              <Link href="/store">
-                {t('company.ctaStore')}
+              <a href="#contact">
+                {t('company.ctaContactUs')}
                 <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Link>
+              </a>
             </Button>
           </motion.div>
         </div>
