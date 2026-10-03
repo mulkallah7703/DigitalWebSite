@@ -43,7 +43,7 @@ export function AdminHeader({ user }: AdminHeaderProps) {
       <div className="flex items-center gap-2">
         {/* View Store */}
         <Button variant="ghost" size="sm" asChild>
-          <Link href="/" target="_blank">
+          <Link href="/store" target="_blank">
             <ExternalLink className="w-4 h-4 mr-2" />
             {t('admin.viewStore')}
           </Link>
