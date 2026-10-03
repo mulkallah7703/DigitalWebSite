@@ -16,16 +16,39 @@ if (process.env.NODE_ENV !== 'production') {
   globalForPrisma.prisma = db
 }
 
-// Helper to serialize Prisma Decimal values to plain numbers
-export function serializeProduct<T extends { price?: unknown; comparePrice?: unknown; rating?: unknown }>(
+function decimalToNumber(value: unknown): number | null | undefined {
+  if (value === null || value === undefined) return value as null | undefined
+  const n = typeof value === 'number' ? value : Number(value)
+  return Number.isFinite(n) ? n : 0
+}
+
+// Helper to serialize Prisma Decimal values to plain numbers.
+// A price or rating of 0 must stay 0; treating it as missing drops the field.
+export function serializeProduct<T extends {
+  price?: unknown
+  comparePrice?: unknown
+  rating?: unknown
+  aiRecommendScore?: unknown
+}>(
   product: T
 ): T {
   return {
     ...product,
-    price: product.price ? Number(product.price) : undefined,
-    comparePrice: product.comparePrice ? Number(product.comparePrice) : undefined,
-    rating: product.rating ? Number(product.rating) : undefined,
+    price: decimalToNumber(product.price) ?? 0,
+    comparePrice: product.comparePrice == null ? null : decimalToNumber(product.comparePrice),
+    rating: decimalToNumber(product.rating) ?? 0,
+    aiRecommendScore: product.aiRecommendScore == null ? product.aiRecommendScore : decimalToNumber(product.aiRecommendScore),
   } as T
+}
+
+// Pages should render an empty catalog when Postgres is down or the query fails.
+export async function safeDb<T>(label: string, fn: () => Promise<T>, fallback: T): Promise<T> {
+  try {
+    return await fn()
+  } catch (error) {
+    console.error(`[${label}]`, error)
+    return fallback
+  }
 }
 
 export function serializeProducts<T extends { price?: unknown; comparePrice?: unknown; rating?: unknown }>(

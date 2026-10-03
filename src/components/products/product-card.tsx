@@ -33,8 +33,12 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   const { addItem, openCart } = useCartStore()
   const { t } = useLanguage()
-  const price = Number(product.price)
-  const comparePrice = product.comparePrice ? Number(product.comparePrice) : null
+  const parsedPrice = Number(product?.price)
+  const price = Number.isFinite(parsedPrice) ? parsedPrice : 0
+  const parsedCompare = product?.comparePrice == null ? null : Number(product.comparePrice)
+  const comparePrice = parsedCompare != null && Number.isFinite(parsedCompare) ? parsedCompare : null
+  const parsedRating = Number(product?.rating)
+  const rating = Number.isFinite(parsedRating) ? parsedRating : 0
   const discount = calculateDiscount(price, comparePrice || 0)
 
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -126,7 +130,7 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* Content */}
         <div className="p-4">
           {/* Category */}
-          <p className="text-xs text-muted-foreground mb-1">{product.category.name}</p>
+          <p className="text-xs text-muted-foreground mb-1">{product.category?.name}</p>
 
           {/* Title */}
           <h3 className="font-semibold line-clamp-2 mb-2 group-hover:text-primary transition-colors">
@@ -136,7 +140,7 @@ export function ProductCard({ product }: ProductCardProps) {
           {/* Rating */}
           <div className="flex items-center gap-1 mb-3">
             <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-            <span className="text-sm font-medium">{Number(product.rating).toFixed(1)}</span>
+            <span className="text-sm font-medium">{rating.toFixed(1)}</span>
             <span className="text-xs text-muted-foreground">({product.reviewCount})</span>
           </div>
 

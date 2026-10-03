@@ -5,6 +5,7 @@ import { ProductsFilter } from '@/components/products/products-filter'
 import { ProductsHeader } from './products-header'
 import { Skeleton } from '@/components/ui/skeleton'
 import { getCategoriesForFilter } from '@/lib/cache'
+import { safeDb } from '@/lib/db'
 
 export const metadata: Metadata = {
   title: 'Products',
@@ -45,7 +46,7 @@ function ProductsSkeleton() {
 
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
   // Use cached categories for filter
-  const categories = await getCategoriesForFilter()
+  const categories = await safeDb('product-categories', () => getCategoriesForFilter(), [])
 
   return (
     <div className="container mx-auto px-4 py-8">

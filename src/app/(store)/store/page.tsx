@@ -5,6 +5,7 @@ import { FeaturedProducts } from '@/components/home/featured-products'
 import { CategoriesSection } from '@/components/home/categories-section'
 import { Skeleton } from '@/components/ui/skeleton'
 import { getFeaturedProducts, getCategories } from '@/lib/cache'
+import { safeDb } from '@/lib/db'
 
 const FeaturesSection = dynamic(() => import('@/components/home/features-section').then(mod => ({ default: mod.FeaturesSection })), {
   loading: () => <div className="py-16 lg:py-24" />,
@@ -38,8 +39,8 @@ function ProductsSkeleton() {
 
 export default async function StoreHomePage() {
   const [products, categories] = await Promise.all([
-    getFeaturedProducts(),
-    getCategories(),
+    safeDb('featured-products', () => getFeaturedProducts(), []),
+    safeDb('store-categories', () => getCategories(), []),
   ])
 
   return (

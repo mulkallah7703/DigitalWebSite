@@ -5,12 +5,13 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatPrice(price: number | string, currency = 'USD'): string {
-  const numPrice = typeof price === 'string' ? parseFloat(price) : price
+export function formatPrice(price: number | string | null | undefined, currency = 'USD'): string {
+  const numPrice = typeof price === 'string' ? parseFloat(price) : Number(price)
+  const safePrice = Number.isFinite(numPrice) ? numPrice : 0
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency,
-  }).format(numPrice)
+  }).format(safePrice)
 }
 
 export function formatDate(date: Date | string): string {

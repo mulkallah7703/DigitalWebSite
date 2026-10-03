@@ -11,7 +11,8 @@ import { formatPrice } from '@/lib/utils'
 import { useLanguage } from '@/components/providers/language-provider'
 
 export function CartDrawer() {
-  const { items, isOpen, closeCart, removeItem, updateQuantity, getTotal, clearCart } = useCartStore()
+  const { items: storedItems, isOpen, closeCart, removeItem, updateQuantity, getTotal, clearCart } = useCartStore()
+  const items = Array.isArray(storedItems) ? storedItems : []
   const { t } = useLanguage()
   const total = getTotal()
 
@@ -65,7 +66,7 @@ export function CartDrawer() {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {items.map((item) => (
+                  {items.filter((item) => item?.product).map((item) => (
                     <motion.div
                       key={item.id}
                       layout

@@ -44,7 +44,11 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const { openCart, getItemCount } = useCartStore()
-  const itemCount = getItemCount()
+  // Persisted cart is only available in the browser. Reading it during the
+  // first render disagrees with the server HTML and fails hydration.
+  const [cartReady, setCartReady] = useState(false)
+  useEffect(() => setCartReady(true), [])
+  const itemCount = cartReady ? getItemCount() : 0
 
   const navLinks = [
     { href: '/', label: t('nav.portfolio') },

@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 import dynamic from 'next/dynamic'
-import { db } from '@/lib/db'
+import { db, safeDb } from '@/lib/db'
 import { getProductBySlug, getRelatedProducts, incrementViewCount } from '@/lib/cache'
 import { ProductDetails } from '@/components/products/product-details'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -30,12 +30,12 @@ interface ProductPageProps {
 
 // Generate static params for popular products
 export async function generateStaticParams() {
-  const products = await db.product.findMany({
+  const products = await safeDb('product-params', () => db.product.findMany({
     where: { status: 'PUBLISHED' },
     select: { slug: true },
     orderBy: { salesCount: 'desc' },
     take: 50, // Pre-render top 50 products
-  })
+  }), [])
   
   return products.map((product) => ({
     slug: product.slug,
@@ -46,7 +46,7 @@ export async function generateStaticParams() {
 export const revalidate = 300
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
-  const product = await getProductBySlug(params.slug)
+  const product = await safeDb('product-metadata', () => getProductBySlug(params.slug), null)
 
   if (!product) {
     return { title: 'Product Not Found' }
@@ -66,7 +66,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 }
 
 async function RelatedProductsSection({ categoryId, productId }: { categoryId: string; productId: string }) {
-  const relatedProducts = await getRelatedProducts(categoryId, productId)
+  const relatedProducts = await safeDb('related-products', () => getRelatedProducts(categoryId, productId), [])
   
   if (relatedProducts.length === 0) return null
   
@@ -74,7 +74,7 @@ async function RelatedProductsSection({ categoryId, productId }: { categoryId: s
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const product = await getProductBySlug(params.slug)
+  const product = await safeDb('product', () => getProductBySlug(params.slug), null)
 
   if (!product) {
     notFound()

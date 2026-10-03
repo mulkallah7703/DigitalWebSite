@@ -44,7 +44,7 @@ export function CategoryCard({ category }: CategoryCardProps) {
                 {category.description}
               </p>
               <span className="text-xs text-primary font-medium">
-                {category._count.products} {t('common.products')}
+                {category._count?.products ?? 0} {t('common.products')}
               </span>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import { db } from '@/lib/db'
+import { db, safeDb, serializeProducts } from '@/lib/db'
 import { ProductCard } from './product-card'
 import { ProductsGridEmpty } from './products-grid-empty'
 import { ProductsGridHeader } from './products-grid-header'
@@ -16,8 +16,15 @@ interface ProductsGridProps {
   }
 }
 
+function finiteNumber(value: string | undefined): number | undefined {
+  if (!value) return undefined
+  const n = Number(value)
+  return Number.isFinite(n) ? n : undefined
+}
+
 export async function ProductsGrid({ searchParams }: ProductsGridProps) {
-  const page = parseInt(searchParams.page || '1')
+  const parsedPage = parseInt(searchParams.page || '1', 10)
+  const page = Number.isFinite(parsedPage) && parsedPage > 0 ? parsedPage : 1
   const limit = 12
   const skip = (page - 1) * limit
 
@@ -37,10 +44,12 @@ export async function ProductsGrid({ searchParams }: ProductsGridProps) {
     ]
   }
 
-  if (searchParams.minPrice || searchParams.maxPrice) {
+  const minPrice = finiteNumber(searchParams.minPrice)
+  const maxPrice = finiteNumber(searchParams.maxPrice)
+  if (minPrice !== undefined || maxPrice !== undefined) {
     where.price = {}
-    if (searchParams.minPrice) where.price.gte = parseFloat(searchParams.minPrice)
-    if (searchParams.maxPrice) where.price.lte = parseFloat(searchParams.maxPrice)
+    if (minPrice !== undefined) where.price.gte = minPrice
+    if (maxPrice !== undefined) where.price.lte = maxPrice
   }
 
   // Build orderBy
@@ -61,7 +70,7 @@ export async function ProductsGrid({ searchParams }: ProductsGridProps) {
       break
   }
 
-  const [products, total] = await Promise.all([
+  const [products, total] = await safeDb('products-grid', () => Promise.all([
     db.product.findMany({
       where,
       include: {
@@ -76,11 +85,13 @@ export async function ProductsGrid({ searchParams }: ProductsGridProps) {
       take: limit,
     }),
     db.product.count({ where }),
-  ])
+  ]), [[], 0] as const)
+
+  const plainProducts = serializeProducts(products)
 
   const totalPages = Math.ceil(total / limit)
 
-  if (products.length === 0) {
+  if (plainProducts.length === 0) {
     return <ProductsGridEmpty />
   }
 
@@ -91,7 +102,7 @@ export async function ProductsGrid({ searchParams }: ProductsGridProps) {
 
       {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {products.map((product) => (
+        {plainProducts.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
