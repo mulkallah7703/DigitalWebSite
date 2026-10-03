@@ -47,6 +47,7 @@ export function Header() {
   const itemCount = getItemCount()
 
   const navLinks = [
+    { href: '/', label: t('nav.portfolio') },
     { href: '/store', label: t('nav.digitalEcommerce') },
     { href: '/products', label: t('nav.products') },
     { href: '/categories', label: t('nav.categories') },
@@ -68,7 +69,7 @@ export function Header() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
+          <Link href="/store" className="flex items-center gap-2 group">
             <div className="relative">
               <Image
                 src="/mylogo.jpg"
@@ -90,7 +91,11 @@ export function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors relative group"
+                className={`text-sm font-medium transition-colors relative group ${
+                  link.href === '/'
+                    ? 'text-primary'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
               >
                 {link.label}
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 group-hover:w-full transition-all duration-300" />
@@ -111,6 +116,9 @@ export function Header() {
 
           {/* Actions */}
           <div className="flex items-center gap-2">
+            <Button asChild variant="ghost" size="sm" className="lg:hidden text-primary px-2">
+              <Link href="/">{t('nav.portfolio')}</Link>
+            </Button>
             {/* Mobile Search Toggle */}
             <Button
               variant="ghost"

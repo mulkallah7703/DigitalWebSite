@@ -23,6 +23,17 @@ const loginSchema = z.object({
 
 type LoginForm = z.infer<typeof loginSchema>
 
+function safeCallback(value: string) {
+  if (value.startsWith('/') && !value.startsWith('//')) return value
+  try {
+    const url = new URL(value, window.location.origin)
+    if (url.origin === window.location.origin) return `${url.pathname}${url.search}`
+  } catch {
+    return '/'
+  }
+  return '/'
+}
+
 export default function LoginPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -60,8 +71,7 @@ export default function LoginPage() {
           variant: 'destructive',
         })
       } else if (result?.ok) {
-        // Successful login - redirect to homepage
-        router.push('/')
+        router.push(safeCallback(callbackUrl))
         router.refresh()
       }
     } catch {

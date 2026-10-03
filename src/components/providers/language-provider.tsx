@@ -41,6 +41,7 @@ const translations: Record<Language, Record<string, string>> = {
     // Store
     'store.name': 'Cam Code Company',
     // Navigation
+    'nav.portfolio': 'Portfolio',
     'nav.digitalEcommerce': 'Digital E-commerce',
     'nav.products': 'Products',
     'nav.categories': 'Categories',
@@ -398,6 +399,7 @@ const translations: Record<Language, Record<string, string>> = {
     // Store
     'store.name': 'شركة كام كود',
     // Navigation
+    'nav.portfolio': 'البورتفوليو',
     'nav.digitalEcommerce': 'التجارة الرقمية',
     'nav.products': 'المنتجات',
     'nav.categories': 'الفئات',
