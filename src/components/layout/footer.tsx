@@ -17,7 +17,6 @@ export function Footer() {
       { label: t('nav.deals'), href: '/deals' },
     ],
     company: [
-      { label: t('footer.aboutUs'), href: '/about' },
       { label: t('footer.contact'), href: '/contact' },
       { label: t('footer.careers'), href: '/careers' },
       { label: t('footer.blog'), href: '/blog' },
