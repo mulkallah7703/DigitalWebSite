@@ -269,12 +269,12 @@ const ar: PortfolioContent = {
     { label: 'GitHub', url: socialUrls.github, followers: '1 متابع' },
   ],
   heroSocialLabels: ['Facebook', 'LinkedIn', 'Instagram'],
-  copyright: '© 2026 Malak Allah Alsadi',
+  copyright: '© 2026 Mulk Allah Al-Sadi',
 }
 
 const en: PortfolioContent = {
-  name: 'Malak Allah Alsadi',
-  photoAlt: 'Malak Allah Alsadi',
+  name: 'Mulk Allah Al-Sadi',
+  photoAlt: 'Mulk Allah Al-Sadi',
   roleBadge: 'Award-winning innovator',
   heroLead:
     'Software engineering student, full-stack developer, and award-winning innovator — passionate about building AI technologies that serve healthcare and education and make a real difference in people’s lives.',
@@ -447,13 +447,13 @@ const en: PortfolioContent = {
     { label: 'GitHub', url: socialUrls.github, followers: '1 follower' },
   ],
   heroSocialLabels: ['Facebook', 'LinkedIn', 'Instagram'],
-  copyright: '© 2026 Malak Allah Alsadi',
+  copyright: '© 2026 Mulk Allah Al-Sadi',
 }
 
 export const portfolioContent: Record<PortfolioLang, PortfolioContent> = { ar, en }
 
 export const resumeUrl = '/portfolio/Resum13.7.pdf'
-export const portraitUrl = '/portfolio/malak-photo.png'
+export const portraitUrl = '/portfolio/portrait.png'
 
 export function getPortfolio(language: string): PortfolioContent {
   return language === 'en' ? en : ar
