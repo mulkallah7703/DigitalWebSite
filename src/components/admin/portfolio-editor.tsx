@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ChevronDown, ChevronUp, Plus, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -25,6 +25,18 @@ const copy = {
     english: 'English',
     photo: 'Profile photo',
     cv: 'CV file',
+    name: 'Name',
+    badge: 'Title badge',
+    bio: 'Bio',
+    productsButton: 'My Products button',
+    contactButton: 'Contact me button',
+    downloadButton: 'Download CV button',
+    cvButton: 'CV button in the header',
+    heroTitle: 'Hero',
+    followersTitle: 'Follower counts',
+    statsTitle: 'Views and interactions',
+    socialLinks: 'Social links',
+    platform: 'Platform',
     upload: 'Upload',
     uploading: 'Uploading…',
     headings: 'Section headings',
@@ -69,6 +81,18 @@ const copy = {
     english: 'English',
     photo: 'الصورة الشخصية',
     cv: 'ملف السيرة',
+    name: 'الاسم',
+    badge: 'اللقب',
+    bio: 'النبذة',
+    productsButton: 'زر منتجاتي',
+    contactButton: 'زر تواصل معي',
+    downloadButton: 'زر تحميل السيرة',
+    cvButton: 'زر السيرة في الشريط',
+    heroTitle: 'المقدمة',
+    followersTitle: 'عدد المتابعين',
+    statsTitle: 'المشاهدات والتفاعل',
+    socialLinks: 'روابط التواصل',
+    platform: 'المنصة',
     upload: 'رفع',
     uploading: 'جارٍ الرفع…',
     headings: 'عناوين القسم',
@@ -204,6 +228,12 @@ export function PortfolioEditor({ initial }: { initial: PortfolioBundle }) {
   const [uploading, setUploading] = useState(false)
   const [status, setStatus] = useState('')
 
+  useEffect(() => {
+    if (window.location.hash === '#hero') {
+      document.getElementById('hero')?.scrollIntoView({ block: 'start' })
+    }
+  }, [])
+
   function setProfile(key: keyof PortfolioProfileData, value: string) {
     setBundle((prev) => ({ ...prev, profile: { ...prev.profile, [key]: value } }))
   }
@@ -223,27 +253,38 @@ export function PortfolioEditor({ initial }: { initial: PortfolioBundle }) {
     }
   }
 
+  async function persist(section: PortfolioSection, data: unknown) {
+    const res = await fetch('/api/admin/portfolio', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ section, data }),
+    })
+    const json = await res.json()
+    if (!res.ok) throw new Error(json.error || 'Save failed')
+    return json.bundle as PortfolioBundle
+  }
+
   async function save(section: PortfolioSection, data: unknown, withProfile = false) {
     setSaving(true)
     setStatus('')
     try {
-      if (withProfile) {
-        const profileRes = await fetch('/api/admin/portfolio', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ section: 'profile', data: bundle.profile }),
-        })
-        const profileJson = await profileRes.json()
-        if (!profileRes.ok) throw new Error(profileJson.error || 'Save failed')
-      }
-      const res = await fetch('/api/admin/portfolio', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ section, data }),
-      })
-      const json = await res.json()
-      if (!res.ok) throw new Error(json.error || 'Save failed')
-      setBundle(json.bundle)
+      if (withProfile) await persist('profile', bundle.profile)
+      setBundle(await persist(section, data))
+      setStatus(ui.saved)
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : 'Save failed')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  async function saveHero() {
+    setSaving(true)
+    setStatus('')
+    try {
+      await persist('profile', bundle.profile)
+      await persist('stats', bundle.stats)
+      setBundle(await persist('socials', bundle.socials))
       setStatus(ui.saved)
     } catch (error) {
       setStatus(error instanceof Error ? error.message : 'Save failed')
@@ -253,6 +294,9 @@ export function PortfolioEditor({ initial }: { initial: PortfolioBundle }) {
   }
 
   const profile = bundle.profile
+  const heroSocials = bundle.socials
+    .map((item, index) => ({ item, index }))
+    .sort((a, b) => Number(b.item.showInHero) - Number(a.item.showInHero) || a.item.heroOrder - b.item.heroOrder)
 
   return (
     <div className="space-y-6">
@@ -284,14 +328,76 @@ export function PortfolioEditor({ initial }: { initial: PortfolioBundle }) {
         </TabsList>
 
         <TabsContent value="profile" className="space-y-4 mt-4">
-          <div className="grid md:grid-cols-[160px_1fr] gap-4 items-start rounded-xl border bg-card p-4">
-            <img src={profile.photoUrl} alt="" className="w-36 h-36 rounded-full object-cover border" />
+          <div id="hero" className="scroll-mt-6 space-y-4">
+            <h2 className="text-lg font-semibold">{ui.heroTitle}</h2>
+            <div className="grid md:grid-cols-[160px_1fr] gap-4 items-start rounded-xl border bg-card p-4">
+              <img src={profile.photoUrl} alt="" className="w-36 h-36 rounded-full object-cover border" />
+              <div className="space-y-3">
+                <Field label={ui.photo} value={profile.photoUrl} onChange={(value) => setProfile('photoUrl', value)} />
+                <Label className="inline-flex">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="text-sm"
+                    disabled={uploading}
+                    onChange={async (event) => {
+                      const file = event.target.files?.[0]
+                      event.target.value = ''
+                      if (!file) return
+                      try {
+                        setProfile('photoUrl', await upload(file))
+                      } catch (error) {
+                        setStatus(error instanceof Error ? error.message : 'Upload failed')
+                      }
+                    }}
+                  />
+                </Label>
+              </div>
+            </div>
             <div className="space-y-3">
-              <Field label={ui.photo} value={profile.photoUrl} onChange={(value) => setProfile('photoUrl', value)} />
+              <h2 className="text-lg font-semibold">{ui.followersTitle}</h2>
+              {heroSocials.map(({ item, index }) => (
+                <div key={`${item.label}-${index}`} className="rounded-xl border bg-card p-4 space-y-3">
+                  <div className="grid md:grid-cols-2 gap-3">
+                    <Field label={ui.platform} value={item.label} onChange={(label) => setBundle((prev) => ({ ...prev, socials: prev.socials.map((row, i) => i === index ? { ...row, label } : row) }))} />
+                    <Field label={ui.url} value={item.url} onChange={(url) => setBundle((prev) => ({ ...prev, socials: prev.socials.map((row, i) => i === index ? { ...row, url } : row) }))} />
+                  </div>
+                  <Pair ui={ui} label={ui.followers} ar={item.followersAr} en={item.followersEn} onAr={(followersAr) => setBundle((prev) => ({ ...prev, socials: prev.socials.map((row, i) => i === index ? { ...row, followersAr } : row) }))} onEn={(followersEn) => setBundle((prev) => ({ ...prev, socials: prev.socials.map((row, i) => i === index ? { ...row, followersEn } : row) }))} />
+                  <label className="flex items-center gap-2 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={item.showInHero}
+                      onChange={(event) => setBundle((prev) => ({ ...prev, socials: prev.socials.map((row, i) => i === index ? { ...row, showInHero: event.target.checked } : row) }))}
+                    />
+                    {ui.showInHero}
+                  </label>
+                </div>
+              ))}
+            </div>
+            <div className="space-y-3">
+              <h2 className="text-lg font-semibold">{ui.statsTitle}</h2>
+              {bundle.stats.map((item, index) => (
+                <div key={`${item.value}-${index}`} className="rounded-xl border bg-card p-4 space-y-3">
+                  <Field label={ui.value} value={item.value} onChange={(value) => setBundle((prev) => ({ ...prev, stats: prev.stats.map((row, i) => i === index ? { ...row, value } : row) }))} />
+                  <Pair ui={ui} label="Label" ar={item.labelAr} en={item.labelEn} onAr={(labelAr) => setBundle((prev) => ({ ...prev, stats: prev.stats.map((row, i) => i === index ? { ...row, labelAr } : row) }))} onEn={(labelEn) => setBundle((prev) => ({ ...prev, stats: prev.stats.map((row, i) => i === index ? { ...row, labelEn } : row) }))} />
+                </div>
+              ))}
+            </div>
+            <div className="rounded-xl border bg-card p-4 space-y-4">
+              <Pair ui={ui} label={ui.badge} ar={profile.roleBadgeAr} en={profile.roleBadgeEn} onAr={(v) => setProfile('roleBadgeAr', v)} onEn={(v) => setProfile('roleBadgeEn', v)} />
+              <Pair ui={ui} label={ui.name} ar={profile.nameAr} en={profile.nameEn} onAr={(v) => setProfile('nameAr', v)} onEn={(v) => setProfile('nameEn', v)} />
+              <Pair ui={ui} label={ui.bio} ar={profile.heroLeadAr} en={profile.heroLeadEn} onAr={(v) => setProfile('heroLeadAr', v)} onEn={(v) => setProfile('heroLeadEn', v)} multiline />
+              <Pair ui={ui} label={ui.productsButton} ar={profile.myProductsAr} en={profile.myProductsEn} onAr={(v) => setProfile('myProductsAr', v)} onEn={(v) => setProfile('myProductsEn', v)} />
+              <Pair ui={ui} label={ui.contactButton} ar={profile.contactCtaAr} en={profile.contactCtaEn} onAr={(v) => setProfile('contactCtaAr', v)} onEn={(v) => setProfile('contactCtaEn', v)} />
+              <Pair ui={ui} label={ui.downloadButton} ar={profile.downloadCvAr} en={profile.downloadCvEn} onAr={(v) => setProfile('downloadCvAr', v)} onEn={(v) => setProfile('downloadCvEn', v)} />
+              <Pair ui={ui} label={ui.cvButton} ar={profile.cvLabelAr} en={profile.cvLabelEn} onAr={(v) => setProfile('cvLabelAr', v)} onEn={(v) => setProfile('cvLabelEn', v)} />
+            </div>
+            <div className="rounded-xl border bg-card p-4 space-y-3">
+              <Field label={ui.cv} value={profile.cvUrl} onChange={(value) => setProfile('cvUrl', value)} />
               <Label className="inline-flex">
                 <input
                   type="file"
-                  accept="image/*"
+                  accept="application/pdf,.pdf"
                   className="text-sm"
                   disabled={uploading}
                   onChange={async (event) => {
@@ -299,60 +405,32 @@ export function PortfolioEditor({ initial }: { initial: PortfolioBundle }) {
                     event.target.value = ''
                     if (!file) return
                     try {
-                      setProfile('photoUrl', await upload(file))
+                      setProfile('cvUrl', await upload(file))
                     } catch (error) {
                       setStatus(error instanceof Error ? error.message : 'Upload failed')
                     }
                   }}
                 />
               </Label>
+              {uploading ? <p className="text-xs text-muted-foreground">{ui.uploading}</p> : null}
             </div>
-          </div>
-          <div className="rounded-xl border bg-card p-4 space-y-3">
-            <Field label={ui.cv} value={profile.cvUrl} onChange={(value) => setProfile('cvUrl', value)} />
-            <Label className="inline-flex">
-              <input
-                type="file"
-                accept="application/pdf,.pdf"
-                className="text-sm"
-                disabled={uploading}
-                onChange={async (event) => {
-                  const file = event.target.files?.[0]
-                  event.target.value = ''
-                  if (!file) return
-                  try {
-                    setProfile('cvUrl', await upload(file))
-                  } catch (error) {
-                    setStatus(error instanceof Error ? error.message : 'Upload failed')
-                  }
-                }}
-              />
-            </Label>
-            {uploading ? <p className="text-xs text-muted-foreground">{ui.uploading}</p> : null}
           </div>
           <div className="rounded-xl border bg-card p-4 space-y-4">
             <div className="grid md:grid-cols-2 gap-3">
               <Field label={ui.email} value={profile.email} onChange={(value) => setProfile('email', value)} />
               <Field label={ui.phone} value={profile.phone} onChange={(value) => setProfile('phone', value)} />
             </div>
-            <Pair ui={ui} label="Name" ar={profile.nameAr} en={profile.nameEn} onAr={(v) => setProfile('nameAr', v)} onEn={(v) => setProfile('nameEn', v)} />
             <Pair ui={ui} label="Photo alt" ar={profile.photoAltAr} en={profile.photoAltEn} onAr={(v) => setProfile('photoAltAr', v)} onEn={(v) => setProfile('photoAltEn', v)} />
-            <Pair ui={ui} label="Role" ar={profile.roleBadgeAr} en={profile.roleBadgeEn} onAr={(v) => setProfile('roleBadgeAr', v)} onEn={(v) => setProfile('roleBadgeEn', v)} />
-            <Pair ui={ui} label="Intro" ar={profile.heroLeadAr} en={profile.heroLeadEn} onAr={(v) => setProfile('heroLeadAr', v)} onEn={(v) => setProfile('heroLeadEn', v)} multiline />
             <Pair ui={ui} label="About" ar={profile.aboutBodyAr} en={profile.aboutBodyEn} onAr={(v) => setProfile('aboutBodyAr', v)} onEn={(v) => setProfile('aboutBodyEn', v)} multiline />
             <Pair ui={ui} label="About eyebrow" ar={profile.aboutEyebrowAr} en={profile.aboutEyebrowEn} onAr={(v) => setProfile('aboutEyebrowAr', v)} onEn={(v) => setProfile('aboutEyebrowEn', v)} />
             <Pair ui={ui} label="About title" ar={profile.aboutTitleAr} en={profile.aboutTitleEn} onAr={(v) => setProfile('aboutTitleAr', v)} onEn={(v) => setProfile('aboutTitleEn', v)} />
-            <Pair ui={ui} label="Contact button" ar={profile.contactCtaAr} en={profile.contactCtaEn} onAr={(v) => setProfile('contactCtaAr', v)} onEn={(v) => setProfile('contactCtaEn', v)} />
-            <Pair ui={ui} label="Download CV" ar={profile.downloadCvAr} en={profile.downloadCvEn} onAr={(v) => setProfile('downloadCvAr', v)} onEn={(v) => setProfile('downloadCvEn', v)} />
-            <Pair ui={ui} label="CV label" ar={profile.cvLabelAr} en={profile.cvLabelEn} onAr={(v) => setProfile('cvLabelAr', v)} onEn={(v) => setProfile('cvLabelEn', v)} />
-            <Pair ui={ui} label="My products" ar={profile.myProductsAr} en={profile.myProductsEn} onAr={(v) => setProfile('myProductsAr', v)} onEn={(v) => setProfile('myProductsEn', v)} />
             <Pair ui={ui} label="Products hint" ar={profile.myProductsHintAr} en={profile.myProductsHintEn} onAr={(v) => setProfile('myProductsHintAr', v)} onEn={(v) => setProfile('myProductsHintEn', v)} />
             <Pair ui={ui} label="Contact title" ar={profile.contactTitleAr} en={profile.contactTitleEn} onAr={(v) => setProfile('contactTitleAr', v)} onEn={(v) => setProfile('contactTitleEn', v)} />
             <Pair ui={ui} label="Contact text" ar={profile.contactBodyAr} en={profile.contactBodyEn} onAr={(v) => setProfile('contactBodyAr', v)} onEn={(v) => setProfile('contactBodyEn', v)} multiline />
             <Pair ui={ui} label="Email button" ar={profile.emailCtaAr} en={profile.emailCtaEn} onAr={(v) => setProfile('emailCtaAr', v)} onEn={(v) => setProfile('emailCtaEn', v)} />
             <Pair ui={ui} label="Copyright" ar={profile.copyrightAr} en={profile.copyrightEn} onAr={(v) => setProfile('copyrightAr', v)} onEn={(v) => setProfile('copyrightEn', v)} />
           </div>
-          <Button type="button" onClick={() => save('profile', bundle.profile)} disabled={saving}>
+          <Button type="button" onClick={saveHero} disabled={saving}>
             {saving ? ui.saving : ui.save}
           </Button>
         </TabsContent>
