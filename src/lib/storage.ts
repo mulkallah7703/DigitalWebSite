@@ -20,6 +20,8 @@ async function saveLocal(filename: string, buffer: Buffer) {
   const dir = path.join(process.cwd(), 'public', 'uploads', 'portfolio')
   await mkdir(dir, { recursive: true })
   await writeFile(path.join(dir, filename), buffer)
+  // Served by src/app/uploads/portfolio/[filename]/route.ts so a file saved
+  // after `next start` is available immediately. Next snapshots public/ at boot.
   return `/uploads/portfolio/${filename}`
 }
 
