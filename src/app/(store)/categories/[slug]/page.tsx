@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { db } from '@/lib/db'
+import { db, safeDb } from '@/lib/db'
 import { ProductsGrid } from '@/components/products/products-grid'
 import { ProductsFilter } from '@/components/products/products-filter'
 import { getCategoriesForFilter } from '@/lib/cache'
@@ -18,14 +18,14 @@ interface CategoryPageProps {
 
 // Generate static params for visible categories
 export async function generateStaticParams() {
-  const categories = await db.category.findMany({
+  const categories = await safeDb('category-params', () => db.category.findMany({
     where: { 
       visible: true,
       parentId: null,
     },
     select: { slug: true },
     take: 100,
-  })
+  }), [])
   
   return categories.map((category) => ({
     slug: category.slug,
@@ -37,7 +37,7 @@ export const revalidate = 300
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
   const { slug } = await params
-  const category = await db.category.findUnique({
+  const category = await safeDb('category-metadata', () => db.category.findUnique({
     where: { slug, visible: true },
     select: {
       name: true,
@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
       metaTitle: true,
       metaDescription: true,
     },
-  })
+  }), null)
 
   if (!category) {
     return {
@@ -61,10 +61,10 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 
 export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
   const { slug } = await params
-  const categories = await getCategoriesForFilter()
+  const categories = await safeDb('category-filters', () => getCategoriesForFilter(), [])
 
   // Fetch category
-  const category = await db.category.findUnique({
+  const category = await safeDb('category', () => db.category.findUnique({
     where: { slug, visible: true },
     select: {
       id: true,
@@ -73,7 +73,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
       metaTitle: true,
       metaDescription: true,
     },
-  })
+  }), null)
 
   if (!category) {
     notFound()

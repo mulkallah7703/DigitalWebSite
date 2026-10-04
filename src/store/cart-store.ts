@@ -92,13 +92,20 @@ export const useCartStore = create<CartState>()(
       closeCart: () => set({ isOpen: false }),
 
       getTotal: () => {
-        return get().items.reduce((total, item) => {
-          return total + Number(item.product.price) * item.quantity
+        const items = get().items
+        if (!Array.isArray(items)) return 0
+        return items.reduce((total, item) => {
+          const price = Number(item?.product?.price)
+          const quantity = Number(item?.quantity)
+          if (!Number.isFinite(price) || !Number.isFinite(quantity)) return total
+          return total + price * quantity
         }, 0)
       },
 
       getItemCount: () => {
-        return get().items.reduce((count, item) => count + item.quantity, 0)
+        const items = get().items
+        if (!Array.isArray(items)) return 0
+        return items.reduce((count, item) => count + (Number(item?.quantity) || 0), 0)
       },
     }),
     {

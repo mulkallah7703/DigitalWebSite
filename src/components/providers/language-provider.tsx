@@ -26,6 +26,7 @@ function setLanguageState(newLang: Language) {
   try {
     if (typeof window !== 'undefined' && window.localStorage) {
       localStorage.setItem('language', newLang)
+      document.cookie = `language=${newLang};path=/;max-age=31536000;samesite=lax`
     }
   } catch {
     // Silently fail
@@ -755,53 +756,63 @@ const translations: Record<Language, Record<string, string>> = {
   },
 }
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>(() => {
-    // Initialize from global state or localStorage
-    if (typeof window !== 'undefined') {
-      try {
-        const savedLang = localStorage.getItem('language') as Language
-        if (savedLang && (savedLang === 'en' || savedLang === 'ar')) {
-          languageState = savedLang
-          return savedLang
-        }
-      } catch {
-        // Silently fail
-      }
-    }
-    return languageState
-  })
+export function LanguageProvider({
+  children,
+  initialLanguage = 'en',
+}: {
+  children: ReactNode
+  initialLanguage?: Language
+}) {
+  // Must match the server render. Reading localStorage here makes the first
+  // client render Arabic while the HTML is still English, which throws a
+  // hydration error and the dev overlay replaces the page.
+  const [language, setLanguage] = useState<Language>(initialLanguage)
 
   useEffect(() => {
-    // Sync with global state
-    languageState = language
+    const listener = (newLang: Language) => {
+      setLanguage((current) => (current === newLang ? current : newLang))
+    }
+    languageListeners.add(listener)
+    return () => {
+      languageListeners.delete(listener)
+    }
+  }, [])
 
-    // Update DOM attributes
+  useEffect(() => {
+    // Copy a language saved before the cookie existed. This runs after paint,
+    // so it cannot disagree with the server HTML during hydration.
     try {
-      if (typeof window !== 'undefined' && document?.documentElement) {
-        document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr'
-        document.documentElement.lang = language
+      const savedLang = localStorage.getItem('language')
+      if (savedLang === 'en' || savedLang === 'ar') {
+        setLanguage((current) => (current === savedLang ? current : savedLang))
       }
     } catch {
       // Silently fail
     }
-
-    // Notify listeners
-    languageListeners.forEach(listener => listener(language))
-  }, [language])
+  }, [])
 
   useEffect(() => {
-    // Subscribe to global state changes
-    const listener = (newLang: Language) => {
-      if (newLang !== language) {
-        setLanguage(newLang)
-      }
-    }
-    languageListeners.add(listener)
+    languageState = language
 
-    return () => {
-      languageListeners.delete(listener)
+    try {
+      if (typeof document !== 'undefined' && document.documentElement) {
+        document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr'
+        document.documentElement.lang = language
+      }
+      const saved = localStorage.getItem('language')
+      // The first paint matches the server. Do not overwrite a saved choice
+      // that the migration effect has not applied yet (React Strict Mode
+      // replays effects and would otherwise erase Arabic).
+      if ((saved === 'en' || saved === 'ar') && saved !== language) {
+        return
+      }
+      localStorage.setItem('language', language)
+      document.cookie = `language=${language};path=/;max-age=31536000;samesite=lax`
+    } catch {
+      // Silently fail
     }
+
+    languageListeners.forEach(listener => listener(language))
   }, [language])
 
   // Context only contains serializable data (no functions)
@@ -818,7 +829,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
 // Translation function - exported for use in client components
 export function getTranslation(language: Language, key: string): string {
-  return translations[language][key] || key
+  return translations[language]?.[key] || key
 }
 
 // Hook to get language and create translation function locally

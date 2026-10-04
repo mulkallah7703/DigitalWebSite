@@ -47,7 +47,7 @@ export function CategoriesSection({ categories }: CategoriesSectionProps) {
 
         {/* Categories Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 lg:gap-6">
-          {categories.map((category, index) => {
+          {(categories ?? []).map((category, index) => {
             const Icon = categoryIcons[category.slug] || categoryIcons.default
             return (
               <motion.div

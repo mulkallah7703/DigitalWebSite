@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { CategoryCard } from './category-card'
 import { CategoriesHeader } from './categories-header'
-import { db } from '@/lib/db'
+import { db, safeDb } from '@/lib/db'
 
 export const metadata: Metadata = {
   title: 'Categories',
@@ -27,14 +27,14 @@ async function getCategories() {
 }
 
 export default async function CategoriesPage() {
-  const categories = await getCategories()
+  const categories = await safeDb('categories', () => getCategories(), [])
 
   return (
     <div className="container mx-auto px-4 py-8">
       <CategoriesHeader />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {categories.map((category) => (
+        {(categories ?? []).map((category) => (
           <CategoryCard key={category.id} category={category} />
         ))}
       </div>

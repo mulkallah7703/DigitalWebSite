@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { cookies } from 'next/headers'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/providers/theme-provider'
@@ -71,13 +72,20 @@ export const metadata: Metadata = {
   },
 }
 
+function getInitialLanguage(): 'en' | 'ar' {
+  const value = cookies().get('language')?.value
+  return value === 'ar' ? 'ar' : 'en'
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const initialLanguage = getInitialLanguage()
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={initialLanguage} dir={initialLanguage === 'ar' ? 'rtl' : 'ltr'} suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -87,7 +95,7 @@ export default function RootLayout({
       <body className={`${inter.variable} font-sans antialiased`}>
         <SessionProvider>
           <QueryProvider>
-            <LanguageProvider>
+            <LanguageProvider initialLanguage={initialLanguage}>
               <ThemeProvider
                 attribute="class"
                 defaultTheme="system"

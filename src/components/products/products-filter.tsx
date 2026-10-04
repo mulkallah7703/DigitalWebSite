@@ -48,13 +48,13 @@ export function ProductsFilter({ categories }: ProductsFilterProps) {
     { value: 'price-desc', label: t('filter.priceHighLow') },
   ]
 
-  const [search, setSearch] = useState(searchParams.get('search') || '')
-  const [minPrice, setMinPrice] = useState(searchParams.get('minPrice') || '')
-  const [maxPrice, setMaxPrice] = useState(searchParams.get('maxPrice') || '')
+  const [search, setSearch] = useState(searchParams?.get('search') || '')
+  const [minPrice, setMinPrice] = useState(searchParams?.get('minPrice') || '')
+  const [maxPrice, setMaxPrice] = useState(searchParams?.get('maxPrice') || '')
 
   const createQueryString = useCallback(
     (params: Record<string, string | null>) => {
-      const newParams = new URLSearchParams(searchParams.toString())
+      const newParams = new URLSearchParams(searchParams?.toString() || '')
       
       Object.entries(params).forEach(([key, value]) => {
         if (value === null || value === '') {
@@ -104,11 +104,11 @@ export function ProductsFilter({ categories }: ProductsFilterProps) {
   }
 
   const hasActiveFilters =
-    searchParams.get('search') ||
-    searchParams.get('category') ||
-    searchParams.get('minPrice') ||
-    searchParams.get('maxPrice') ||
-    searchParams.get('sortBy')
+    searchParams?.get('search') ||
+    searchParams?.get('category') ||
+    searchParams?.get('minPrice') ||
+    searchParams?.get('maxPrice') ||
+    searchParams?.get('sortBy')
 
   return (
     <div className="space-y-6">
@@ -126,7 +126,7 @@ export function ProductsFilter({ categories }: ProductsFilterProps) {
       <div>
         <Label className="text-sm font-medium mb-2 block">{t('filter.sortBy')}</Label>
         <Select
-          value={searchParams.get('sortBy') || 'newest'}
+          value={searchParams?.get('sortBy') || 'newest'}
           onValueChange={(value) => updateFilter('sortBy', value)}
         >
           <SelectTrigger>
@@ -152,17 +152,17 @@ export function ProductsFilter({ categories }: ProductsFilterProps) {
           <AccordionContent>
             <div className="space-y-2">
               <Button
-                variant={!searchParams.get('category') ? 'secondary' : 'ghost'}
+                variant={!searchParams?.get('category') ? 'secondary' : 'ghost'}
                 size="sm"
                 className="w-full justify-start"
                 onClick={() => updateFilter('category', null)}
               >
                 {t('filter.allCategories')}
               </Button>
-              {categories.map((category) => (
+              {(categories ?? []).map((category) => (
                 <Button
                   key={category.id}
-                  variant={searchParams.get('category') === category.slug ? 'secondary' : 'ghost'}
+                  variant={searchParams?.get('category') === category.slug ? 'secondary' : 'ghost'}
                   size="sm"
                   className="w-full justify-start"
                   onClick={() => updateFilter('category', category.slug)}
