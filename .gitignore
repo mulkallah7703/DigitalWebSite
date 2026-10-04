@@ -48,5 +48,7 @@ prisma/*.db-journal
 # Uploads (ignore files but keep directory structure)
 public/uploads/images/*
 public/uploads/videos/*
+public/uploads/portfolio/*
 !public/uploads/images/.gitkeep
 !public/uploads/videos/.gitkeep
+!public/uploads/portfolio/.gitkeep

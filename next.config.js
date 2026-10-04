@@ -24,6 +24,7 @@ const nextConfig = {
 
   // Experimental features for performance
   experimental: {
+    serverComponentsExternalPackages: ['@vercel/blob', '@aws-sdk/client-s3'],
     serverActions: {
       bodySizeLimit: '10mb',
     },

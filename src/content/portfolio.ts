@@ -5,6 +5,7 @@ export interface PortfolioProject {
   desc: string
   tags: string[]
   demoUrl?: string
+  imageUrl?: string
 }
 
 export interface PortfolioJob {
