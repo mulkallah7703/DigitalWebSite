@@ -14,6 +14,7 @@ import {
   Sparkles,
   FolderTree,
   Ticket,
+  Briefcase,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useLanguage } from '@/components/providers/language-provider'
@@ -23,6 +24,7 @@ export function AdminSidebar() {
   const { t } = useLanguage()
 
   const navItems = [
+    { href: '/admin/portfolio', icon: Briefcase, label: t('admin.portfolio') },
     { href: '/admin', icon: LayoutDashboard, label: t('admin.dashboard') },
     { href: '/admin/products', icon: Package, label: t('admin.products') },
     { href: '/admin/categories', icon: FolderTree, label: t('admin.categories') },

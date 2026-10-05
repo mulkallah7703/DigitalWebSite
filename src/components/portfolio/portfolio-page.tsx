@@ -1,14 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
 import { ArrowRight, Menu, Moon, Sun, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { LanguageSwitcher } from '@/components/layout/language-switcher'
 import { useLanguage } from '@/components/providers/language-provider'
-import { getPortfolio, portraitUrl, resumeUrl } from '@/content/portfolio'
+import type { PortfolioView } from '@/lib/portfolio-db'
 
 function SectionHeading({ eyebrow, title }: { eyebrow: string; title: string }) {
   return (
@@ -19,11 +18,11 @@ function SectionHeading({ eyebrow, title }: { eyebrow: string; title: string }) 
   )
 }
 
-export function PortfolioPage() {
+export function PortfolioPage({ contentByLang }: { contentByLang: { ar: PortfolioView; en: PortfolioView } }) {
   const { language } = useLanguage()
   const { theme, setTheme } = useTheme()
   const [menuOpen, setMenuOpen] = useState(false)
-  const content = getPortfolio(language)
+  const content = language === 'en' ? contentByLang.en : contentByLang.ar
   const heroSocials = content.heroSocialLabels
     .map((label) => content.socials.find((social) => social.label === label))
     .filter((social): social is NonNullable<typeof social> => Boolean(social))
@@ -58,7 +57,7 @@ export function PortfolioPage() {
               </Link>
             </Button>
             <Button asChild variant="outline" size="sm" className="hidden md:inline-flex">
-              <a href={resumeUrl} target="_blank" rel="noopener noreferrer">
+              <a href={content.cvUrl} target="_blank" rel="noopener noreferrer">
                 {content.cvLabel}
               </a>
             </Button>
@@ -98,7 +97,7 @@ export function PortfolioPage() {
                 </a>
               ))}
               <a
-                href={resumeUrl}
+                href={content.cvUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={closeMenu}
@@ -138,7 +137,7 @@ export function PortfolioPage() {
                   <a href="#contact">{content.contactCta}</a>
                 </Button>
                 <Button asChild size="lg" variant="secondary">
-                  <a href={resumeUrl} target="_blank" rel="noopener noreferrer">
+                  <a href={content.cvUrl} target="_blank" rel="noopener noreferrer">
                     {content.downloadCv}
                   </a>
                 </Button>
@@ -169,13 +168,10 @@ export function PortfolioPage() {
             <div className="shrink-0">
               <div className="relative w-56 h-56 sm:w-64 sm:h-64 rounded-full p-1.5 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 shadow-xl shadow-indigo-500/25">
                 <div className="relative w-full h-full rounded-full overflow-hidden bg-card">
-                  <Image
-                    src={portraitUrl}
+                  <img
+                    src={content.photoUrl}
                     alt={content.photoAlt}
-                    fill
-                    priority
-                    className="object-cover"
-                    sizes="256px"
+                    className="absolute inset-0 h-full w-full object-cover"
                   />
                 </div>
               </div>
@@ -233,20 +229,27 @@ export function PortfolioPage() {
 
         <section id="innovation" className="container mx-auto px-4 py-16 scroll-mt-24">
           <SectionHeading eyebrow={content.innovationEyebrow} title={content.innovationTitle} />
-          <div className="rounded-2xl border bg-gradient-to-br from-indigo-500/15 via-purple-500/10 to-pink-500/10 p-6 sm:p-10">
-            <span className="inline-flex text-xs font-medium rounded-md bg-background/70 border px-3 py-1 mb-4">
-              {content.innovationBadge}
-            </span>
-            <h3 className="text-2xl font-semibold mb-3 max-w-3xl">{content.innovationName}</h3>
-            <p className="text-muted-foreground max-w-3xl leading-relaxed">{content.innovationBody}</p>
+          <div className="space-y-5">
+            {content.innovations.map((item) => (
+              <div key={`${item.badge}-${item.name}`} className="rounded-2xl border bg-gradient-to-br from-indigo-500/15 via-purple-500/10 to-pink-500/10 p-6 sm:p-10">
+                <span className="inline-flex text-xs font-medium rounded-md bg-background/70 border px-3 py-1 mb-4">
+                  {item.badge}
+                </span>
+                <h3 className="text-2xl font-semibold mb-3 max-w-3xl">{item.name}</h3>
+                <p className="text-muted-foreground max-w-3xl leading-relaxed">{item.body}</p>
+              </div>
+            ))}
           </div>
         </section>
 
         <section id="projects" className="container mx-auto px-4 py-16 scroll-mt-24">
           <SectionHeading eyebrow={content.projectsEyebrow} title={content.projectsTitle} />
           <div className="grid md:grid-cols-2 gap-5">
-            {content.projects.map((project) => (
-              <article key={project.name} className="rounded-2xl border bg-card p-6 flex flex-col">
+            {content.projects.map((project, index) => (
+              <article key={`${project.name}-${index}`} className="rounded-2xl border bg-card p-6 flex flex-col">
+                {project.imageUrl ? (
+                  <img src={project.imageUrl} alt={project.name} className="w-full h-40 object-cover rounded-xl mb-4" />
+                ) : null}
                 <h3 className="text-lg font-semibold mb-2">{project.name}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed flex-1">{project.desc}</p>
                 <div className="flex flex-wrap gap-2 mt-4">
@@ -312,9 +315,13 @@ export function PortfolioPage() {
 
         <section id="research" className="container mx-auto px-4 py-16 scroll-mt-24">
           <SectionHeading eyebrow={content.researchEyebrow} title={content.researchTitle} />
-          <div className="rounded-2xl border bg-card p-6 sm:p-8 max-w-3xl">
-            <h3 className="text-lg font-semibold mb-2">{content.researchName}</h3>
-            <p className="text-muted-foreground leading-relaxed">{content.researchBody}</p>
+          <div className="space-y-4 max-w-3xl">
+            {content.researchItems.map((item) => (
+              <div key={item.name} className="rounded-2xl border bg-card p-6 sm:p-8">
+                <h3 className="text-lg font-semibold mb-2">{item.name}</h3>
+                <p className="text-muted-foreground leading-relaxed">{item.body}</p>
+              </div>
+            ))}
           </div>
         </section>
 

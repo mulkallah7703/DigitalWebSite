@@ -102,6 +102,7 @@ const translations: Record<Language, Record<string, string>> = {
     'checkout.addProducts': 'Add some products to your cart first',
     // Admin
     'admin.dashboard': 'Dashboard',
+    'admin.portfolio': 'Portfolio Management',
     'admin.products': 'Products',
     'admin.categories': 'Categories',
     'admin.orders': 'Orders',
@@ -460,6 +461,7 @@ const translations: Record<Language, Record<string, string>> = {
     'checkout.addProducts': 'أضف بعض المنتجات إلى سلة التسوق أولاً',
     // Admin
     'admin.dashboard': 'لوحة التحكم',
+    'admin.portfolio': 'إدارة البورتفوليو',
     'admin.products': 'المنتجات',
     'admin.categories': 'الفئات',
     'admin.orders': 'الطلبات',

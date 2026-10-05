@@ -447,3 +447,231 @@ model SpreadsheetSyncLog {
 
   @@index([createdAt])
 }
+
+// ==================== PORTFOLIO ====================
+
+model PortfolioProfile {
+  id                   String   @id @default("default")
+  photoUrl             String   @default("/portfolio/portrait.png")
+  cvUrl                String   @default("/portfolio/Resum13.7.pdf")
+  email                String   @default("")
+  phone                String   @default("")
+  nameAr               String   @default("")
+  nameEn               String   @default("")
+  photoAltAr           String   @default("")
+  photoAltEn           String   @default("")
+  roleBadgeAr          String   @default("")
+  roleBadgeEn          String   @default("")
+  heroLeadAr           String   @default("")
+  heroLeadEn           String   @default("")
+  contactCtaAr         String   @default("")
+  contactCtaEn         String   @default("")
+  downloadCvAr         String   @default("")
+  downloadCvEn         String   @default("")
+  cvLabelAr            String   @default("")
+  cvLabelEn            String   @default("")
+  myProductsAr         String   @default("")
+  myProductsEn         String   @default("")
+  myProductsHintAr     String   @default("")
+  myProductsHintEn     String   @default("")
+  aboutEyebrowAr       String   @default("")
+  aboutEyebrowEn       String   @default("")
+  aboutTitleAr         String   @default("")
+  aboutTitleEn         String   @default("")
+  aboutBodyAr          String   @default("")
+  aboutBodyEn          String   @default("")
+  skillsEyebrowAr      String   @default("")
+  skillsEyebrowEn      String   @default("")
+  skillsTitleAr        String   @default("")
+  skillsTitleEn        String   @default("")
+  experienceEyebrowAr  String   @default("")
+  experienceEyebrowEn  String   @default("")
+  experienceTitleAr    String   @default("")
+  experienceTitleEn    String   @default("")
+  innovationEyebrowAr  String   @default("")
+  innovationEyebrowEn  String   @default("")
+  innovationTitleAr    String   @default("")
+  innovationTitleEn    String   @default("")
+  projectsEyebrowAr    String   @default("")
+  projectsEyebrowEn    String   @default("")
+  projectsTitleAr      String   @default("")
+  projectsTitleEn      String   @default("")
+  liveDemoAr           String   @default("")
+  liveDemoEn           String   @default("")
+  educationEyebrowAr   String   @default("")
+  educationEyebrowEn   String   @default("")
+  educationTitleAr     String   @default("")
+  educationTitleEn     String   @default("")
+  certsEyebrowAr       String   @default("")
+  certsEyebrowEn       String   @default("")
+  certsTitleAr         String   @default("")
+  certsTitleEn         String   @default("")
+  researchEyebrowAr    String   @default("")
+  researchEyebrowEn    String   @default("")
+  researchTitleAr      String   @default("")
+  researchTitleEn      String   @default("")
+  languagesEyebrowAr   String   @default("")
+  languagesEyebrowEn   String   @default("")
+  languagesTitleAr     String   @default("")
+  languagesTitleEn     String   @default("")
+  contactTitleAr       String   @default("")
+  contactTitleEn       String   @default("")
+  contactBodyAr        String   @default("")
+  contactBodyEn        String   @default("")
+  emailCtaAr           String   @default("")
+  emailCtaEn           String   @default("")
+  copyrightAr          String   @default("")
+  copyrightEn          String   @default("")
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+model PortfolioNavLink {
+  id        String @id @default(cuid())
+  href      String
+  labelAr   String
+  labelEn   String
+  sortOrder Int    @default(0)
+
+  @@index([sortOrder])
+}
+
+model PortfolioStat {
+  id        String @id @default(cuid())
+  value     String
+  labelAr   String
+  labelEn   String
+  sortOrder Int    @default(0)
+
+  @@index([sortOrder])
+}
+
+model PortfolioSkillGroup {
+  id        String           @id @default(cuid())
+  titleAr   String
+  titleEn   String
+  sortOrder Int              @default(0)
+  items     PortfolioSkill[]
+
+  @@index([sortOrder])
+}
+
+model PortfolioSkill {
+  id        String              @id @default(cuid())
+  groupId   String
+  group     PortfolioSkillGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  textAr    String
+  textEn    String
+  sortOrder Int                 @default(0)
+
+  @@index([groupId])
+}
+
+model PortfolioJob {
+  id        String               @id @default(cuid())
+  datesAr   String
+  datesEn   String
+  titleAr   String
+  titleEn   String
+  companyAr String
+  companyEn String
+  sortOrder Int                  @default(0)
+  bullets   PortfolioJobBullet[]
+
+  @@index([sortOrder])
+}
+
+model PortfolioJobBullet {
+  id        String       @id @default(cuid())
+  jobId     String
+  job       PortfolioJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  textAr    String
+  textEn    String
+  sortOrder Int          @default(0)
+
+  @@index([jobId])
+}
+
+model PortfolioInnovation {
+  id        String @id @default(cuid())
+  badgeAr   String
+  badgeEn   String
+  nameAr    String
+  nameEn    String
+  bodyAr    String
+  bodyEn    String
+  sortOrder Int    @default(0)
+
+  @@index([sortOrder])
+}
+
+model PortfolioProject {
+  id        String @id @default(cuid())
+  nameAr    String
+  nameEn    String
+  descAr    String
+  descEn    String
+  tags      String @default("")
+  demoUrl   String @default("")
+  imageUrl  String @default("")
+  sortOrder Int    @default(0)
+
+  @@index([sortOrder])
+}
+
+model PortfolioEducation {
+  id        String @id @default(cuid())
+  datesAr   String
+  datesEn   String
+  degreeAr  String
+  degreeEn  String
+  schoolAr  String @default("")
+  schoolEn  String @default("")
+  sortOrder Int    @default(0)
+
+  @@index([sortOrder])
+}
+
+model PortfolioCertificate {
+  id        String @id @default(cuid())
+  textAr    String
+  textEn    String
+  sortOrder Int    @default(0)
+
+  @@index([sortOrder])
+}
+
+model PortfolioResearchItem {
+  id        String @id @default(cuid())
+  nameAr    String
+  nameEn    String
+  bodyAr    String
+  bodyEn    String
+  sortOrder Int    @default(0)
+
+  @@index([sortOrder])
+}
+
+model PortfolioSpokenLanguage {
+  id        String @id @default(cuid())
+  nameAr    String
+  nameEn    String
+  levelAr   String
+  levelEn   String
+  sortOrder Int    @default(0)
+
+  @@index([sortOrder])
+}
+
+model PortfolioSocial {
+  id          String  @id @default(cuid())
+  label       String
+  url         String
+  followersAr String  @default("")
+  followersEn String  @default("")
+  showInHero  Boolean @default(false)
+  heroOrder   Int     @default(0)
+  sortOrder   Int     @default(0)
+
+  @@index([sortOrder])
+}

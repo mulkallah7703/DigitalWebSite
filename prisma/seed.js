@@ -20,6 +20,11 @@ async function main() {
     })
 
     console.log('✅ Admin created:', admin.email)
+
+    const { register } = require('tsx/cjs/api')
+    register()
+    const { seedPortfolioIfEmpty } = require('../src/lib/portfolio-db.ts')
+    await seedPortfolioIfEmpty(prisma)
 }
 
 main()
