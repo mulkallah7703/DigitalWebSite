@@ -8,7 +8,7 @@ import { motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Mail, Lock, Sparkles, Chrome } from 'lucide-react'
+import { Mail, Lock, Chrome } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -92,13 +92,6 @@ export function LoginForm({ googleEnabled }: { googleEnabled: boolean }) {
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-md space-y-8"
         >
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-bold gradient-text">{t('store.name')}</span>
-          </Link>
-
           <div>
             <h1 className="text-3xl font-bold">{t('auth.welcomeBack')}</h1>
             <p className="text-muted-foreground mt-2">

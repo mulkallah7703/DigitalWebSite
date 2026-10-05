@@ -40,7 +40,7 @@ function getLanguageState(): Language {
 const translations: Record<Language, Record<string, string>> = {
   en: {
     // Store
-    'store.name': 'Cam Code Company',
+    'store.name': 'Alsadi Digital Store',
     // Navigation
     'nav.portfolio': 'Portfolio',
     'nav.digitalEcommerce': 'Digital E-commerce',
@@ -401,7 +401,7 @@ const translations: Record<Language, Record<string, string>> = {
   },
   ar: {
     // Store
-    'store.name': 'شركة كام كود',
+    'store.name': 'متجر السعدي الرقمي',
     // Navigation
     'nav.portfolio': 'البورتفوليو',
     'nav.digitalEcommerce': 'التجارة الرقمية',
