@@ -2,10 +2,16 @@ import type { NextAuthOptions } from 'next-auth'
 import type { Adapter } from 'next-auth/adapters'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import GoogleProvider from 'next-auth/providers/google'
-import GitHubProvider from 'next-auth/providers/github'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
 import { db } from './db'
+import { isGoogleAuthEnabled } from './google-auth'
+
+function googleEmailVerified(profile: unknown) {
+  if (!profile || typeof profile !== 'object') return false
+  const value = (profile as { email_verified?: unknown }).email_verified
+  return value === true || value === 'true'
+}
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -17,14 +23,26 @@ export const authOptions: NextAuthOptions = {
     signIn: '/auth/login',
   },
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-    }),
-    GitHubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID || '',
-      clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
-    }),
+    ...(isGoogleAuthEnabled()
+      ? [
+          GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID!.trim(),
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!.trim(),
+            // Google marks the address verified. Linking is limited to that case in signIn.
+            allowDangerousEmailAccountLinking: true,
+            profile(profile) {
+              return {
+                id: profile.sub,
+                name: profile.name,
+                email: profile.email,
+                image: profile.picture,
+                // New Google accounts are customers. Linking an existing user keeps that user's role.
+                role: 'USER',
+              }
+            },
+          }),
+        ]
+      : []),
     CredentialsProvider({
       name: 'credentials',
       credentials: {
@@ -65,6 +83,10 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    async signIn({ account, profile }) {
+      if (account?.provider !== 'google') return true
+      return googleEmailVerified(profile)
+    },
     async session({ session, token }) {
       try {
         if (token && session.user) {
@@ -112,6 +134,22 @@ export const authOptions: NextAuthOptions = {
         console.error('JWT callback error:', error)
         return token
       }
+    },
+  },
+  events: {
+    async signIn({ user, account, profile }) {
+      if (account?.provider !== 'google' || !user?.id || !googleEmailVerified(profile)) return
+      const existing = await db.user.findUnique({
+        where: { id: user.id },
+        select: { image: true, name: true, emailVerified: true },
+      })
+      if (!existing) return
+      const data: { image?: string; name?: string; emailVerified?: Date } = {}
+      if (!existing.image && user.image) data.image = user.image
+      if (!existing.name && user.name) data.name = user.name
+      if (!existing.emailVerified) data.emailVerified = new Date()
+      if (!Object.keys(data).length) return
+      await db.user.update({ where: { id: user.id }, data })
     },
   },
   debug: process.env.NODE_ENV === 'development',
