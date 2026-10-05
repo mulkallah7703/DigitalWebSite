@@ -52,7 +52,6 @@ export function Header() {
 
   const navLinks = [
     { href: '/', label: t('nav.portfolio') },
-    { href: '/store', label: t('nav.digitalEcommerce') },
     { href: '/products', label: t('nav.products') },
     { href: '/categories', label: t('nav.categories') },
   ]
@@ -90,7 +89,7 @@ export function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-8">
+          <nav className="hidden lg:flex items-center gap-8 ms-6">
             {navLinks.map((link) => (
               <Link
                 key={link.href}

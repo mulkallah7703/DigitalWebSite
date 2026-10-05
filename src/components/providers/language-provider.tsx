@@ -43,7 +43,6 @@ const translations: Record<Language, Record<string, string>> = {
     'store.name': 'Alsadi Digital Store',
     // Navigation
     'nav.portfolio': 'Portfolio',
-    'nav.digitalEcommerce': 'Digital E-commerce',
     'nav.products': 'Products',
     'nav.categories': 'Categories',
     'nav.deals': 'Deals',
@@ -404,7 +403,6 @@ const translations: Record<Language, Record<string, string>> = {
     'store.name': 'متجر السعدي الرقمي',
     // Navigation
     'nav.portfolio': 'البورتفوليو',
-    'nav.digitalEcommerce': 'التجارة الرقمية',
     'nav.products': 'المنتجات',
     'nav.categories': 'الفئات',
     'nav.deals': 'العروض',
