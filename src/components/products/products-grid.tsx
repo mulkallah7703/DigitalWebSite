@@ -1,5 +1,6 @@
 import { db, safeDb, serializeProducts } from '@/lib/db'
 import { withAutomaticPrices } from '@/lib/product-discount'
+import { withDisplayedStats } from '@/lib/display-stats'
 import { ProductCard } from './product-card'
 import { ProductsGridEmpty } from './products-grid-empty'
 import { ProductsGridHeader } from './products-grid-header'
@@ -88,7 +89,7 @@ export async function ProductsGrid({ searchParams }: ProductsGridProps) {
     db.product.count({ where }),
   ]), [[], 0] as const)
 
-  const plainProducts = await withAutomaticPrices(serializeProducts(products))
+  const plainProducts = (await withAutomaticPrices(serializeProducts(products))).map(withDisplayedStats)
 
   const totalPages = Math.ceil(total / limit)
 

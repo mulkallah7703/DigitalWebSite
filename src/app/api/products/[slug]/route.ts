@@ -64,7 +64,8 @@ async function handler(
       data: { viewCount: { increment: 1 } },
     })
 
-    return NextResponse.json(product)
+    const { withDisplayedStats } = await import('@/lib/display-stats')
+    return NextResponse.json(withDisplayedStats(product))
   } catch (error) {
     console.error('Product fetch error:', error)
     return NextResponse.json(

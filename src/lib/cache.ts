@@ -1,6 +1,7 @@
 import { unstable_cache } from 'next/cache'
 import { db, serializeProducts } from './db'
 import { withAutomaticPrices } from './product-discount'
+import { withDisplayedStats } from './display-stats'
 
 // Cache tags for revalidation
 export const CACHE_TAGS = {
@@ -26,6 +27,11 @@ export const getFeaturedProducts = unstable_cache(
         comparePrice: true,
         rating: true,
         reviewCount: true,
+        salesCount: true,
+        useManualStats: true,
+        displayRating: true,
+        displayReviewCount: true,
+        displaySalesCount: true,
         featured: true,
         isFeatured: true,
         externalPurchaseLink: true,
@@ -49,7 +55,7 @@ export const getFeaturedProducts = unstable_cache(
       orderBy: { createdAt: 'desc' },
       take: 8,
     })
-    return withAutomaticPrices(serializeProducts(products))
+    return (await withAutomaticPrices(serializeProducts(products))).map(withDisplayedStats)
   },
   ['featured-products'],
   {
@@ -157,7 +163,7 @@ export const getProductBySlug = unstable_cache(
       comparePrice: product.comparePrice ? Number(product.comparePrice) : null,
       rating: Number(product.rating),
     }])
-    return priced
+    return withDisplayedStats(priced)
   },
   ['product'],
   {
@@ -183,6 +189,11 @@ export const getRelatedProducts = unstable_cache(
         comparePrice: true,
         rating: true,
         reviewCount: true,
+        salesCount: true,
+        useManualStats: true,
+        displayRating: true,
+        displayReviewCount: true,
+        displaySalesCount: true,
         featured: true,
         externalPurchaseLink: true,
         category: {
@@ -204,7 +215,7 @@ export const getRelatedProducts = unstable_cache(
       },
       take: 4,
     })
-    return withAutomaticPrices(serializeProducts(products))
+    return (await withAutomaticPrices(serializeProducts(products))).map(withDisplayedStats)
   },
   ['related-products'],
   {

@@ -2,7 +2,8 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Heart, ShoppingCart, Star, Eye } from 'lucide-react'
+import { Heart, ShoppingCart, Eye } from 'lucide-react'
+import { StarRating } from '@/components/products/star-rating'
 import { SafeImage } from '@/components/ui/safe-image'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -149,7 +150,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
           {/* Rating */}
           <div className="flex items-center gap-1 mb-3">
-            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+            <StarRating value={rating} size="sm" />
             <span className="text-sm font-medium">{rating.toFixed(1)}</span>
             <span className="text-xs text-muted-foreground">({product.reviewCount})</span>
           </div>

@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { SafeImage } from '@/components/ui/safe-image'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  Star,
   Heart,
   Share2,
   ShoppingCart,
@@ -24,6 +23,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useCartStore, type CartProduct } from '@/store/cart-store'
 import { formatPrice, calculateDiscount, formatDate } from '@/lib/utils'
 import { useLanguage } from '@/components/providers/language-provider'
+import { StarRating } from '@/components/products/star-rating'
 
 // Serialized product type (with numbers instead of Decimals)
 interface SerializedProduct {
@@ -272,16 +272,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
         {/* Rating & Stats */}
         <div className="flex items-center gap-4 flex-wrap">
           <div className="flex items-center gap-1">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star
-                key={i}
-                className={`w-5 h-5 ${
-                  i < Math.round(Number(product.rating))
-                    ? 'fill-yellow-400 text-yellow-400'
-                    : 'text-muted-foreground'
-                }`}
-              />
-            ))}
+            <StarRating value={Number(product.rating)} />
             <span className="ml-2 font-medium">{Number(product.rating).toFixed(1)}</span>
             <span className="text-muted-foreground">({product.reviewCount} {t('common.reviews')})</span>
           </div>
@@ -416,16 +407,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                           </span>
                         </div>
                         <div className="flex items-center gap-1 mt-1">
-                          {Array.from({ length: 5 }).map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`w-4 h-4 ${
-                                i < review.rating
-                                  ? 'fill-yellow-400 text-yellow-400'
-                                  : 'text-muted-foreground'
-                              }`}
-                            />
-                          ))}
+                          <StarRating value={review.rating} size="sm" />
                             {review.verified && (
                             <Badge variant="secondary" className="ml-2 text-xs">
                               <Check className="w-3 h-3 mr-1" />

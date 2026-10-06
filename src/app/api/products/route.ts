@@ -92,8 +92,9 @@ async function handler(req: Request) {
       db.product.count({ where }),
     ])
 
+    const { withDisplayedStats } = await import('@/lib/display-stats')
     return NextResponse.json({
-      data: products,
+      data: products.map((product) => withDisplayedStats(product)),
       pagination: {
         page,
         limit,
