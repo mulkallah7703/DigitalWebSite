@@ -142,6 +142,11 @@ model Product {
   salesCount  Int     @default(0)
   rating      Decimal @default(0) @db.Decimal(2, 1)
   reviewCount Int     @default(0)
+  // Storefront overrides. Shown only when useManualStats is true and the field is set.
+  useManualStats     Boolean  @default(false)
+  displayRating      Decimal? @db.Decimal(2, 1)
+  displayReviewCount Int?
+  displaySalesCount  Int?
 
   // AI Features
   aiRecommendScore Decimal  @default(0) @db.Decimal(5, 2)
