@@ -61,7 +61,13 @@ export function SafeImage({ src, alt, fallbackIcon, className, fill, unoptimized
       alt={alt}
       className={className}
       onError={handleError}
-      style={fill ? { position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" } : undefined}
+      style={fill ? {
+        position: 'absolute',
+        inset: 0,
+        width: '100%',
+        height: '100%',
+        objectFit: className?.includes('object-contain') ? 'contain' : 'cover',
+      } : undefined}
     />
   )
 }

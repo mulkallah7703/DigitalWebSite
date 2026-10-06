@@ -7,6 +7,8 @@ export interface CartProduct {
   name: string
   slug: string
   price: number
+  originalPrice?: number | null
+  discountPercent?: number
   comparePrice?: number | null
   externalPurchaseLink?: string | null
   images: { id: string; url: string; alt?: string | null }[]
@@ -31,7 +33,9 @@ interface CartState {
   openCart: () => void
   closeCart: () => void
   getTotal: () => number
+  getOriginalTotal: () => number
   getItemCount: () => number
+  syncPrices: () => Promise<void>
 }
 
 export const useCartStore = create<CartState>()(
@@ -100,6 +104,50 @@ export const useCartStore = create<CartState>()(
           if (!Number.isFinite(price) || !Number.isFinite(quantity)) return total
           return total + price * quantity
         }, 0)
+      },
+
+      getOriginalTotal: () => {
+        const items = get().items
+        if (!Array.isArray(items)) return 0
+        return items.reduce((total, item) => {
+          const original = Number(item?.product?.originalPrice)
+          const price = Number.isFinite(original) && original > 0 ? original : Number(item?.product?.price)
+          const quantity = Number(item?.quantity)
+          if (!Number.isFinite(price) || !Number.isFinite(quantity)) return total
+          return total + price * quantity
+        }, 0)
+      },
+
+      syncPrices: async () => {
+        const items = get().items
+        if (!Array.isArray(items) || items.length === 0) return
+        try {
+          const ids = items.map((item) => item.productId).join(',')
+          const response = await fetch(`/api/store/prices?ids=${encodeURIComponent(ids)}`)
+          if (!response.ok) return
+          const data = await response.json() as {
+            prices?: { id: string; price: number; salePrice: number | null; discountPercent: number }[]
+          }
+          const quotes = new Map((data.prices || []).map((quote) => [quote.id, quote]))
+          set({
+            items: get().items.map((item) => {
+              const quote = quotes.get(item.productId)
+              if (!quote) return item
+              const sale = quote.salePrice != null && quote.salePrice < quote.price
+              return {
+                ...item,
+                product: {
+                  ...item.product,
+                  price: sale ? quote.salePrice! : quote.price,
+                  originalPrice: sale ? quote.price : null,
+                  discountPercent: sale ? quote.discountPercent : 0,
+                },
+              }
+            }),
+          })
+        } catch {
+          // Keep the prices captured when the item was added.
+        }
       },
 
       getItemCount: () => {

@@ -1,5 +1,6 @@
 import { unstable_cache } from 'next/cache'
 import { db, serializeProducts } from './db'
+import { withAutomaticPrices } from './product-discount'
 
 // Cache tags for revalidation
 export const CACHE_TAGS = {
@@ -48,7 +49,7 @@ export const getFeaturedProducts = unstable_cache(
       orderBy: { createdAt: 'desc' },
       take: 8,
     })
-    return serializeProducts(products)
+    return withAutomaticPrices(serializeProducts(products))
   },
   ['featured-products'],
   {
@@ -148,14 +149,15 @@ export const getProductBySlug = unstable_cache(
     if (!product) return null
     
     // Explicitly include videoUrl and all fields
-    return {
+    const [priced] = await withAutomaticPrices([{
       ...product,
       videoUrl: product.videoUrl, // Explicitly include videoUrl
       externalPurchaseLink: product.externalPurchaseLink ?? null,
       price: Number(product.price),
       comparePrice: product.comparePrice ? Number(product.comparePrice) : null,
       rating: Number(product.rating),
-    }
+    }])
+    return priced
   },
   ['product'],
   {
@@ -202,7 +204,7 @@ export const getRelatedProducts = unstable_cache(
       },
       take: 4,
     })
-    return serializeProducts(products)
+    return withAutomaticPrices(serializeProducts(products))
   },
   ['related-products'],
   {

@@ -3,7 +3,7 @@ export const runtime = 'nodejs'
 export const revalidate = 0
 
 import { NextResponse } from 'next/server'
-import { revalidateTag } from 'next/cache'
+import { revalidateStore } from '@/lib/revalidate-store'
 
 export async function POST(req: Request) {
   return handler(req)
@@ -104,12 +104,7 @@ async function handler(req: Request) {
       }
     }
 
-    // Revalidate cache so product appears immediately in store
-    revalidateTag('products')
-    revalidateTag('featured-products')
-    if (data.status === 'PUBLISHED') {
-      revalidateTag(`product-${product.slug}`)
-    }
+    revalidateStore(data.status === 'PUBLISHED' ? [product.slug] : [])
 
     return NextResponse.json({
       success: true,
@@ -332,12 +327,7 @@ async function updateHandler(req: Request) {
       }
     }
 
-    // Revalidate cache
-    revalidateTag('products')
-    revalidateTag('featured-products')
-    if (data.status === 'PUBLISHED') {
-      revalidateTag(`product-${product.slug}`)
-    }
+    revalidateStore([existingProduct.slug, product.slug])
 
     return NextResponse.json({
       success: true,
@@ -383,14 +373,21 @@ async function deleteHandler(req: Request) {
       return NextResponse.json({ error: 'Product ID is required' }, { status: 400 })
     }
 
+    const existing = await db.product.findUnique({
+      where: { id: productId },
+      select: { slug: true },
+    })
+
+    if (!existing) {
+      return NextResponse.json({ error: 'Product not found' }, { status: 404 })
+    }
+
     // Delete product (cascade will handle related records)
     await db.product.delete({
       where: { id: productId },
     })
 
-    // Revalidate cache
-    revalidateTag('products')
-    revalidateTag('featured-products')
+    revalidateStore(existing ? [existing.slug] : [])
 
     return NextResponse.json({ success: true })
   } catch (error) {

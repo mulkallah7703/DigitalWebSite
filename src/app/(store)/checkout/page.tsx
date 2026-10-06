@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { SafeImage } from '@/components/ui/safe-image'
@@ -18,9 +18,14 @@ export default function CheckoutPage() {
   const router = useRouter()
   const { toast } = useToast()
   const { t } = useLanguage()
-  const { items, removeItem, getTotal, clearCart } = useCartStore()
+  const { items, removeItem, getTotal, getOriginalTotal, clearCart } = useCartStore()
   const [isLoading, setIsLoading] = useState(false)
   const total = getTotal()
+  const originalTotal = getOriginalTotal()
+
+  useEffect(() => {
+    void useCartStore.getState().syncPrices()
+  }, [items.length])
 
   const getExternalPurchaseLink = () => {
     const match = items.find((item) => item.product.externalPurchaseLink?.trim())
@@ -167,7 +172,12 @@ export default function CheckoutPage() {
                         </p>
                         <div className="flex items-center justify-between mt-2">
                           <span className="text-lg font-bold text-primary">
-                            {formatPrice(item.product.price)}
+                            {formatPrice(item.product.price * item.quantity)}
+                            {item.product.originalPrice != null && item.product.originalPrice > item.product.price && (
+                              <span className="ms-2 text-sm font-normal text-muted-foreground line-through">
+                                {formatPrice(item.product.originalPrice * item.quantity)}
+                              </span>
+                            )}
                           </span>
                           <Button
                             variant="ghost"
@@ -197,8 +207,16 @@ export default function CheckoutPage() {
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">{t('common.subtotal')}</span>
-                    <span>{formatPrice(total)}</span>
+                    <span className={originalTotal > total ? 'line-through text-muted-foreground' : ''}>
+                      {formatPrice(originalTotal > total ? originalTotal : total)}
+                    </span>
                   </div>
+                  {originalTotal > total && (
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">{t('admin.discount')}</span>
+                      <span>-{formatPrice(originalTotal - total)}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">{t('common.tax')}</span>
                     <span>$0.00</span>

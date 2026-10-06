@@ -7,6 +7,7 @@ const nextConfig = {
       { protocol: 'https', hostname: '**.githubusercontent.com' },
       { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'https', hostname: 'via.placeholder.com' },
+      { protocol: 'https', hostname: '**.public.blob.vercel-storage.com' },
     ],
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
@@ -24,7 +25,7 @@ const nextConfig = {
 
   // Experimental features for performance
   experimental: {
-    serverComponentsExternalPackages: ['@vercel/blob', '@aws-sdk/client-s3'],
+    serverComponentsExternalPackages: ['@vercel/blob', '@aws-sdk/client-s3', 'sharp'],
     serverActions: {
       bodySizeLimit: '10mb',
     },

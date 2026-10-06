@@ -17,7 +17,6 @@ async function handler(req: Request) {
     const { z } = await import('zod')
     const { requireAuth } = await import('@/lib/auth')
     const { createCheckoutSession } = await import('@/lib/stripe')
-    const { db } = await import('@/lib/db')
 
     const checkoutSchema = z.object({
       items: z.array(
@@ -32,27 +31,24 @@ async function handler(req: Request) {
     const body = await req.json()
     const { items } = checkoutSchema.parse(body)
 
-    const productIds = items.map((item) => item.productId)
-    const products = await db.product.findMany({
-      where: { id: { in: productIds }, status: 'PUBLISHED' },
-    })
+    const { priceOrderLines } = await import('@/lib/product-discount')
+    const priced = await priceOrderLines(items)
 
-    if (products.length !== items.length) {
+    if (!priced) {
       return NextResponse.json(
         { error: 'Some products are not available' },
         { status: 400 }
       )
     }
 
-    const lineItems = items.map((item) => {
-      const product = products.find((p) => p.id === item.productId)!
-      return {
-        productId: product.id,
-        name: product.name,
-        price: Number(product.price),
-        quantity: item.quantity,
-      }
-    })
+    const lineItems = priced.lines.map((line) => ({
+      productId: line.productId,
+      name: line.name,
+      price: line.unitPrice,
+      originalPrice: line.originalPrice,
+      quantity: line.quantity,
+      couponId: line.couponId,
+    }))
 
     const checkoutSession = await createCheckoutSession({
       items: lineItems,

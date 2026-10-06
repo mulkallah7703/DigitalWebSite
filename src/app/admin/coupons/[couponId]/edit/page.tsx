@@ -5,6 +5,7 @@ import { CouponForm } from '../../_components/coupon-form'
 async function getCoupon(couponId: string) {
   const coupon = await db.coupon.findUnique({
     where: { id: couponId },
+    include: { products: { select: { productId: true } } },
   })
 
   if (!coupon) {
@@ -26,5 +27,10 @@ export default async function EditCouponPage({
     redirect('/admin/coupons')
   }
 
-  return <CouponForm coupon={coupon} />
+  const products = await db.product.findMany({
+    select: { id: true, name: true },
+    orderBy: { name: 'asc' },
+  })
+
+  return <CouponForm coupon={coupon} products={products} />
 }

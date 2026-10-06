@@ -3,7 +3,7 @@ export const runtime = 'nodejs'
 export const revalidate = 0
 
 import { NextResponse } from 'next/server'
-import { revalidateTag } from 'next/cache'
+import { revalidateStore } from '@/lib/revalidate-store'
 
 export async function GET(req: Request) {
   return getHandler(req)
@@ -91,6 +91,7 @@ async function createHandler(req: Request) {
       startDate: z.string().optional().nullable().transform((val) => val ? new Date(val) : null),
       endDate: z.string().optional().nullable().transform((val) => val ? new Date(val) : null),
       active: z.boolean().optional().default(true),
+      productIds: z.array(z.string()).optional().default([]),
     })
 
     const body = await req.json()
@@ -124,6 +125,14 @@ async function createHandler(req: Request) {
       )
     }
 
+    const productIds = Array.from(new Set(data.productIds || []))
+    if (productIds.length > 0) {
+      const found = await db.product.count({ where: { id: { in: productIds } } })
+      if (found !== productIds.length) {
+        return NextResponse.json({ error: 'One or more products were not found' }, { status: 400 })
+      }
+    }
+
     // Create coupon
     const coupon = await db.coupon.create({
       data: {
@@ -137,6 +146,9 @@ async function createHandler(req: Request) {
         startDate: data.startDate,
         endDate: data.endDate,
         active: data.active ?? true,
+        products: {
+          create: productIds.map((productId) => ({ productId })),
+        },
       },
       include: {
         _count: {
@@ -145,7 +157,7 @@ async function createHandler(req: Request) {
       },
     })
 
-    revalidateTag('coupons')
+    revalidateStore()
 
     return NextResponse.json({
       success: true,

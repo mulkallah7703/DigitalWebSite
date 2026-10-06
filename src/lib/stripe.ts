@@ -10,7 +10,7 @@ export async function createCheckoutSession({
   userId,
   customerEmail,
 }: {
-  items: { productId: string; name: string; price: number; quantity: number }[]
+  items: { productId: string; name: string; price: number; quantity: number; originalPrice?: number; couponId?: string | null }[]
   userId: string
   customerEmail: string
 }) {

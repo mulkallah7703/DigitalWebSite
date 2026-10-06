@@ -46,16 +46,36 @@ async function handler(req: Request) {
       return NextResponse.json({ error: 'Missing metadata' }, { status: 400 })
     }
 
-    const items = JSON.parse(itemsJson) as { productId: string; quantity: number }[]
+    const items = JSON.parse(itemsJson) as {
+      productId: string
+      quantity: number
+      price?: number
+      originalPrice?: number
+      couponId?: string | null
+    }[]
 
-    const products = await db.product.findMany({
-      where: { id: { in: items.map((i) => i.productId) } },
+    const { priceOrderLines } = await import('@/lib/product-discount')
+    const priced = await priceOrderLines(items.map((item) => ({
+      productId: item.productId,
+      quantity: item.quantity,
+    })))
+
+    const lines = items.map((item) => {
+      const fresh = priced?.lines.find((line) => line.productId === item.productId)
+      const unitPrice = typeof item.price === 'number' ? item.price : fresh?.unitPrice
+      const originalPrice = typeof item.originalPrice === 'number' ? item.originalPrice : fresh?.originalPrice ?? unitPrice
+      return {
+        productId: item.productId,
+        quantity: item.quantity,
+        unitPrice: unitPrice ?? 0,
+        originalPrice: originalPrice ?? unitPrice ?? 0,
+        couponId: item.couponId ?? fresh?.couponId ?? null,
+      }
     })
 
-    const subtotal = items.reduce((sum, item) => {
-      const product = products.find((p) => p.id === item.productId)
-      return sum + (product ? Number(product.price) * item.quantity : 0)
-    }, 0)
+    const subtotal = lines.reduce((sum, line) => sum + line.originalPrice * line.quantity, 0)
+    const total = lines.reduce((sum, line) => sum + line.unitPrice * line.quantity, 0)
+    const couponIds = Array.from(new Set(lines.map((line) => line.couponId).filter((id): id is string => Boolean(id))))
 
     const order = await db.order.create({
       data: {
@@ -66,22 +86,28 @@ async function handler(req: Request) {
         paymentMethod: 'stripe',
         paymentIntentId: session.payment_intent as string,
         subtotal,
-        total: subtotal,
+        discount: Math.max(0, subtotal - total),
+        total,
+        couponId: couponIds[0] || null,
         customerEmail: session.customer_email || '',
         customerName: session.customer_details?.name || '',
         items: {
-          create: items.map((item) => {
-            const product = products.find((p) => p.id === item.productId)!
-            return {
-              productId: item.productId,
-              quantity: item.quantity,
-              price: product.price,
-              total: Number(product.price) * item.quantity,
-            }
-          }),
+          create: lines.map((line) => ({
+            productId: line.productId,
+            quantity: line.quantity,
+            price: line.unitPrice,
+            total: line.unitPrice * line.quantity,
+          })),
         },
       },
     })
+
+    for (const couponId of couponIds) {
+      await db.coupon.update({
+        where: { id: couponId },
+        data: { usageCount: { increment: 1 } },
+      })
+    }
 
     for (const item of items) {
       await db.product.update({
