@@ -1,13 +1,11 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
-import { useTheme } from 'next-themes'
-import { ArrowRight, Menu, Moon, Sun, X } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { LanguageSwitcher } from '@/components/layout/language-switcher'
 import { useLanguage } from '@/components/providers/language-provider'
 import type { PortfolioView } from '@/lib/portfolio-db'
+import { PortfolioNav } from '@/components/portfolio/portfolio-nav'
 
 function SectionHeading({ eyebrow, title }: { eyebrow: string; title: string }) {
   return (
@@ -20,95 +18,14 @@ function SectionHeading({ eyebrow, title }: { eyebrow: string; title: string }) 
 
 export function PortfolioPage({ contentByLang }: { contentByLang: { ar: PortfolioView; en: PortfolioView } }) {
   const { language } = useLanguage()
-  const { theme, setTheme } = useTheme()
-  const [menuOpen, setMenuOpen] = useState(false)
   const content = language === 'en' ? contentByLang.en : contentByLang.ar
   const heroSocials = content.heroSocialLabels
     .map((label) => content.socials.find((social) => social.label === label))
     .filter((social): social is NonNullable<typeof social> => Boolean(social))
 
-  const closeMenu = () => setMenuOpen(false)
-
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <header className="fixed top-0 inset-x-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-xl">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-3">
-          <a href="#hero" className="font-bold text-base sm:text-lg shrink-0 gradient-text">
-            {content.name}
-          </a>
-
-          <nav className="hidden xl:flex items-center gap-5">
-            {content.nav.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-2">
-            <Button asChild variant="gradient" size="sm" className="shrink-0">
-              <Link href="/store">
-                {content.myProducts}
-                <ArrowRight className="w-4 h-4 ms-1.5 rtl:rotate-180" />
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="sm" className="hidden md:inline-flex">
-              <a href={content.cvUrl} target="_blank" rel="noopener noreferrer">
-                {content.cvLabel}
-              </a>
-            </Button>
-            <LanguageSwitcher />
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              aria-label="Toggle theme"
-            >
-              <Sun className="w-5 h-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-              <Moon className="absolute w-5 h-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="xl:hidden"
-              onClick={() => setMenuOpen((open) => !open)}
-              aria-label="Menu"
-            >
-              {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </Button>
-          </div>
-        </div>
-
-        {menuOpen && (
-          <nav className="xl:hidden border-t bg-background">
-            <div className="container mx-auto px-4 py-3 flex flex-col gap-1">
-              {content.nav.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={closeMenu}
-                  className="px-3 py-2 rounded-lg text-sm hover:bg-accent"
-                >
-                  {link.label}
-                </a>
-              ))}
-              <a
-                href={content.cvUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={closeMenu}
-                className="px-3 py-2 rounded-lg text-sm hover:bg-accent md:hidden"
-              >
-                {content.cvLabel}
-              </a>
-            </div>
-          </nav>
-        )}
-      </header>
+      <PortfolioNav content={content} />
 
       <main className="pt-16">
         <section id="hero" className="relative overflow-hidden scroll-mt-20">
