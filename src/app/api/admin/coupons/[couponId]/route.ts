@@ -150,6 +150,15 @@ async function updateHandler(
       }
     }
 
+    const previousLinks = await db.couponProduct.findMany({
+      where: { couponId },
+      select: { productId: true },
+    })
+    const affectedIds = Array.from(new Set([
+      ...previousLinks.map((link) => link.productId),
+      ...(productIds || []),
+    ]))
+
     // Update coupon
     const coupon = await db.coupon.update({
       where: { id: couponId },
@@ -180,7 +189,13 @@ async function updateHandler(
       },
     })
 
-    revalidateStore()
+    const targeted = affectedIds.length
+      ? await db.product.findMany({
+          where: { id: { in: affectedIds } },
+          select: { slug: true },
+        })
+      : []
+    revalidateStore(targeted.map((product) => product.slug))
 
     return NextResponse.json({
       success: true,
@@ -234,6 +249,11 @@ async function deleteHandler(
       return NextResponse.json({ error: 'Coupon not found' }, { status: 404 })
     }
 
+    const targeted = await db.couponProduct.findMany({
+      where: { couponId },
+      select: { product: { select: { slug: true } } },
+    })
+
     // Check if coupon has been used
     if (coupon._count.orders > 0) {
       return NextResponse.json(
@@ -247,7 +267,7 @@ async function deleteHandler(
       where: { id: couponId },
     })
 
-    revalidateStore()
+    revalidateStore(targeted.map((link) => link.product.slug))
 
     return NextResponse.json({ success: true })
   } catch (error) {

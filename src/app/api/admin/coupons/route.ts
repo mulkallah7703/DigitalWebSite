@@ -157,7 +157,11 @@ async function createHandler(req: Request) {
       },
     })
 
-    revalidateStore()
+    const targeted = await db.product.findMany({
+      where: { id: { in: productIds } },
+      select: { slug: true },
+    })
+    revalidateStore(targeted.map((product) => product.slug))
 
     return NextResponse.json({
       success: true,
