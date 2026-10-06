@@ -18,6 +18,8 @@ export interface ProductCardData {
   slug: string
   price: Decimal | number
   comparePrice?: Decimal | number | null
+  salePrice?: number | null
+  discountPercent?: number
   featured?: boolean
   rating: Decimal | number
   reviewCount: number
@@ -34,12 +36,18 @@ export function ProductCard({ product }: ProductCardProps) {
   const { addItem, openCart } = useCartStore()
   const { t } = useLanguage()
   const parsedPrice = Number(product?.price)
-  const price = Number.isFinite(parsedPrice) ? parsedPrice : 0
+  const listPrice = Number.isFinite(parsedPrice) ? parsedPrice : 0
+  const parsedSale = product?.salePrice == null ? null : Number(product.salePrice)
+  const salePrice = parsedSale != null && Number.isFinite(parsedSale) && parsedSale < listPrice ? parsedSale : null
+  const price = salePrice ?? listPrice
   const parsedCompare = product?.comparePrice == null ? null : Number(product.comparePrice)
   const comparePrice = parsedCompare != null && Number.isFinite(parsedCompare) ? parsedCompare : null
   const parsedRating = Number(product?.rating)
   const rating = Number.isFinite(parsedRating) ? parsedRating : 0
-  const discount = calculateDiscount(price, comparePrice || 0)
+  const discount = salePrice != null
+    ? (product.discountPercent || calculateDiscount(salePrice, listPrice))
+    : calculateDiscount(listPrice, comparePrice || 0)
+  const strikePrice = salePrice != null ? listPrice : (comparePrice && comparePrice > listPrice ? comparePrice : null)
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -50,6 +58,8 @@ export function ProductCard({ product }: ProductCardProps) {
       name: product.name,
       slug: product.slug,
       price,
+      originalPrice: salePrice != null ? listPrice : null,
+      discountPercent: discount,
       comparePrice,
       externalPurchaseLink: product.externalPurchaseLink ?? null,
       images: product.images,
@@ -149,9 +159,9 @@ export function ProductCard({ product }: ProductCardProps) {
             <span className="text-lg font-bold text-primary">
               {formatPrice(price)}
             </span>
-            {comparePrice && comparePrice > price && (
+            {strikePrice != null && strikePrice > price && (
               <span className="text-sm text-muted-foreground line-through">
-                {formatPrice(comparePrice)}
+                {formatPrice(strikePrice)}
               </span>
             )}
           </div>

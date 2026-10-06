@@ -49,6 +49,8 @@ prisma/*.db-journal
 public/uploads/images/*
 public/uploads/videos/*
 public/uploads/portfolio/*
+public/uploads/products/*
 !public/uploads/images/.gitkeep
 !public/uploads/videos/.gitkeep
 !public/uploads/portfolio/.gitkeep
+!public/uploads/products/.gitkeep

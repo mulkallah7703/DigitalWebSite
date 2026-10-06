@@ -34,6 +34,8 @@ interface SerializedProduct {
   shortDescription: string | null
   price: number
   comparePrice: number | null
+  salePrice?: number | null
+  discountPercent?: number
   externalPurchaseLink: string | null
   categoryId: string
   featured: boolean
@@ -94,9 +96,15 @@ export function ProductDetails({ product }: ProductDetailsProps) {
   const [selectedImage, setSelectedImage] = useState(0)
   const { addItem, openCart } = useCartStore()
   const { t } = useLanguage()
-  const price = Number(product.price)
+  const listPrice = Number(product.price)
+  const parsedSale = product.salePrice == null ? null : Number(product.salePrice)
+  const salePrice = parsedSale != null && Number.isFinite(parsedSale) && parsedSale < listPrice ? parsedSale : null
+  const price = salePrice ?? listPrice
   const comparePrice = product.comparePrice ? Number(product.comparePrice) : null
-  const discount = calculateDiscount(price, comparePrice || 0)
+  const discount = salePrice != null
+    ? (product.discountPercent || calculateDiscount(salePrice, listPrice))
+    : calculateDiscount(listPrice, comparePrice || 0)
+  const strikePrice = salePrice != null ? listPrice : (comparePrice && comparePrice > listPrice ? comparePrice : null)
 
   const features = [
     { icon: Download, label: t('product.instantDownload') },
@@ -112,6 +120,8 @@ export function ProductDetails({ product }: ProductDetailsProps) {
       name: product.name,
       slug: product.slug,
       price,
+      originalPrice: salePrice != null ? listPrice : null,
+      discountPercent: discount,
       comparePrice,
       externalPurchaseLink: product.externalPurchaseLink ?? null,
       images: product.images.map(img => ({
@@ -282,9 +292,9 @@ export function ProductDetails({ product }: ProductDetailsProps) {
         {/* Price */}
         <div className="flex items-baseline gap-3">
           <span className="text-4xl font-bold gradient-text">{formatPrice(price)}</span>
-          {comparePrice && comparePrice > price && (
+          {strikePrice != null && strikePrice > price && (
             <span className="text-xl text-muted-foreground line-through">
-              {formatPrice(comparePrice)}
+              {formatPrice(strikePrice)}
             </span>
           )}
         </div>

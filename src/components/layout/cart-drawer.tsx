@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { SafeImage } from '@/components/ui/safe-image'
@@ -11,10 +12,15 @@ import { formatPrice } from '@/lib/utils'
 import { useLanguage } from '@/components/providers/language-provider'
 
 export function CartDrawer() {
-  const { items: storedItems, isOpen, closeCart, removeItem, updateQuantity, getTotal, clearCart } = useCartStore()
+  const { items: storedItems, isOpen, closeCart, removeItem, updateQuantity, getTotal, getOriginalTotal, clearCart } = useCartStore()
   const items = Array.isArray(storedItems) ? storedItems : []
   const { t } = useLanguage()
   const total = getTotal()
+  const originalTotal = getOriginalTotal()
+
+  useEffect(() => {
+    if (isOpen) void useCartStore.getState().syncPrices()
+  }, [isOpen, items.length])
 
   return (
     <AnimatePresence>
@@ -103,6 +109,11 @@ export function CartDrawer() {
                         </Link>
                         <p className="text-sm font-semibold text-primary mt-1">
                           {formatPrice(item.product.price)}
+                          {item.product.originalPrice != null && item.product.originalPrice > item.product.price && (
+                            <span className="ms-2 text-xs font-normal text-muted-foreground line-through">
+                              {formatPrice(item.product.originalPrice)}
+                            </span>
+                          )}
                         </p>
 
                         {/* Quantity Controls */}
@@ -156,8 +167,16 @@ export function CartDrawer() {
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground">{t('common.subtotal')}</span>
-                    <span>{formatPrice(total)}</span>
+                    <span className={originalTotal > total ? 'line-through text-muted-foreground' : ''}>
+                      {formatPrice(originalTotal > total ? originalTotal : total)}
+                    </span>
                   </div>
+                  {originalTotal > total && (
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">{t('admin.discount')}</span>
+                      <span>-{formatPrice(originalTotal - total)}</span>
+                    </div>
+                  )}
                   <div className="flex items-center justify-between font-semibold text-lg">
                     <span>{t('common.total')}</span>
                     <span className="gradient-text">{formatPrice(total)}</span>

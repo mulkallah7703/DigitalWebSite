@@ -51,16 +51,24 @@ const couponSchema = z.object({
 
 type CouponForm = z.infer<typeof couponSchema>
 
-interface CouponFormProps {
-  coupon?: Coupon | null
+interface CouponProductOption {
+  id: string
+  name: string
 }
 
-export function CouponForm({ coupon }: CouponFormProps) {
+interface CouponFormProps {
+  coupon?: (Coupon & { products?: { productId: string }[] }) | null
+  products: CouponProductOption[]
+}
+
+export function CouponForm({ coupon, products }: CouponFormProps) {
   const isEditMode = !!coupon
   const router = useRouter()
   const { toast } = useToast()
   const { t } = useLanguage()
   const [isLoading, setIsLoading] = useState(false)
+  const [productIds, setProductIds] = useState<string[]>([])
+  const [productQuery, setProductQuery] = useState('')
 
   const {
     register,
@@ -106,6 +114,7 @@ export function CouponForm({ coupon }: CouponFormProps) {
         endDate: coupon.endDate ? new Date(coupon.endDate).toISOString().split('T')[0] : '',
         active: coupon.active,
       })
+      setProductIds(coupon.products?.map((link) => link.productId) || [])
     }
   }, [coupon, reset])
 
@@ -144,6 +153,7 @@ export function CouponForm({ coupon }: CouponFormProps) {
         startDate: data.startDate || null,
         endDate: data.endDate || null,
         active: data.active,
+        productIds,
       }
 
       const response = await fetch(url, {
@@ -368,6 +378,51 @@ export function CouponForm({ coupon }: CouponFormProps) {
               {...register('endDate')}
             />
           </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="coupon-products">
+            {t('admin.couponProducts')}
+          </Label>
+          <p className="text-xs text-muted-foreground">
+            {t('admin.couponProductsHint')}
+          </p>
+          <Input
+            id="coupon-products"
+            value={productQuery}
+            onChange={(event) => setProductQuery(event.target.value)}
+            placeholder={t('admin.searchProducts') || 'Search products...'}
+          />
+          <div className="max-h-56 overflow-y-auto rounded-lg border p-2 space-y-1">
+            {products.filter((product) => product.name.toLowerCase().includes(productQuery.trim().toLowerCase())).length === 0 ? (
+              <p className="px-2 py-3 text-sm text-muted-foreground">{t('admin.couponNoProducts')}</p>
+            ) : (
+              products
+                .filter((product) => product.name.toLowerCase().includes(productQuery.trim().toLowerCase()))
+                .map((product) => (
+                  <label key={product.id} className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-accent cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={productIds.includes(product.id)}
+                      onChange={() => {
+                        setProductIds((current) => (
+                          current.includes(product.id)
+                            ? current.filter((id) => id !== product.id)
+                            : [...current, product.id]
+                        ))
+                      }}
+                      className="h-4 w-4 rounded border-input"
+                    />
+                    <span>{product.name}</span>
+                  </label>
+                ))
+            )}
+          </div>
+          <p className="text-xs text-muted-foreground">
+            {productIds.length === 0
+              ? t('admin.couponStoreWide')
+              : `${t('admin.couponSelected')}: ${productIds.length}`}
+          </p>
         </div>
 
         {/* Active Toggle */}

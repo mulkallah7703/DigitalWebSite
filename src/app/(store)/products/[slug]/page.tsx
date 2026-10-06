@@ -92,7 +92,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     image: product.images.map((img) => img.url),
     offers: {
       '@type': 'Offer',
-      price: product.price.toString(),
+      price: (product.salePrice ?? product.price).toString(),
       priceCurrency: 'USD',
       availability: 'https://schema.org/InStock',
     },

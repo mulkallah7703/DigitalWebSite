@@ -3,7 +3,7 @@ export const runtime = 'nodejs'
 export const revalidate = 0
 
 import { NextResponse } from 'next/server'
-import { revalidateTag } from 'next/cache'
+import { revalidateStore } from '@/lib/revalidate-store'
 
 export async function GET(
   req: Request,
@@ -93,6 +93,7 @@ async function updateHandler(
       startDate: z.string().optional().nullable().transform((val) => val ? new Date(val) : null),
       endDate: z.string().optional().nullable().transform((val) => val ? new Date(val) : null),
       active: z.boolean().optional(),
+      productIds: z.array(z.string()).optional(),
     })
 
     const body = await req.json()
@@ -141,6 +142,23 @@ async function updateHandler(
       )
     }
 
+    const productIds = data.productIds ? Array.from(new Set(data.productIds)) : undefined
+    if (productIds && productIds.length > 0) {
+      const found = await db.product.count({ where: { id: { in: productIds } } })
+      if (found !== productIds.length) {
+        return NextResponse.json({ error: 'One or more products were not found' }, { status: 400 })
+      }
+    }
+
+    const previousLinks = await db.couponProduct.findMany({
+      where: { couponId },
+      select: { productId: true },
+    })
+    const affectedIds = Array.from(new Set([
+      ...previousLinks.map((link) => link.productId),
+      ...(productIds || []),
+    ]))
+
     // Update coupon
     const coupon = await db.coupon.update({
       where: { id: couponId },
@@ -155,6 +173,14 @@ async function updateHandler(
         startDate: data.startDate !== undefined ? data.startDate : undefined,
         endDate: data.endDate !== undefined ? data.endDate : undefined,
         active: data.active !== undefined ? data.active : undefined,
+        ...(productIds
+          ? {
+              products: {
+                deleteMany: {},
+                create: productIds.map((productId) => ({ productId })),
+              },
+            }
+          : {}),
       },
       include: {
         _count: {
@@ -163,7 +189,13 @@ async function updateHandler(
       },
     })
 
-    revalidateTag('coupons')
+    const targeted = affectedIds.length
+      ? await db.product.findMany({
+          where: { id: { in: affectedIds } },
+          select: { slug: true },
+        })
+      : []
+    revalidateStore(targeted.map((product) => product.slug))
 
     return NextResponse.json({
       success: true,
@@ -217,6 +249,11 @@ async function deleteHandler(
       return NextResponse.json({ error: 'Coupon not found' }, { status: 404 })
     }
 
+    const targeted = await db.couponProduct.findMany({
+      where: { couponId },
+      select: { product: { select: { slug: true } } },
+    })
+
     // Check if coupon has been used
     if (coupon._count.orders > 0) {
       return NextResponse.json(
@@ -230,7 +267,7 @@ async function deleteHandler(
       where: { id: couponId },
     })
 
-    revalidateTag('coupons')
+    revalidateStore(targeted.map((link) => link.product.slug))
 
     return NextResponse.json({ success: true })
   } catch (error) {

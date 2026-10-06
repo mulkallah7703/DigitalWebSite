@@ -136,6 +136,7 @@ export function AddProductForm({ categories, product }: AddProductFormProps) {
       const newUrls = [...imageUrls, ...urls]
       setImageUrls(newUrls)
       setValue('imageUrls', newUrls)
+      e.target.value = ''
     } catch (error) {
       toast({
         title: t('admin.uploadError') || 'Upload Error',
@@ -462,11 +463,11 @@ export function AddProductForm({ categories, product }: AddProductFormProps) {
           {imageUrls.length > 0 && (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-4">
               {imageUrls.map((url, index) => (
-                <div key={index} className="relative group">
+                <div key={url} className="relative group aspect-[4/3] overflow-hidden rounded-lg border bg-secondary">
                   <img
                     src={url}
                     alt={`Preview ${index + 1}`}
-                    className="w-full h-24 object-cover rounded-lg border"
+                    className="absolute inset-0 h-full w-full object-cover"
                   />
                   <button
                     type="button"
