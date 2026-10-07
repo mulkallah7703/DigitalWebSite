@@ -24,6 +24,7 @@ import { useCartStore, type CartProduct } from '@/store/cart-store'
 import { formatPrice, calculateDiscount, formatDate } from '@/lib/utils'
 import { useLanguage } from '@/components/providers/language-provider'
 import { StarRating } from '@/components/products/star-rating'
+import { syntheticReviews } from '@/lib/synthetic-reviews'
 
 // Serialized product type (with numbers instead of Decimals)
 interface SerializedProduct {
@@ -42,6 +43,8 @@ interface SerializedProduct {
   rating: number
   reviewCount: number
   salesCount: number
+  useManualStats?: boolean
+  displayReviewCount?: number | null
   viewCount: number
   videoUrl: string | null
   category: {
@@ -96,6 +99,31 @@ export function ProductDetails({ product }: ProductDetailsProps) {
   const [selectedImage, setSelectedImage] = useState(0)
   const { addItem, openCart } = useCartStore()
   const { t } = useLanguage()
+  const manualReviewCount = product.useManualStats ? product.displayReviewCount : null
+  const shownReviews = manualReviewCount != null
+    ? syntheticReviews({
+        productId: product.id,
+        name: product.name,
+        description: product.description,
+        category: product.category?.name,
+        rating: Number(product.rating) || 0,
+        count: manualReviewCount,
+      }).map((review) => ({
+        id: review.id,
+        rating: review.rating,
+        title: null as string | null,
+        content: review.content,
+        verified: false,
+        createdAt: '' as string | Date,
+        relativeDate: review.relativeDate,
+        place: review.place,
+        user: { name: review.user.name, image: null as string | null },
+      }))
+    : product.reviews.map((review) => ({
+        ...review,
+        relativeDate: undefined as string | undefined,
+        place: undefined as string | undefined,
+      }))
   const listPrice = Number(product.price)
   const parsedSale = product.salePrice == null ? null : Number(product.salePrice)
   const salePrice = parsedSale != null && Number.isFinite(parsedSale) && parsedSale < listPrice ? parsedSale : null
@@ -379,12 +407,12 @@ export function ProductDetails({ product }: ProductDetailsProps) {
           </TabsContent>
 
           <TabsContent value="reviews" className="mt-4">
-            {product.reviews.length > 0 ? (
+            {shownReviews.length > 0 ? (
               <div className="space-y-4">
-                {product.reviews.map((review) => (
+                {shownReviews.map((review) => (
                   <div key={review.id} className="p-4 rounded-lg bg-secondary/50">
                     <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <div className="w-10 h-10 shrink-0 rounded-full bg-primary/10 flex items-center justify-center">
                         {review.user.image ? (
                           <SafeImage
                             src={review.user.image}
@@ -399,25 +427,30 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                           </span>
                         )}
                       </div>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between">
-                          <p className="font-medium">{review.user.name}</p>
-                          <span className="text-xs text-muted-foreground">
-                            {formatDate(review.createdAt)}
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="min-w-0" dir="auto">
+                            <p className="font-medium">{review.user.name}</p>
+                            {review.place && (
+                              <p className="text-xs text-muted-foreground">{review.place}</p>
+                            )}
+                          </div>
+                          <span className="shrink-0 text-xs text-muted-foreground">
+                            {review.relativeDate || formatDate(review.createdAt)}
                           </span>
                         </div>
                         <div className="flex items-center gap-1 mt-1">
                           <StarRating value={review.rating} size="sm" />
-                            {review.verified && (
-                            <Badge variant="secondary" className="ml-2 text-xs">
-                              <Check className="w-3 h-3 mr-1" />
+                          {review.verified && (
+                            <Badge variant="secondary" className="ms-2 text-xs">
+                              <Check className="w-3 h-3 me-1" />
                               {t('product.verified')}
                             </Badge>
                           )}
                         </div>
-                        {review.title && <p className="font-medium mt-2">{review.title}</p>}
+                        {review.title && <p className="font-medium mt-2" dir="auto">{review.title}</p>}
                         {review.content && (
-                          <p className="text-sm text-muted-foreground mt-1">{review.content}</p>
+                          <p className="text-sm text-muted-foreground mt-1" dir="auto">{review.content}</p>
                         )}
                       </div>
                     </div>
