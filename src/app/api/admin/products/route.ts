@@ -41,7 +41,7 @@ async function handler(req: Request) {
       productType: z.enum(['course', 'video', 'audio', 'ebook', 'software']),
       status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']),
       isFeatured: z.boolean().optional().default(false),
-      videoUrl: z.string().optional().nullable(), // Can be local path or URL
+      videoUrl: z.string().optional().nullable(), // Local upload or external URL (video, PDF, or PowerPoint)
       imageUrls: z.array(z.string()).optional().nullable(),
     })
 
@@ -183,7 +183,7 @@ async function updateHandler(req: Request) {
       productType: z.enum(['course', 'video', 'audio', 'ebook', 'software']),
       status: z.enum(['DRAFT', 'PUBLISHED', 'ARCHIVED']),
       isFeatured: z.boolean().optional().default(false),
-      videoUrl: z.string().optional().nullable(),
+      videoUrl: z.string().optional().nullable(), // Local upload or external URL (video, PDF, or PowerPoint)
       imageUrls: z.array(z.string()).optional().nullable(),
     })
 

@@ -19,6 +19,8 @@ import {
 } from '@/components/ui/select'
 import { useToast } from '@/hooks/use-toast'
 import { useLanguage } from '@/components/providers/language-provider'
+import { ProductAttachment } from '@/components/products/product-attachment'
+import { PRODUCT_MEDIA_ACCEPT, isProductMediaFile } from '@/lib/product-media'
 import type { Category, Product, ProductImage } from '@prisma/client'
 
 const productSchema = z.object({
@@ -117,6 +119,7 @@ export function AddProductForm({ categories, product }: AddProductFormProps) {
       const uploadPromises = Array.from(files).map(async (file) => {
         const formData = new FormData()
         formData.append('file', file)
+        formData.append('slot', 'image')
 
         const response = await fetch('/api/admin/upload', {
           method: 'POST',
@@ -152,10 +155,21 @@ export function AddProductForm({ categories, product }: AddProductFormProps) {
     const file = e.target.files?.[0]
     if (!file) return
 
+    if (!isProductMediaFile(file)) {
+      toast({
+        title: t('admin.uploadError') || 'Upload Error',
+        description: t('admin.invalidProductFile') || 'Only video, PDF, and PowerPoint (.ppt, .pptx) files are allowed.',
+        variant: 'destructive',
+      })
+      e.target.value = ''
+      return
+    }
+
     setUploadingVideo(true)
     try {
       const formData = new FormData()
       formData.append('file', file)
+      formData.append('slot', 'media')
 
       const response = await fetch('/api/admin/upload', {
         method: 'POST',
@@ -178,6 +192,7 @@ export function AddProductForm({ categories, product }: AddProductFormProps) {
       })
     } finally {
       setUploadingVideo(false)
+      e.target.value = ''
     }
   }
 
@@ -446,7 +461,7 @@ export function AddProductForm({ categories, product }: AddProductFormProps) {
         {/* Product Images */}
         <div className="space-y-2">
           <Label htmlFor="images">
-            {t('admin.productImages') || 'Product Images'} (optional)
+            {t('admin.productImages') || 'Product Images'} ({t('admin.optional') || 'optional'})
           </Label>
           <Input
             id="images"
@@ -482,15 +497,18 @@ export function AddProductForm({ categories, product }: AddProductFormProps) {
           )}
         </div>
 
-        {/* Product Video */}
+        {/* Product Video / File */}
         <div className="space-y-2">
           <Label htmlFor="video">
-            {t('admin.productVideo') || 'Product Video'} (optional)
+            {t('admin.productVideo') || 'Product Video / File'} ({t('admin.optional') || 'optional'})
           </Label>
+          <p className="text-xs text-muted-foreground">
+            {t('admin.productFileHint') || 'Video, PDF, or PowerPoint (.ppt, .pptx)'}
+          </p>
           <Input
             id="video"
             type="file"
-            accept="video/*"
+            accept={PRODUCT_MEDIA_ACCEPT}
             onChange={handleVideoUpload}
             disabled={uploadingVideo}
             className="cursor-pointer"
@@ -499,24 +517,17 @@ export function AddProductForm({ categories, product }: AddProductFormProps) {
             <p className="text-sm text-muted-foreground">{t('admin.uploading') || 'Uploading...'}</p>
           )}
           {videoUrl && (
-            <div className="mt-4">
-              <video
-                src={videoUrl}
-                controls
-                className="w-full max-w-md rounded-lg border"
-                preload="metadata"
-              >
-                Your browser does not support the video tag.
-              </video>
+            <div className="mt-4 space-y-2">
+              <ProductAttachment url={videoUrl} variant="admin" />
               <button
                 type="button"
                 onClick={() => {
                   setVideoUrl(null)
                   setValue('videoUrl', null)
                 }}
-                className="mt-2 text-sm text-destructive hover:underline"
+                className="text-sm text-destructive hover:underline"
               >
-                {t('admin.removeVideo') || 'Remove video'}
+                {t('admin.removeVideo') || 'Remove file'}
               </button>
             </div>
           )}

@@ -320,6 +320,7 @@ export function SettingsForm({ initialData }: SettingsFormProps) {
     try {
       const formData = new FormData()
       formData.append('file', file)
+      formData.append('slot', 'image')
 
       const response = await fetch('/api/admin/upload', {
         method: 'POST',

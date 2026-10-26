@@ -24,6 +24,7 @@ import { useCartStore, type CartProduct } from '@/store/cart-store'
 import { formatPrice, calculateDiscount, formatDate } from '@/lib/utils'
 import { useLanguage } from '@/components/providers/language-provider'
 import { StarRating } from '@/components/products/star-rating'
+import { ProductAttachment } from '@/components/products/product-attachment'
 import { REVIEW_AVATARS, syntheticReviews, type ReviewerGender } from '@/lib/synthetic-reviews'
 
 // Serialized product type (with numbers instead of Decimals)
@@ -260,22 +261,8 @@ export function ProductDetails({ product }: ProductDetailsProps) {
           </div>
         )}
 
-        {/* Video */}
         {product.videoUrl && product.videoUrl.trim().length > 0 && (
-          <div className="relative aspect-video rounded-2xl overflow-hidden bg-secondary">
-            <video
-              src={product.videoUrl}
-              controls
-              className="w-full h-full object-contain"
-              preload="metadata"
-              playsInline
-            >
-              <source src={product.videoUrl} type="video/mp4" />
-              <source src={product.videoUrl} type="video/webm" />
-              <source src={product.videoUrl} type="video/ogg" />
-              Your browser does not support the video tag.
-            </video>
-          </div>
+          <ProductAttachment url={product.videoUrl} />
         )}
       </div>
 
