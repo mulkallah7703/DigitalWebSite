@@ -65,6 +65,7 @@ export function AccountProfile({ user, preferences, onUpdate }: AccountProfilePr
     try {
       const formData = new FormData()
       formData.append('file', file)
+      formData.append('slot', 'image')
 
       const response = await fetch('/api/admin/upload', {
         method: 'POST',
