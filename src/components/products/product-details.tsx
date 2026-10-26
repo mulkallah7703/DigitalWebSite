@@ -25,7 +25,7 @@ import { formatPrice, calculateDiscount, formatDate } from '@/lib/utils'
 import { useLanguage } from '@/components/providers/language-provider'
 import { StarRating } from '@/components/products/star-rating'
 import { ProductAttachment } from '@/components/products/product-attachment'
-import { syntheticReviews } from '@/lib/synthetic-reviews'
+import { REVIEW_AVATARS, syntheticReviews, type ReviewerGender } from '@/lib/synthetic-reviews'
 
 // Serialized product type (with numbers instead of Decimals)
 interface SerializedProduct {
@@ -118,10 +118,11 @@ export function ProductDetails({ product }: ProductDetailsProps) {
         createdAt: '' as string | Date,
         relativeDate: review.relativeDate,
         place: review.place,
-        user: { name: review.user.name, image: null as string | null },
+        user: { name: review.user.name, image: null as string | null, gender: review.user.gender as ReviewerGender | null },
       }))
     : product.reviews.map((review) => ({
         ...review,
+        user: { ...review.user, gender: null as ReviewerGender | null },
         relativeDate: undefined as string | undefined,
         place: undefined as string | undefined,
       }))
@@ -399,8 +400,18 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                 {shownReviews.map((review) => (
                   <div key={review.id} className="p-4 rounded-lg bg-secondary/50">
                     <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 shrink-0 rounded-full bg-primary/10 flex items-center justify-center">
-                        {review.user.image ? (
+                      <div className="w-10 h-10 shrink-0 rounded-full overflow-hidden bg-primary/10 flex items-center justify-center">
+                        {review.user.gender ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={REVIEW_AVATARS[review.user.gender]}
+                            alt=""
+                            width={40}
+                            height={40}
+                            loading="lazy"
+                            className="w-10 h-10 rounded-full object-cover"
+                          />
+                        ) : review.user.image ? (
                           <SafeImage
                             src={review.user.image}
                             alt={review.user.name || ''}
