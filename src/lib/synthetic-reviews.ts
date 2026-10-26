@@ -4,7 +4,14 @@ export type SyntheticReview = {
   content: string
   relativeDate: string
   place: string
-  user: { name: string }
+  user: { name: string; gender: ReviewerGender }
+}
+
+export type ReviewerGender = 'male' | 'female'
+
+export const REVIEW_AVATARS: Record<ReviewerGender, string> = {
+  male: '/avatars/male.webp',
+  female: '/avatars/female.webp',
 }
 
 type DialectId = 'gulf' | 'syrian' | 'egyptian' | 'iraqi' | 'moroccan' | 'tunisian'
@@ -624,10 +631,29 @@ function poolWalker(pool: string[], productId: string, tag: string) {
   return () => pool[(offset + index++ * stride) % size]
 }
 
+// Reviews written with a feminine first-person form get a female name.
+const FEMININE_VOICE = /(مرتاحة|مترددة|فرحانة|مبسوطة|خايفة|متوقعة|عارفة|راضية)/
+
+export function reviewerGender(name: string): ReviewerGender | null {
+  if (MALE.includes(name)) return 'male'
+  if (FEMALE.includes(name)) return 'female'
+  return null
+}
+
 function namePicker(productId: string, next: () => number) {
   const male = poolWalker(MALE, productId, 'm')
   const female = poolWalker(FEMALE, productId, 'f')
-  return (content: string) => (MASCULINE_VOICE.test(content) || next() < 0.5 ? male() : female())
+  return (content: string): { name: string; gender: ReviewerGender } => {
+    const roll = next()
+    const gender: ReviewerGender = MASCULINE_VOICE.test(content)
+      ? 'male'
+      : FEMININE_VOICE.test(content)
+        ? 'female'
+        : roll < 0.5
+          ? 'male'
+          : 'female'
+    return { name: gender === 'male' ? male() : female(), gender }
+  }
 }
 
 /** Endless deck: shuffled order, reshuffled each time it runs out. */
@@ -765,7 +791,7 @@ export function syntheticReviews(input: {
       content,
       relativeDate: RELATIVE_DATES[hash32(`${input.productId}|date|${index}`) % RELATIVE_DATES.length],
       place: dialect.places[hash32(`${input.productId}|place|${index}`) % dialect.places.length],
-      user: { name: nameFor(content) },
+      user: nameFor(content),
     })
   }
 
