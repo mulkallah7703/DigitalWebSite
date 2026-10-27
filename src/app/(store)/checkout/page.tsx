@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { SafeImage } from '@/components/ui/safe-image'
 import { motion } from 'framer-motion'
-import { ShoppingBag, Trash2, ArrowLeft, Lock, CreditCard } from 'lucide-react'
+import { ShoppingBag, Trash2, ArrowLeft, Lock, CreditCard, MailCheck } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
@@ -20,6 +20,7 @@ export default function CheckoutPage() {
   const { t } = useLanguage()
   const { items, removeItem, getTotal, getOriginalTotal, clearCart } = useCartStore()
   const [isLoading, setIsLoading] = useState(false)
+  const [sentTo, setSentTo] = useState<string | null>(null)
   const total = getTotal()
   const originalTotal = getOriginalTotal()
 
@@ -53,6 +54,52 @@ export default function CheckoutPage() {
     }
 
     window.location.href = purchaseLink
+  }
+
+  // Products without a Payhip link are delivered by email: the server prices
+  // the order, completes it only when the total is $0, and emails the files.
+  const handleEmailDelivery = async () => {
+    setIsLoading(true)
+    try {
+      const response = await fetch('/api/checkout/free', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: items.map((item) => ({ productId: item.productId, quantity: item.quantity })),
+        }),
+      })
+      const data = await response.json().catch(() => ({}))
+      if (response.status === 401) {
+        router.push('/auth/login?callbackUrl=/checkout')
+        return
+      }
+      if (!response.ok || !data.ok) {
+        throw new Error(data.error || t('checkout.failed'))
+      }
+      clearCart()
+      setSentTo(data.email || '')
+      toast({ title: t('checkout.filesSent'), description: data.email })
+    } catch (error) {
+      toast({
+        title: t('checkout.failed'),
+        description: error instanceof Error ? error.message : t('checkout.failed'),
+        variant: 'destructive',
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleBuyNow = () => {
+    if (items.length === 0) {
+      handleExternalPurchase()
+      return
+    }
+    if (getExternalPurchaseLink()) {
+      handleExternalPurchase()
+      return
+    }
+    void handleEmailDelivery()
   }
 
   const handleCheckout = async () => {
@@ -95,6 +142,27 @@ export default function CheckoutPage() {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  if (sentTo !== null) {
+    return (
+      <div className="container mx-auto px-4 py-16">
+        <div className="max-w-md mx-auto text-center">
+          <div className="w-20 h-20 rounded-full bg-green-500/10 flex items-center justify-center mx-auto mb-6">
+            <MailCheck className="w-10 h-10 text-green-500" />
+          </div>
+          <h1 className="text-2xl font-bold mb-2">{t('checkout.filesSent')}</h1>
+          {sentTo && (
+            <p className="text-muted-foreground mb-6">
+              {t('checkout.filesSentDesc')} <span className="font-medium text-foreground" dir="ltr">{sentTo}</span>
+            </p>
+          )}
+          <Button asChild variant="gradient">
+            <Link href="/products">{t('cart.browse')}</Link>
+          </Button>
+        </div>
+      </div>
+    )
   }
 
   if (items.length === 0) {
@@ -231,7 +299,7 @@ export default function CheckoutPage() {
                 </div>
 
                 <Button
-                  onClick={handleExternalPurchase}
+                  onClick={handleBuyNow}
                   className="w-full"
                   variant="gradient"
                   size="lg"

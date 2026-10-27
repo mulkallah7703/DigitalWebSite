@@ -2,6 +2,7 @@ import { unstable_cache } from 'next/cache'
 import { db, serializeProducts } from './db'
 import { withAutomaticPrices } from './product-discount'
 import { withDisplayedStats } from './display-stats'
+import { storefrontProduct } from './product-delivery'
 
 // Cache tags for revalidation
 export const CACHE_TAGS = {
@@ -163,9 +164,10 @@ export const getProductBySlug = unstable_cache(
       comparePrice: product.comparePrice ? Number(product.comparePrice) : null,
       rating: Number(product.rating),
     }])
-    return withDisplayedStats(priced)
+    // Email-delivered products never expose their files on the storefront.
+    return storefrontProduct(withDisplayedStats(priced))
   },
-  ['product'],
+  ['product-storefront-v2'],
   {
     revalidate: 300,
     tags: [CACHE_TAGS.products],
