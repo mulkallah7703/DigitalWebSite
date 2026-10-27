@@ -19,7 +19,7 @@ export async function getStoreName(language: 'en' | 'ar' = 'en'): Promise<string
  */
 export async function generateBaseMetadata(language: 'en' | 'ar' = 'en'): Promise<Metadata> {
   const storeName = await getStoreName(language)
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://nexus-digital-store.vercel.app'
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.alsadidigital.com'
 
   return {
     metadataBase: new URL(appUrl),

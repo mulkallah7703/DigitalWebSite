@@ -38,7 +38,7 @@ export function Footer() {
     { icon: Twitter, href: 'https://twitter.com', label: 'Twitter' },
     { icon: Github, href: 'https://github.com', label: 'GitHub' },
     { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
-    { icon: Mail, href: 'mailto:hello@nexus.store', label: 'Email' },
+    { icon: Mail, href: 'mailto:mulkallah7@gmail.com', label: 'Email' },
   ]
   return (
     <footer className="bg-secondary/30 border-t">
