@@ -70,6 +70,9 @@ export const metadata: Metadata = {
   verification: {
     google: 'your-google-verification-code',
   },
+  other: {
+    'google-adsense-account': 'ca-pub-6648838032352085',
+  },
 }
 
 function getInitialLanguage(): 'en' | 'ar' {
@@ -91,6 +94,13 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#6366f1" />
+        {/* Google AdSense auto ads: a plain script tag so it is in the server-rendered head. */}
+        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6648838032352085"
+          crossOrigin="anonymous"
+        />
       </head>
       <body className={`${inter.variable} font-sans antialiased`}>
         <SessionProvider>
