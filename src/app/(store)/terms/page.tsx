@@ -104,7 +104,7 @@ export default function TermsPage() {
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">9. Contact</h2>
           <p className="text-muted-foreground">
-            For questions about these Terms of Service, please contact us at legal@nexus.store.
+            For questions about these Terms of Service, please contact us at mulkallah7@gmail.com.
           </p>
         </section>
       </div>

@@ -11,7 +11,7 @@ import { CartDrawer } from '@/components/layout/cart-drawer'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
-const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://nexus-digital-store.vercel.app'
+const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.alsadidigital.com'
 // Default store name (English) - individual pages can override with generateMetadata
 const defaultStoreName = 'Alsadi Digital Store'
 

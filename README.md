@@ -1,4 +1,4 @@
-# Nexus Digital Store
+# Alsadi Digital Store
 
 A premium AI-powered digital e-commerce platform built with Next.js 14, featuring modern UI/UX, secure payments, and intelligent product recommendations.
 
@@ -40,8 +40,8 @@ A premium AI-powered digital e-commerce platform built with Next.js 14, featurin
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/nexus-digital-store.git
-cd nexus-digital-store
+git clone https://github.com/yourusername/alsadi-digital-store.git
+cd alsadi-digital-store
 ```
 
 2. Install dependencies:
@@ -73,7 +73,7 @@ Visit `http://localhost:3000` to see the application.
 ## Admin Access
 
 After seeding, use these credentials to access the admin dashboard:
-- Email: admin@nexus.store
+- Email: admin@example.com (seed default; change after first login)
 - Password: admin123
 
 ## Google Sheets Integration
@@ -104,8 +104,8 @@ To sync products from Google Sheets:
 ### Docker
 
 ```bash
-docker build -t nexus-store .
-docker run -p 3000:3000 nexus-store
+docker build -t alsadi-store .
+docker run -p 3000:3000 alsadi-store
 ```
 
 ## License
