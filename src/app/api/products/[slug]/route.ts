@@ -65,7 +65,11 @@ async function handler(
     })
 
     const { withDisplayedStats } = await import('@/lib/display-stats')
-    return NextResponse.json(withDisplayedStats(product))
+    const { storefrontProduct } = await import('@/lib/product-delivery')
+    const view = storefrontProduct(withDisplayedStats(product))
+    // Never return stored file URLs from the public API.
+    const files = (view.files || []).map(({ url: _url, ...file }) => file)
+    return NextResponse.json({ ...view, files })
   } catch (error) {
     console.error('Product fetch error:', error)
     return NextResponse.json(

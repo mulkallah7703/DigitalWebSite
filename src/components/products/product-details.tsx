@@ -25,6 +25,7 @@ import { formatPrice, calculateDiscount, formatDate } from '@/lib/utils'
 import { useLanguage } from '@/components/providers/language-provider'
 import { StarRating } from '@/components/products/star-rating'
 import { ProductAttachment } from '@/components/products/product-attachment'
+import { summaryTotal, type FileSummary } from '@/lib/product-delivery'
 import { REVIEW_AVATARS, syntheticReviews, type ReviewerGender } from '@/lib/synthetic-reviews'
 
 // Serialized product type (with numbers instead of Decimals)
@@ -48,6 +49,9 @@ interface SerializedProduct {
   displayReviewCount?: number | null
   viewCount: number
   videoUrl: string | null
+  /** Files are emailed after checkout and never shown on the page. */
+  deliverByEmail?: boolean
+  fileSummary?: FileSummary
   category: {
     id: string
     name: string
@@ -96,7 +100,10 @@ interface ProductDetailsProps {
   product: SerializedProduct
 }
 
+const FILE_KINDS = ['pdf', 'video', 'presentation', 'file'] as const
+
 export function ProductDetails({ product }: ProductDetailsProps) {
+  const fileCount = product.fileSummary ? summaryTotal(product.fileSummary) : product.files.length
   const [selectedImage, setSelectedImage] = useState(0)
   const { addItem, openCart } = useCartStore()
   const { t } = useLanguage()
@@ -357,7 +364,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
               {t('product.description')}
             </TabsTrigger>
             <TabsTrigger value="files" className="flex-1">
-              {t('product.files')} ({product.files.length})
+              {t('product.files')} ({fileCount})
             </TabsTrigger>
             <TabsTrigger value="reviews" className="flex-1">
               {t('product.reviews')} ({product.reviewCount})
@@ -372,6 +379,25 @@ export function ProductDetails({ product }: ProductDetailsProps) {
           </TabsContent>
 
           <TabsContent value="files" className="mt-4">
+            {product.deliverByEmail && product.fileSummary ? (
+              <div className="space-y-3">
+                <div className="flex flex-wrap gap-2">
+                  {FILE_KINDS.filter((kind) => (product.fileSummary?.[kind] || 0) > 0).map((kind) => {
+                    const n = product.fileSummary![kind]
+                    return (
+                      <span
+                        key={kind}
+                        className="inline-flex items-center gap-2 rounded-lg bg-secondary/60 px-3 py-2 text-sm font-medium"
+                      >
+                        <Download className="w-4 h-4 text-primary" />
+                        {n} {t(n === 1 ? `product.kind.${kind}` : `product.kind.${kind}.plural`)}
+                      </span>
+                    )
+                  })}
+                </div>
+                <p className="text-sm text-muted-foreground">{t('product.filesByEmail')}</p>
+              </div>
+            ) : (
             <div className="space-y-3">
               {product.files.map((file) => (
                 <div
@@ -392,6 +418,7 @@ export function ProductDetails({ product }: ProductDetailsProps) {
                 </div>
               ))}
             </div>
+            )}
           </TabsContent>
 
           <TabsContent value="reviews" className="mt-4">

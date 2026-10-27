@@ -93,8 +93,14 @@ async function handler(req: Request) {
     ])
 
     const { withDisplayedStats } = await import('@/lib/display-stats')
+    const { isUploadedAttachment, hasPayhipLink } = await import('@/lib/product-delivery')
     return NextResponse.json({
-      data: products.map((product) => withDisplayedStats(product)),
+      data: products.map((product) => {
+        const view = withDisplayedStats(product)
+        // Uploaded files of email-delivered products stay private.
+        if (!hasPayhipLink(view) && isUploadedAttachment(view.videoUrl)) return { ...view, videoUrl: null }
+        return view
+      }),
       pagination: {
         page,
         limit,

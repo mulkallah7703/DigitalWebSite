@@ -127,6 +127,17 @@ async function handler(req: Request) {
     })
 
     console.log('Order created:', order.orderNumber)
+
+    // Email files of non-Payhip products for this paid, server-priced order.
+    try {
+      const { sendOrderFilesEmail } = await import('@/lib/order-delivery')
+      const delivery = await sendOrderFilesEmail(order.id)
+      if (!delivery.ok && delivery.reason !== 'no-files') {
+        console.error('Order files email failed:', order.orderNumber, delivery.reason)
+      }
+    } catch (error) {
+      console.error('Order files email error:', error)
+    }
   }
 
   return NextResponse.json({ received: true })
