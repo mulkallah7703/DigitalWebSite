@@ -108,7 +108,7 @@ const ar: PortfolioContent = {
   contactCta: 'تواصل معي',
   downloadCv: 'تحميل السيرة الذاتية',
   cvLabel: 'السيرة الذاتية',
-  myProducts: 'منتجاتي',
+  myProducts: 'المتجر الرقمي',
   myProductsHint: 'المتجر الرقمي',
   nav: [
     { href: '#about', label: 'نبذة عني' },
@@ -282,7 +282,7 @@ const en: PortfolioContent = {
   contactCta: 'Contact me',
   downloadCv: 'Download CV',
   cvLabel: 'CV',
-  myProducts: 'My Products',
+  myProducts: 'Digital Store',
   myProductsHint: 'Digital store',
   nav: [
     { href: '#about', label: 'About' },
