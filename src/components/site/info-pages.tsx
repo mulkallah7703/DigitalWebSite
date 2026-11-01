@@ -23,7 +23,7 @@ function PageHero({ title, lead }: { title: string; lead: string }) {
 const about = {
   ar: {
     title: 'من نحن',
-    lead: 'السعدي الرقمية منصة عربية مستقلة تجمع المتجر الرقمي والخدمات التقنية والمحتوى التعليمي في مكان واحد.',
+    lead: '«السعدي» منصة عربية مستقلة تجمع المتجر الرقمي والخدمات التقنية والمحتوى التعليمي في مكان واحد.',
     sections: [
       {
         heading: 'قصتنا',
@@ -47,7 +47,7 @@ const about = {
   },
   en: {
     title: 'About us',
-    lead: 'Alsadi Digital is an independent Arabic platform that brings a digital store, tech services and educational content together in one place.',
+    lead: 'Alsadi is an independent Arabic platform that brings a digital store, tech services and educational content together in one place.',
     sections: [
       {
         heading: 'Our story',
@@ -55,7 +55,7 @@ const about = {
       },
       {
         heading: 'The founder',
-        body: 'Alsadi Digital was founded by Mulk Allah Al-Sadi, a software engineering student and full-stack developer passionate about building AI technology that serves healthcare and education and makes a real difference in people’s lives. His experience, projects and research are on the portfolio page.',
+        body: 'Alsadi was founded by Mulk Allah Al-Sadi, a software engineering student and full-stack developer passionate about building AI technology that serves healthcare and education and makes a real difference in people’s lives. His experience, projects and research are on the portfolio page.',
       },
       {
         heading: 'What we offer',

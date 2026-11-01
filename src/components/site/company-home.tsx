@@ -12,10 +12,10 @@ export const CONTACT_EMAIL = 'mulkallah7@gmail.com'
 
 const copy = {
   ar: {
-    badge: 'منصة السعدي الرقمية',
+    badge: 'منصة السعدي',
     title: 'منصة رقمية تجمع المعرفة والتقنية والمنتجات في مكان واحد',
     lead:
-      'السعدي الرقمية منصة عربية مستقلة أسسها ملك الله السعدي، طالب هندسة البرمجيات ومطوّر الـ full-stack، لتكون بيتًا واحدًا لثلاثة أشياء: متجر للمنتجات والدورات الرقمية، وخدمات برمجية وتقنية، ومحتوى تعليمي مجاني عن الذكاء الاصطناعي والإنتاجية.',
+      '«السعدي» منصة عربية مستقلة أسسها ملك الله السعدي، طالب هندسة البرمجيات ومطوّر الـ full-stack، لتكون بيتًا واحدًا لثلاثة أشياء: متجر للمنتجات والدورات الرقمية، وخدمات برمجية وتقنية، ومحتوى تعليمي مجاني عن الذكاء الاصطناعي والإنتاجية.',
     ctaStore: 'تصفّح المتجر الرقمي',
     ctaPortfolio: 'تعرّف على المؤسس',
     servicesTitle: 'ماذا تقدّم المنصة؟',
@@ -50,9 +50,9 @@ const copy = {
         link: 'اقرأ المدونة',
       },
     ],
-    aboutTitle: 'عن السعدي الرقمية',
+    aboutTitle: 'عن منصة السعدي',
     aboutBody: [
-      'بدأت السعدي الرقمية من قناعة بسيطة: المحتوى التقني الجيد باللغة العربية ما زال قليلًا، وكثير من الأدوات الحديثة تبدو معقدة لمن لم يجرّبها بعد. لذلك نحاول أن نقدم الشرح بلغة واضحة، والمنتج بجودة نثق بها، والخدمة بأسلوب يحترم وقت صاحبها.',
+      'بدأت منصة السعدي من قناعة بسيطة: المحتوى التقني الجيد باللغة العربية ما زال قليلًا، وكثير من الأدوات الحديثة تبدو معقدة لمن لم يجرّبها بعد. لذلك نحاول أن نقدم الشرح بلغة واضحة، والمنتج بجودة نثق بها، والخدمة بأسلوب يحترم وقت صاحبها.',
       'خلف المنصة مؤسسها ملك الله السعدي، طالب هندسة برمجيات ومطوّر full-stack، شغوف ببناء تقنيات ذكاء اصطناعي تُحدث أثرًا حقيقيًا في حياة الناس. كل ما تراه هنا، من المتجر إلى المدونة، مبني ومُدار بشكل مستقل.',
     ],
     aboutLink: 'اقرأ المزيد عنّا',
@@ -65,10 +65,10 @@ const copy = {
     contactCta: 'صفحة التواصل',
   },
   en: {
-    badge: 'Alsadi Digital Platform',
+    badge: 'Alsadi Platform',
     title: 'One digital platform for knowledge, technology and products',
     lead:
-      'Alsadi Digital is an independent Arabic platform founded by Mulk Allah Al-Sadi, a software engineering student and full-stack developer, to bring three things under one roof: a store for digital products and courses, software and tech services, and free educational content about AI and productivity.',
+      'Alsadi is an independent Arabic platform founded by Mulk Allah Al-Sadi, a software engineering student and full-stack developer, to bring three things under one roof: a store for digital products and courses, software and tech services, and free educational content about AI and productivity.',
     ctaStore: 'Browse the Digital Store',
     ctaPortfolio: 'Meet the founder',
     servicesTitle: 'What the platform offers',
@@ -103,9 +103,9 @@ const copy = {
         link: 'Read the blog',
       },
     ],
-    aboutTitle: 'About Alsadi Digital',
+    aboutTitle: 'About Alsadi',
     aboutBody: [
-      'Alsadi Digital started from a simple belief: good technical content in Arabic is still scarce, and many modern tools look complicated until someone explains them. So we aim for clear explanations, products we trust, and services that respect our clients’ time.',
+      'Alsadi started from a simple belief: good technical content in Arabic is still scarce, and many modern tools look complicated until someone explains them. So we aim for clear explanations, products we trust, and services that respect our clients’ time.',
       'Behind the platform is its founder, Mulk Allah Al-Sadi, a software engineering student and full-stack developer passionate about building AI technology that makes a real difference in people’s lives. Everything here, from the store to the blog, is built and run independently.',
     ],
     aboutLink: 'Read more about us',

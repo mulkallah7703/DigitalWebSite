@@ -3,7 +3,7 @@ import type { BlogPost } from '../types'
 export const post: BlogPost = {
   slug: 'ai-for-everyday-office-work',
   date: '2026-10-27',
-  cover: '/blog/ai-for-everyday-office-work.png?v=2',
+  cover: '/blog/ai-for-everyday-office-work.png?v=3',
   coverLines: ['Claude for Excel,', 'Word & PowerPoint'],
   coverAlt: { ar: 'غلاف مقال Claude لأعمال Excel وWord وPowerPoint', en: 'Cover: Claude for Excel, Word and PowerPoint' },
   tags: ['Claude', 'Excel', 'Productivity'],

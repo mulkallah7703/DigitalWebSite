@@ -13,7 +13,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://www.alsadidigital.com'
 // Default store name (English) - individual pages can override with generateMetadata
-const defaultStoreName = 'Alsadi Digital Store'
+const defaultStoreName = 'Alsadi Store'
 
 export const metadata: Metadata = {
   metadataBase: new URL(appUrl),
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: appUrl,
-    siteName: defaultStoreName,
+    siteName: 'Alsadi',
     title: `${defaultStoreName} - Premium Digital Products`,
     description: 'Discover premium digital products powered by AI.',
     images: [

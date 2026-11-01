@@ -15,7 +15,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   if (!post) return {}
   const url = `/blog/${post.slug}`
   return {
-    title: { absolute: `${post.ar.title} | Alsadi Digital` },
+    title: { absolute: `${post.ar.title} | Alsadi` },
     description: post.ar.excerpt,
     keywords: post.tags,
     authors: [{ name: `${BLOG_AUTHOR.name.ar} (${BLOG_AUTHOR.name.en})`, url: BLOG_AUTHOR.url }],
@@ -53,7 +53,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     datePublished: post.date,
     inLanguage: ['ar', 'en'],
     mainEntityOfPage: `${base}/blog/${post.slug}`,
-    publisher: { '@type': 'Organization', name: 'Alsadi Digital', url: base },
+    publisher: { '@type': 'Organization', name: 'Alsadi', url: base },
     author: { '@type': 'Person', name: BLOG_AUTHOR.name.en, alternateName: BLOG_AUTHOR.name.ar, url: `${base}${BLOG_AUTHOR.url}`, image: `${base}${BLOG_AUTHOR.photo}` },
   }
   return (

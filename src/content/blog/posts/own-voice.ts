@@ -3,7 +3,7 @@ import type { BlogPost } from '../types'
 export const post: BlogPost = {
   slug: 'write-in-your-own-voice-with-ai',
   date: '2026-10-29',
-  cover: '/blog/write-in-your-own-voice-with-ai.png?v=2',
+  cover: '/blog/write-in-your-own-voice-with-ai.png?v=3',
   coverLines: ['Natural Writing', 'with AI'],
   coverAlt: { ar: 'غلاف مقال الكتابة الطبيعية مع الذكاء الاصطناعي', en: 'Cover: natural writing with AI' },
   tags: ['Writing', 'ChatGPT', 'Claude'],

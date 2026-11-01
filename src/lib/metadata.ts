@@ -7,8 +7,8 @@ import type { Metadata } from 'next'
  */
 export async function getStoreName(language: 'en' | 'ar' = 'en'): Promise<string> {
   const translations: Record<'en' | 'ar', string> = {
-    en: 'Alsadi Digital Store',
-    ar: 'متجر السعدي الرقمي',
+    en: 'Alsadi Store',
+    ar: 'متجر السعدي',
   }
   return translations[language] || translations.en
 }
@@ -34,7 +34,7 @@ export async function generateBaseMetadata(language: 'en' | 'ar' = 'en'): Promis
       type: 'website',
       locale: language === 'ar' ? 'ar_SA' : 'en_US',
       url: appUrl,
-      siteName: storeName,
+      siteName: language === 'ar' ? 'السعدي' : 'Alsadi',
       title: `${storeName} - Premium Digital Products`,
       description: 'Discover premium digital products powered by AI.',
       images: [

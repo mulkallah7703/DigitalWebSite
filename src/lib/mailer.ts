@@ -16,7 +16,7 @@ export type MailMessage = {
 
 export type MailResult = { ok: true; provider: 'smtp' | 'resend' } | { ok: false; reason: string }
 
-const DEFAULT_FROM_NAME = 'Alsadi Digital Store | متجر السعدي الرقمي'
+const DEFAULT_FROM_NAME = 'Alsadi Store | متجر السعدي'
 
 export function mailConfigured() {
   return Boolean(

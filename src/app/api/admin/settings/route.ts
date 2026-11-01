@@ -46,7 +46,7 @@ async function getHandler(req: Request) {
     return NextResponse.json({
       data: {
         // 1. Store Identity Settings
-        storeName: get('store.name', 'Alsadi Digital Store') as string,
+        storeName: get('store.name', 'Alsadi Store') as string,
         storeLogo: get('store.logo', '') as string,
         storeFavicon: get('store.favicon', '') as string,
         storeDescription: get('store.description', '') as string,

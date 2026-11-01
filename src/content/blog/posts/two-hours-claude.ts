@@ -3,7 +3,7 @@ import type { BlogPost } from '../types'
 export const post: BlogPost = {
   slug: 'two-hours-to-learn-claude',
   date: '2026-10-24',
-  cover: '/blog/two-hours-to-learn-claude.png',
+  cover: '/blog/two-hours-to-learn-claude.png?v=3',
   coverLines: ['Two Hours to', 'Learn Claude'],
   coverAlt: { ar: 'غلاف مقال ساعتان لتعلم Claude عمليًا', en: 'Cover: two hours to learn Claude hands-on' },
   tags: ['Claude', 'Prompting', 'Hands-on'],

@@ -9,8 +9,8 @@ import { deliverableFiles, hasPayhipLink, type DeliverableFile } from './product
 /** Attach files when they add up to less than this; otherwise send signed links. */
 export const MAX_ATTACHMENT_BYTES = 15 * 1024 * 1024
 
-const STORE_NAME_EN = 'Alsadi Digital Store'
-const STORE_NAME_AR = 'متجر السعدي الرقمي'
+const STORE_NAME_EN = 'Alsadi Store'
+const STORE_NAME_AR = 'متجر السعدي'
 const OWNER_EN = 'Mulk Allah Al-Sadi'
 const OWNER_AR = 'ملك الله السعدي'
 
