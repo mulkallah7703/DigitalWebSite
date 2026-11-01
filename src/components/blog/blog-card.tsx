@@ -24,13 +24,15 @@ export function BlogCard({ post }: { post: BlogPost }) {
   const locale = post[language]
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border/60 bg-card/60 shadow-sm backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl hover:shadow-purple-500/10">
-      <Link href={`/blog/${post.slug}`} className="relative block aspect-[1200/630] overflow-hidden" tabIndex={-1} aria-hidden>
+      <Link href={`/blog/${post.slug}`} className="relative block aspect-[4/5] overflow-hidden bg-[#0b0b14]" tabIndex={-1} aria-hidden>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={post.cover}
           alt={post.coverAlt[language]}
           loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          width={1080}
+          height={1350}
+          className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.03]"
         />
       </Link>
       <div className="flex flex-1 flex-col p-5">

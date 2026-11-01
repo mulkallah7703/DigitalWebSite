@@ -3,8 +3,7 @@ import type { BlogPost } from '../types'
 export const post: BlogPost = {
   slug: 'ai-research-assistant-workflow',
   date: '2026-10-30',
-  cover: '/blog/ai-research-assistant-workflow.png?v=3',
-  coverLines: ['Claude for', 'Academic Research'],
+  cover: '/blog/ai-research-assistant-workflow.webp?v=4',
   coverAlt: { ar: 'غلاف مقال Claude في البحث العلمي', en: 'Cover: Claude for academic research' },
   tags: ['Research', 'Claude', 'Prompts'],
   ar: {

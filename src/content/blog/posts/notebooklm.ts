@@ -3,8 +3,7 @@ import type { BlogPost } from '../types'
 export const post: BlogPost = {
   slug: 'active-study-with-notebooklm',
   date: '2026-10-27',
-  cover: '/blog/active-study-with-notebooklm.png?v=3',
-  coverLines: ['NotebookLM', 'Study System'],
+  cover: '/blog/active-study-with-notebooklm.webp?v=4',
   coverAlt: { ar: 'غلاف مقال نظام المذاكرة مع NotebookLM', en: 'Cover: a study system with NotebookLM' },
   tags: ['NotebookLM', 'Study', 'AI'],
   ar: {

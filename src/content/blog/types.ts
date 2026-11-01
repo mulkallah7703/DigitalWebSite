@@ -25,9 +25,8 @@ export type BlogPost = {
   slug: string
   /** ISO publish date. */
   date: string
+  /** Portrait 4:5 cover (1080x1350 webp) shown on cards and the article page. */
   cover: string
-  /** Two short lines baked into the generated cover image. */
-  coverLines: [string, string]
   coverAlt: { ar: string; en: string }
   tags: string[]
   ar: BlogLocale

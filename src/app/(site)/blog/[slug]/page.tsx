@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { BlogArticle } from '@/components/blog/blog-pages'
-import { BLOG_AUTHOR, BLOG_POSTS, getBlogPost } from '@/content/blog'
+import { BLOG_AUTHOR, BLOG_POSTS, blogOgImage, getBlogPost } from '@/content/blog'
 import { siteUrl } from '@/lib/site-url'
 
 export const dynamicParams = false
@@ -28,13 +28,13 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
       publishedTime: post.date,
       authors: [BLOG_AUTHOR.name.en],
       tags: post.tags,
-      images: [{ url: post.cover, width: 1200, height: 630, alt: post.coverAlt.ar }],
+      images: [{ url: blogOgImage(post), width: 1200, height: 630, alt: post.coverAlt.ar }],
     },
     twitter: {
       card: 'summary_large_image',
       title: post.ar.title,
       description: post.ar.excerpt,
-      images: [post.cover],
+      images: [blogOgImage(post)],
     },
   }
 }
@@ -49,7 +49,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     headline: post.ar.title,
     alternativeHeadline: post.en.title,
     description: post.ar.excerpt,
-    image: `${base}${post.cover}`,
+    image: [`${base}${post.cover}`, `${base}${blogOgImage(post)}`],
     datePublished: post.date,
     inLanguage: ['ar', 'en'],
     mainEntityOfPage: `${base}/blog/${post.slug}`,

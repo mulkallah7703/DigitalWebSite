@@ -3,8 +3,7 @@ import type { BlogPost } from '../types'
 export const post: BlogPost = {
   slug: 'meta-courses-and-certificates-guide',
   date: '2026-10-29',
-  cover: '/blog/meta-courses-and-certificates-guide.png?v=3',
-  coverLines: ['Meta Courses', '& Certificates'],
+  cover: '/blog/meta-courses-and-certificates-guide.webp?v=4',
   coverAlt: { ar: 'غلاف مقال دورات Meta وشهاداتها', en: 'Cover: Meta courses and certificates' },
   tags: ['Meta', 'Coursera', 'Career'],
   ar: {
