@@ -1,17 +1,21 @@
 import type { MetadataRoute } from 'next'
 import { db } from '@/lib/db'
 import { siteUrl } from '@/lib/site-url'
+import { BLOG_POSTS } from '@/content/blog'
 
 // Rebuilt at most once an hour so new products show up without a redeploy.
 export const revalidate = 3600
 
-const STATIC_PATHS = ['/', '/store', '/products', '/categories', '/terms', '/privacy']
+const STATIC_PATHS = ['/', '/portfolio', '/store', '/blog', '/about', '/contact', '/products', '/categories', '/terms', '/privacy']
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = siteUrl()
   const entries: MetadataRoute.Sitemap = STATIC_PATHS.map((path) => ({
     url: path === '/' ? `${base}/` : `${base}${path}`,
   }))
+  for (const post of BLOG_POSTS) {
+    entries.push({ url: `${base}/blog/${post.slug}`, lastModified: new Date(`${post.date}T00:00:00Z`) })
+  }
 
   if (!process.env.DATABASE_URL) return entries
 

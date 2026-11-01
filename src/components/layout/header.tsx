@@ -1,6 +1,7 @@
 'use client'
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
 import { useTheme } from 'next-themes'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -50,11 +51,17 @@ export function Header() {
   useEffect(() => setCartReady(true), [])
   const itemCount = cartReady ? getItemCount() : 0
 
+  const pathname = usePathname()
   const navLinks = [
-    { href: '/', label: t('nav.portfolio') },
+    { href: '/', label: t('nav.home') },
+    { href: '/portfolio', label: t('nav.portfolio') },
+    { href: '/store', label: t('nav.store') },
+    { href: '/blog', label: t('nav.blog') },
     { href: '/products', label: t('nav.products') },
     { href: '/categories', label: t('nav.categories') },
   ]
+  const isActive = (href: string) =>
+    href === '/' ? pathname === '/' : pathname === href || Boolean(pathname?.startsWith(`${href}/`))
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10)
@@ -89,13 +96,13 @@ export function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-8 ms-6">
+          <nav className="hidden lg:flex items-center gap-5 xl:gap-6 ms-6">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-sm font-medium transition-colors relative group ${
-                  link.href === '/'
+                className={`text-sm font-medium whitespace-nowrap transition-colors relative group ${
+                  isActive(link.href)
                     ? 'text-primary'
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
@@ -107,7 +114,7 @@ export function Header() {
           </nav>
 
           {/* Search Bar - Desktop */}
-          <div className="hidden lg:flex flex-1 max-w-md mx-8">
+          <div className="hidden xl:flex flex-1 max-w-xs mx-6">
             <div className="relative w-full">
               <Input
                 placeholder={t('common.search')}
@@ -120,13 +127,13 @@ export function Header() {
           {/* Actions */}
           <div className="flex items-center gap-2">
             <Button asChild variant="ghost" size="sm" className="lg:hidden text-primary px-2">
-              <Link href="/">{t('nav.portfolio')}</Link>
+              <Link href="/portfolio">{t('nav.portfolio')}</Link>
             </Button>
             {/* Mobile Search Toggle */}
             <Button
               variant="ghost"
               size="icon"
-              className="lg:hidden"
+              className="xl:hidden"
               onClick={() => setIsSearchOpen(!isSearchOpen)}
             >
               <Search className="w-5 h-5" />
@@ -250,7 +257,7 @@ export function Header() {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="lg:hidden overflow-hidden"
+              className="xl:hidden overflow-hidden"
             >
               <div className="pb-4">
                 <Input

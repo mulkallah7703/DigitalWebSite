@@ -53,6 +53,11 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.settings': 'Settings',
     'nav.signOut': 'Sign Out',
     'nav.signIn': 'Sign In',
+    'nav.home': 'Home',
+    'nav.store': 'Digital Store',
+    'nav.blog': 'Blog',
+    'nav.about': 'About',
+    'nav.contact': 'Contact',
     // Common
     'common.search': 'Search products...',
     'common.cart': 'Shopping Cart',
@@ -478,6 +483,11 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.settings': 'الإعدادات',
     'nav.signOut': 'تسجيل الخروج',
     'nav.signIn': 'تسجيل الدخول',
+    'nav.home': 'الرئيسية',
+    'nav.store': 'المتجر الرقمي',
+    'nav.blog': 'المدونة',
+    'nav.about': 'من نحن',
+    'nav.contact': 'تواصل معنا',
     // Common
     'common.search': 'البحث عن المنتجات...',
     'common.cart': 'سلة التسوق',

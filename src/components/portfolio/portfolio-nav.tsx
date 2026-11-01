@@ -140,6 +140,12 @@ export function PortfolioNav({ content }: { content: PortfolioView }) {
         </nav>
 
         <div className="ms-auto flex shrink-0 items-center gap-1.5 sm:gap-2">
+          <Button asChild variant="ghost" size="sm" className="hidden h-9 xl:inline-flex">
+            <Link href="/">{t('nav.home')}</Link>
+          </Button>
+          <Button asChild variant="ghost" size="sm" className="hidden h-9 lg:inline-flex">
+            <Link href="/blog">{t('nav.blog')}</Link>
+          </Button>
           <Button asChild variant="gradient" size="sm" className="h-9 shrink-0 px-2.5 sm:px-3">
             <Link href="/store">
               <span className="whitespace-nowrap text-xs sm:text-sm">{content.myProducts}</span>
@@ -200,6 +206,14 @@ export function PortfolioNav({ content }: { content: PortfolioView }) {
               })}
 
               <div className="mt-2 flex flex-col gap-3 border-t pt-3">
+                <div className="grid grid-cols-2 gap-2">
+                  <Button asChild variant="outline" className="w-full">
+                    <Link href="/" onClick={closeMenu}>{t('nav.home')}</Link>
+                  </Button>
+                  <Button asChild variant="outline" className="w-full">
+                    <Link href="/blog" onClick={closeMenu}>{t('nav.blog')}</Link>
+                  </Button>
+                </div>
                 <Button asChild variant="gradient" className="w-full">
                   <Link href="/store" onClick={closeMenu}>
                     {content.myProducts}
