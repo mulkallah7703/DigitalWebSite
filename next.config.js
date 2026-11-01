@@ -53,6 +53,17 @@ const nextConfig = {
     ],
   },
 
+  // Blog articles renamed in the practical-prompts rewrite keep their old links working.
+  async redirects() {
+    return [
+      { source: '/blog/master-ai-tools-by-building', destination: '/blog/learn-claude-step-by-step', permanent: true },
+      { source: '/blog/turn-free-certificates-into-proof', destination: '/blog/meta-courses-and-certificates-guide', permanent: true },
+      { source: '/blog/linkedin-profile-checklist-for-tech-students', destination: '/blog/linkedin-profile-review-with-claude', permanent: true },
+      { source: '/blog/ai-learning-path-for-developers', destination: '/blog/anthropic-academy-free-courses', permanent: true },
+      { source: '/blog/your-first-week-with-ai', destination: '/blog/two-hours-to-learn-claude', permanent: true },
+    ]
+  },
+
   // Headers for caching
   async headers() {
     return [

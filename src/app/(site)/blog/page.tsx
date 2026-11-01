@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     title: 'المدونة | Alsadi Digital Blog',
     description: 'Practical articles about AI tools, free courses and productivity.',
     url: '/blog',
-    images: [{ url: '/blog/master-ai-tools-by-building.png', width: 1200, height: 630 }],
+    images: [{ url: '/blog/learn-claude-step-by-step.png', width: 1200, height: 630 }],
   },
 }
 
