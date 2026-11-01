@@ -54,7 +54,7 @@ export function SiteNav() {
   const links = useSiteLinks()
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const brand = language === 'ar' ? 'السعدي الرقمية' : 'Alsadi Digital'
+  const brand = language === 'ar' ? 'السعدي' : 'Alsadi'
   const menuLabel = language === 'ar' ? 'القائمة' : 'Menu'
 
   useEffect(() => {

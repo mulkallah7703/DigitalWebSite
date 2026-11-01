@@ -2,14 +2,14 @@ import type { Metadata } from 'next'
 import { BlogIndex } from '@/components/blog/blog-pages'
 
 export const metadata: Metadata = {
-  title: { absolute: 'المدونة | Blog — Alsadi Digital' },
-  description: 'مدونة ملك الله السعدي على منصة السعدي الرقمية: مقالات عربية عملية عن أدوات الذكاء الاصطناعي مثل Claude وNotebookLM، والدورات المجانية، والإنتاجية.',
+  title: { absolute: 'المدونة | Blog — Alsadi' },
+  description: 'مدونة ملك الله السعدي على منصة السعدي: مقالات عربية عملية عن أدوات الذكاء الاصطناعي مثل Claude وNotebookLM، والدورات المجانية، والإنتاجية.',
   alternates: { canonical: '/blog' },
   openGraph: {
-    title: 'المدونة | Alsadi Digital Blog',
+    title: 'المدونة | Alsadi Blog',
     description: 'Practical articles about AI tools, free courses and productivity.',
     url: '/blog',
-    images: [{ url: '/blog/learn-claude-step-by-step.png', width: 1200, height: 630 }],
+    images: [{ url: '/blog/learn-claude-step-by-step.png?v=3', width: 1200, height: 630 }],
   },
 }
 

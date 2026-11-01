@@ -3,7 +3,7 @@ import type { BlogPost } from '../types'
 export const post: BlogPost = {
   slug: 'data-analytics-roadmap-for-beginners',
   date: '2026-10-30',
-  cover: '/blog/data-analytics-roadmap-for-beginners.png?v=2',
+  cover: '/blog/data-analytics-roadmap-for-beginners.png?v=3',
   coverLines: ['Data Analytics', 'Essentials + AI'],
   coverAlt: { ar: 'غلاف مقال تعلم تحليل البيانات مع دورة Cisco والذكاء الاصطناعي', en: 'Cover: data analytics with Cisco and AI' },
   tags: ['Data', 'Cisco', 'SQL'],

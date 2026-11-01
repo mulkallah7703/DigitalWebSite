@@ -1,4 +1,4 @@
-# Alsadi Digital Store
+# Alsadi Store
 
 A premium AI-powered digital e-commerce platform built with Next.js 14, featuring modern UI/UX, secure payments, and intelligent product recommendations.
 

@@ -3,7 +3,7 @@ import type { BlogPost } from '../types'
 export const post: BlogPost = {
   slug: 'anthropic-academy-free-courses',
   date: '2026-10-26',
-  cover: '/blog/anthropic-academy-free-courses.png',
+  cover: '/blog/anthropic-academy-free-courses.png?v=3',
   coverLines: ['Anthropic Academy', 'Free Courses'],
   coverAlt: { ar: 'غلاف مقال دورات Anthropic Academy المجانية', en: 'Cover: Anthropic Academy free courses' },
   tags: ['Claude', 'Courses', 'Anthropic'],

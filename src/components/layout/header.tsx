@@ -83,7 +83,7 @@ export function Header() {
             <div className="relative">
               <Image
                 src="/mylogo.jpg"
-                alt="Alsadi Digital Store Logo"
+                alt="Alsadi Store Logo"
                 width={40}
                 height={40}
                 className="rounded-xl object-contain"
