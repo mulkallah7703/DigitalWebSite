@@ -306,7 +306,7 @@ export function PortfolioEditor({ initial }: { initial: PortfolioBundle }) {
           <p className="text-sm text-muted-foreground mt-1">{ui.subtitle}</p>
         </div>
         <Button asChild variant="outline">
-          <a href="/" target="_blank" rel="noopener noreferrer">{ui.view}</a>
+          <a href="/portfolio" target="_blank" rel="noopener noreferrer">{ui.view}</a>
         </Button>
       </div>
       {status ? <p className="text-sm rounded-lg border bg-card px-3 py-2" role="status">{status}</p> : null}

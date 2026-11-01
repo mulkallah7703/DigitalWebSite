@@ -777,6 +777,7 @@ export async function savePortfolioSection(section: PortfolioSection, data: unkn
   }
   const { revalidatePath } = await import('next/cache')
   revalidatePath('/')
+  revalidatePath('/portfolio')
   revalidatePath('/admin/portfolio')
   return loadPortfolioBundle()
 }
