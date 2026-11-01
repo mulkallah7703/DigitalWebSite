@@ -12,12 +12,13 @@ export type BlogLocale = {
 
 export type BlogPost = {
   slug: string
-  /** ISO date of the original LinkedIn post the article is based on. */
+  /** ISO publish date. */
   date: string
   cover: string
+  /** Two short lines baked into the generated cover image. */
+  coverLines: [string, string]
   coverAlt: { ar: string; en: string }
   tags: string[]
-  source: { url: string; author: string; authorAr: string }
   ar: BlogLocale
   en: BlogLocale
 }

@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { CalendarDays, Clock } from 'lucide-react'
 import { useLanguage } from '@/components/providers/language-provider'
-import { readingMinutes, type BlogPost } from '@/content/blog'
+import { BLOG_AUTHOR, readingMinutes, type BlogPost } from '@/content/blog'
 
 export function formatBlogDate(date: string, language: 'ar' | 'en') {
   return new Intl.DateTimeFormat(language === 'ar' ? 'ar-EG' : 'en-US', {
@@ -47,6 +47,11 @@ export function BlogCard({ post }: { post: BlogPost }) {
           </Link>
         </h3>
         <p className="mb-4 line-clamp-3 flex-1 text-sm leading-relaxed text-muted-foreground">{locale.excerpt}</p>
+        <div className="mb-3 flex items-center gap-2">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={BLOG_AUTHOR.photo} alt="" width={28} height={28} className="h-7 w-7 rounded-full object-cover ring-2 ring-primary/30" />
+          <span className="text-xs font-medium">{BLOG_AUTHOR.name[language]}</span>
+        </div>
         <div className="flex items-center gap-4 border-t border-border/60 pt-3 text-xs text-muted-foreground">
           <span className="inline-flex items-center gap-1.5">
             <CalendarDays className="h-3.5 w-3.5" />

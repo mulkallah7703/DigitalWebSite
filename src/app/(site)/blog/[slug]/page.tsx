@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { BlogArticle } from '@/components/blog/blog-pages'
-import { BLOG_POSTS, getBlogPost } from '@/content/blog'
+import { BLOG_AUTHOR, BLOG_POSTS, getBlogPost } from '@/content/blog'
 import { siteUrl } from '@/lib/site-url'
 
 export const dynamicParams = false
@@ -18,6 +18,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
     title: { absolute: `${post.ar.title} | Alsadi Digital` },
     description: post.ar.excerpt,
     keywords: post.tags,
+    authors: [{ name: `${BLOG_AUTHOR.name.ar} (${BLOG_AUTHOR.name.en})`, url: BLOG_AUTHOR.url }],
     alternates: { canonical: url },
     openGraph: {
       type: 'article',
@@ -25,6 +26,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
       title: post.ar.title,
       description: post.ar.excerpt,
       publishedTime: post.date,
+      authors: [BLOG_AUTHOR.name.en],
       tags: post.tags,
       images: [{ url: post.cover, width: 1200, height: 630, alt: post.coverAlt.ar }],
     },
@@ -52,7 +54,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     inLanguage: ['ar', 'en'],
     mainEntityOfPage: `${base}/blog/${post.slug}`,
     publisher: { '@type': 'Organization', name: 'Alsadi Digital', url: base },
-    isBasedOn: post.source.url,
+    author: { '@type': 'Person', name: BLOG_AUTHOR.name.en, alternateName: BLOG_AUTHOR.name.ar, url: `${base}${BLOG_AUTHOR.url}`, image: `${base}${BLOG_AUTHOR.photo}` },
   }
   return (
     <>

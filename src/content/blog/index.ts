@@ -1,29 +1,40 @@
 import type { BlogLocale, BlogPost } from './types'
-import { post as learnClaude } from './posts/learn-claude-roadmap'
-import { post as claudeResearch } from './posts/claude-for-research'
-import { post as ciscoData } from './posts/cisco-data-analytics'
-import { post as humanWriting } from './posts/human-sounding-ai-writing'
-import { post as metaCourses } from './posts/meta-free-courses'
-import { post as linkedinProfile } from './posts/linkedin-profile-with-claude'
-import { post as claudeOffice } from './posts/claude-excel-word-powerpoint'
-import { post as notebookLm } from './posts/notebooklm-learning-system'
-import { post as anthropicCourses } from './posts/anthropic-free-courses'
-import { post as twoHours } from './posts/two-hours-with-claude'
+import { post as masterAiTools } from './posts/master-ai-tools'
+import { post as researchWorkflow } from './posts/ai-research-workflow'
+import { post as dataRoadmap } from './posts/data-analytics-roadmap'
+import { post as ownVoice } from './posts/write-in-your-voice'
+import { post as certificates } from './posts/certificates-to-portfolio'
+import { post as linkedin } from './posts/linkedin-checklist'
+import { post as officeWork } from './posts/ai-office-work'
+import { post as notebookLm } from './posts/notebooklm-active-study'
+import { post as developerPath } from './posts/ai-path-developers'
+import { post as firstWeek } from './posts/first-week-with-ai'
 
 export type { BlogPost, BlogLocale, BlogSection } from './types'
 
+/** Every article is written by the site founder. */
+export const BLOG_AUTHOR = {
+  name: { ar: 'ملك الله السعدي', en: 'Mulk Allah Al-Sadi' },
+  role: {
+    ar: 'طالب هندسة برمجيات ومطوّر full-stack، مهتم بتقنيات الذكاء الاصطناعي في الرعاية الصحية والتعليم',
+    en: 'Software engineering student and full-stack developer focused on AI for healthcare and education',
+  },
+  photo: '/blog/author.webp',
+  url: '/portfolio',
+}
+
 /** Newest first. */
 export const BLOG_POSTS: BlogPost[] = [
-  learnClaude,
-  claudeResearch,
-  ciscoData,
-  humanWriting,
-  metaCourses,
-  linkedinProfile,
-  claudeOffice,
+  masterAiTools,
+  researchWorkflow,
+  dataRoadmap,
+  ownVoice,
+  certificates,
+  linkedin,
+  officeWork,
   notebookLm,
-  anthropicCourses,
-  twoHours,
+  developerPath,
+  firstWeek,
 ].sort((a, b) => (a.date < b.date ? 1 : -1))
 
 export function getBlogPost(slug: string) {

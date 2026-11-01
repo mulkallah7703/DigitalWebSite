@@ -1,11 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowLeft, ArrowRight, CalendarDays, Clock, ExternalLink } from 'lucide-react'
+import { ArrowLeft, ArrowRight, CalendarDays, Clock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useLanguage } from '@/components/providers/language-provider'
 import { BlogCard, formatBlogDate, readingLabel } from '@/components/blog/blog-card'
-import { BLOG_POSTS, readingMinutes, type BlogPost } from '@/content/blog'
+import { BLOG_AUTHOR, BLOG_POSTS, readingMinutes, type BlogPost } from '@/content/blog'
 
 export function BlogIndex() {
   const { language } = useLanguage()
@@ -48,7 +48,6 @@ export function BlogArticle({ post }: { post: BlogPost }) {
   const ar = language === 'ar'
   const Back = ar ? ArrowRight : ArrowLeft
   const related = BLOG_POSTS.filter((p) => p.slug !== post.slug).slice(0, 3)
-  const author = ar ? post.source.authorAr : post.source.author
 
   return (
     <article dir={ar ? 'rtl' : 'ltr'} lang={language}>
@@ -69,6 +68,11 @@ export function BlogArticle({ post }: { post: BlogPost }) {
           <h1 className="mb-5 text-3xl font-extrabold leading-tight sm:text-4xl lg:text-[2.75rem]">{locale.title}</h1>
           <p className="mb-6 text-lg leading-relaxed text-muted-foreground">{locale.excerpt}</p>
           <div className="flex flex-wrap items-center gap-5 text-sm text-muted-foreground">
+            <Link href={BLOG_AUTHOR.url} className="inline-flex items-center gap-2 font-medium text-foreground hover:text-primary">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={BLOG_AUTHOR.photo} alt={BLOG_AUTHOR.name[language]} width={36} height={36} className="h-9 w-9 rounded-full object-cover ring-2 ring-primary/30" />
+              {BLOG_AUTHOR.name[language]}
+            </Link>
             <span className="inline-flex items-center gap-1.5">
               <CalendarDays className="h-4 w-4" />
               <time dateTime={post.date}>{formatBlogDate(post.date, language)}</time>
@@ -118,19 +122,18 @@ export function BlogArticle({ post }: { post: BlogPost }) {
           ))}
         </div>
 
-        <aside className="rounded-2xl border border-primary/20 bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-pink-500/10 p-6">
-          <h2 className="mb-2 text-lg font-bold">{ar ? 'المصدر الأصلي' : 'Original source'}</h2>
-          <p className="mb-4 text-sm leading-relaxed text-muted-foreground">
-            {ar
-              ? `هذا المقال مكتوب بأسلوب موسّع انطلاقًا من أفكار منشور على LinkedIn لـ ${author}. الأرقام والادعاءات الواردة في المنشور منسوبة إليه، وننصح بالتحقق منها من المصادر الرسمية.`
-              : `This article expands on the ideas in a LinkedIn post by ${author}. Figures and claims from the post are attributed to it; please verify them with official sources.`}
-          </p>
-          <Button asChild variant="outline" size="sm">
-            <a href={post.source.url} target="_blank" rel="noopener noreferrer nofollow">
-              {ar ? 'اقرأ المنشور الأصلي على LinkedIn' : 'Read the original LinkedIn post'}
-              <ExternalLink className="ms-2 h-4 w-4" />
-            </a>
-          </Button>
+        <aside className="flex flex-col items-center gap-5 rounded-2xl border border-primary/20 bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-pink-500/10 p-6 text-center sm:flex-row sm:text-start">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={BLOG_AUTHOR.photo} alt={BLOG_AUTHOR.name[language]} width={80} height={80} className="h-20 w-20 shrink-0 rounded-full object-cover ring-4 ring-primary/30" />
+          <div>
+            <p className="mb-1 text-xs font-medium uppercase tracking-wide text-primary">{ar ? 'كاتب المقال' : 'Written by'}</p>
+            <h2 className="mb-1 text-lg font-bold">{BLOG_AUTHOR.name[language]}</h2>
+            <p className="mb-3 text-sm leading-relaxed text-muted-foreground">{BLOG_AUTHOR.role[language]}</p>
+            <Link href={BLOG_AUTHOR.url} className="inline-flex items-center gap-1 text-sm font-semibold text-primary">
+              {ar ? 'تعرّف عليّ أكثر في البورتفوليو' : 'More about me in my portfolio'}
+              <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+            </Link>
+          </div>
         </aside>
       </div>
 
