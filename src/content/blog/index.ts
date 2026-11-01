@@ -1,16 +1,16 @@
 import type { BlogLocale, BlogPost } from './types'
-import { post as masterAiTools } from './posts/master-ai-tools'
-import { post as researchWorkflow } from './posts/ai-research-workflow'
-import { post as dataRoadmap } from './posts/data-analytics-roadmap'
-import { post as ownVoice } from './posts/write-in-your-voice'
-import { post as certificates } from './posts/certificates-to-portfolio'
-import { post as linkedin } from './posts/linkedin-checklist'
-import { post as officeWork } from './posts/ai-office-work'
-import { post as notebookLm } from './posts/notebooklm-active-study'
-import { post as developerPath } from './posts/ai-path-developers'
-import { post as firstWeek } from './posts/first-week-with-ai'
+import { post as learnClaude } from './posts/learn-claude'
+import { post as researchWorkflow } from './posts/ai-research'
+import { post as dataRoadmap } from './posts/data-analytics'
+import { post as ownVoice } from './posts/own-voice'
+import { post as metaCourses } from './posts/meta-courses'
+import { post as linkedin } from './posts/linkedin-claude'
+import { post as officeWork } from './posts/office-claude'
+import { post as notebookLm } from './posts/notebooklm'
+import { post as anthropicCourses } from './posts/anthropic-courses'
+import { post as twoHours } from './posts/two-hours-claude'
 
-export type { BlogPost, BlogLocale, BlogSection } from './types'
+export type { BlogPost, BlogLocale, BlogSection, BlogPrompt } from './types'
 
 /** Every article is written by the site founder. */
 export const BLOG_AUTHOR = {
@@ -25,16 +25,16 @@ export const BLOG_AUTHOR = {
 
 /** Newest first. */
 export const BLOG_POSTS: BlogPost[] = [
-  masterAiTools,
+  learnClaude,
   researchWorkflow,
   dataRoadmap,
   ownVoice,
-  certificates,
+  metaCourses,
   linkedin,
   officeWork,
   notebookLm,
-  developerPath,
-  firstWeek,
+  anthropicCourses,
+  twoHours,
 ].sort((a, b) => (a.date < b.date ? 1 : -1))
 
 export function getBlogPost(slug: string) {
@@ -42,7 +42,16 @@ export function getBlogPost(slug: string) {
 }
 
 function words(locale: BlogLocale) {
-  const text = [locale.title, ...locale.sections.flatMap((s) => [s.heading || '', ...s.paragraphs, ...(s.list || [])])].join(' ')
+  const text = [
+    locale.title,
+    locale.hook,
+    ...locale.sections.flatMap((s) => [
+      s.heading || '',
+      ...s.paragraphs,
+      ...(s.list || []),
+      ...(s.prompts || []).flatMap((p) => [p.title, p.when, p.expect, p.text]),
+    ]),
+  ].join(' ')
   return text.split(/\s+/).filter(Boolean).length
 }
 

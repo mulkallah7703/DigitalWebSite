@@ -1,10 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowLeft, ArrowRight, CalendarDays, Clock } from 'lucide-react'
+import { ArrowLeft, ArrowRight, CalendarDays, Clock, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useLanguage } from '@/components/providers/language-provider'
 import { BlogCard, formatBlogDate, readingLabel } from '@/components/blog/blog-card'
+import { CopyPrompt } from '@/components/blog/copy-prompt'
 import { BLOG_AUTHOR, BLOG_POSTS, readingMinutes, type BlogPost } from '@/content/blog'
 
 export function BlogIndex() {
@@ -13,11 +14,11 @@ export function BlogIndex() {
     language === 'ar'
       ? {
           title: 'المدونة',
-          lead: 'مقالات عملية ومفصّلة عن أدوات الذكاء الاصطناعي، والدورات المجانية، والإنتاجية في الدراسة والعمل.',
+          lead: 'أدلة عملية ببرومبتات جاهزة للنسخ عن أدوات الذكاء الاصطناعي، والدورات المجانية، والإنتاجية في الدراسة والعمل.',
         }
       : {
           title: 'Blog',
-          lead: 'Practical, in-depth articles about AI tools, free courses, and productivity at study and work.',
+          lead: 'Practical guides with ready-to-copy prompts on AI tools, free courses, and productivity at study and work.',
         }
   return (
     <>
@@ -48,6 +49,10 @@ export function BlogArticle({ post }: { post: BlogPost }) {
   const ar = language === 'ar'
   const Back = ar ? ArrowRight : ArrowLeft
   const related = BLOG_POSTS.filter((p) => p.slug !== post.slug).slice(0, 3)
+  const promptOffsets = locale.sections.reduce<number[]>((acc, _section, i) => {
+    acc.push(i === 0 ? 0 : acc[i - 1] + (locale.sections[i - 1].prompts?.length || 0))
+    return acc
+  }, [])
 
   return (
     <article dir={ar ? 'rtl' : 'ltr'} lang={language}>
@@ -95,6 +100,15 @@ export function BlogArticle({ post }: { post: BlogPost }) {
       </div>
 
       <div className="mx-auto max-w-3xl px-4 py-12">
+        {locale.hook && (
+          <div className="mb-10 flex gap-3 rounded-2xl border border-primary/25 bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-pink-500/10 p-5">
+            <Sparkles className="mt-1 h-5 w-5 shrink-0 text-primary" />
+            <div>
+              <p className="mb-1 text-sm font-bold text-primary">{ar ? 'ماذا ستحصل عليه' : 'What you will get'}</p>
+              <p className="leading-relaxed text-foreground/90">{locale.hook}</p>
+            </div>
+          </div>
+        )}
         <div className={ar ? 'text-[1.125rem] leading-[2.1]' : 'text-[1.0625rem] leading-8'}>
           {locale.sections.map((section, i) => (
             <section key={i} className="mb-10">
@@ -118,6 +132,9 @@ export function BlogArticle({ post }: { post: BlogPost }) {
                   ))}
                 </ul>
               )}
+              {section.prompts?.map((prompt, j) => (
+                <CopyPrompt key={j} prompt={prompt} index={promptOffsets[i] + j + 1} language={language} />
+              ))}
             </section>
           ))}
         </div>
