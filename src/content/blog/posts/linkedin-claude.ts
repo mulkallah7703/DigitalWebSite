@@ -3,8 +3,7 @@ import type { BlogPost } from '../types'
 export const post: BlogPost = {
   slug: 'linkedin-profile-review-with-claude',
   date: '2026-10-28',
-  cover: '/blog/linkedin-profile-review-with-claude.png?v=3',
-  coverLines: ['LinkedIn Profile', 'Review with Claude'],
+  cover: '/blog/linkedin-profile-review-with-claude.webp?v=4',
   coverAlt: { ar: 'غلاف مقال مراجعة ملف LinkedIn مع Claude', en: 'Cover: LinkedIn profile review with Claude' },
   tags: ['LinkedIn', 'Claude', 'Career'],
   ar: {

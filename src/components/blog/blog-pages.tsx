@@ -58,7 +58,8 @@ export function BlogArticle({ post }: { post: BlogPost }) {
     <article dir={ar ? 'rtl' : 'ltr'} lang={language}>
       <header className="relative overflow-hidden border-b border-border/50">
         <div className="pointer-events-none absolute -top-24 start-1/2 -z-10 h-80 w-80 -translate-x-1/2 rounded-full bg-purple-500/20 blur-3xl" />
-        <div className="mx-auto max-w-3xl px-4 pb-10 pt-10 sm:pt-14">
+        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 pb-10 pt-10 sm:pt-14 lg:grid-cols-[minmax(0,1fr)_380px]">
+          <div>
           <Link href="/blog" className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary">
             <Back className="h-4 w-4" />
             {ar ? 'العودة إلى المدونة' : 'Back to the blog'}
@@ -87,17 +88,17 @@ export function BlogArticle({ post }: { post: BlogPost }) {
               {readingLabel(readingMinutes(post, language), language)}
             </span>
           </div>
+          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={post.cover}
+            alt={post.coverAlt[language]}
+            width={1080}
+            height={1350}
+            className="mx-auto aspect-[4/5] w-full max-w-sm rounded-2xl border border-border/60 bg-[#0b0b14] object-contain shadow-xl shadow-purple-500/15"
+          />
         </div>
       </header>
-
-      <div className="mx-auto max-w-4xl px-4 pt-10">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={post.cover}
-          alt={post.coverAlt[language]}
-          className="aspect-[1200/630] w-full rounded-2xl border border-border/60 object-cover shadow-xl shadow-purple-500/10"
-        />
-      </div>
 
       <div className="mx-auto max-w-3xl px-4 py-12">
         {locale.hook && (

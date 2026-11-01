@@ -3,8 +3,7 @@ import type { BlogPost } from '../types'
 export const post: BlogPost = {
   slug: 'learn-claude-step-by-step',
   date: '2026-10-31',
-  cover: '/blog/learn-claude-step-by-step.png?v=3',
-  coverLines: ['Learn Claude', 'Step by Step'],
+  cover: '/blog/learn-claude-step-by-step.webp?v=4',
   coverAlt: { ar: 'غلاف مقال تعلم Claude خطوة بخطوة', en: 'Cover: learn Claude step by step' },
   tags: ['Claude', 'Prompts', 'Roadmap'],
   ar: {

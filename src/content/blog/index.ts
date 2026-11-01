@@ -37,6 +37,11 @@ export const BLOG_POSTS: BlogPost[] = [
   twoHours,
 ].sort((a, b) => (a.date < b.date ? 1 : -1))
 
+/** 1200x630 social-share variant of the cover (portrait image centred on a blurred backdrop). */
+export function blogOgImage(post: BlogPost) {
+  return `/blog/og/${post.slug}.jpg?v=4`
+}
+
 export function getBlogPost(slug: string) {
   return BLOG_POSTS.find((post) => post.slug === slug) || null
 }
