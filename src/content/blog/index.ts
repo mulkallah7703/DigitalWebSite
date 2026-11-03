@@ -9,6 +9,7 @@ import { post as officeWork } from './posts/office-claude'
 import { post as notebookLm } from './posts/notebooklm'
 import { post as anthropicCourses } from './posts/anthropic-courses'
 import { post as twoHours } from './posts/two-hours-claude'
+import { post as agentsRoadmap } from './posts/ai-agents-roadmap'
 
 export type { BlogPost, BlogLocale, BlogSection, BlogPrompt } from './types'
 
@@ -35,6 +36,7 @@ export const BLOG_POSTS: BlogPost[] = [
   notebookLm,
   anthropicCourses,
   twoHours,
+  agentsRoadmap,
 ].sort((a, b) => (a.date < b.date ? 1 : -1))
 
 /** 1200x630 social-share variant of the cover (portrait image centred on a blurred backdrop). */
