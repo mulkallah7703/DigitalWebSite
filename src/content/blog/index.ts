@@ -43,7 +43,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
 /** 1200x630 social-share variant of the cover (portrait image centred on a blurred backdrop). */
 export function blogOgImage(post: BlogPost) {
-  return `/blog/og/${post.slug}.jpg?v=4`
+  return `/blog/og/${post.slug}.jpg?v=6`
 }
 
 export function getBlogPost(slug: string) {

@@ -3,7 +3,7 @@ import type { BlogPost } from '../types'
 export const post: BlogPost = {
   slug: 'from-idea-to-pptx-xlsx-with-claude',
   date: '2026-11-09',
-  cover: '/blog/from-idea-to-pptx-xlsx-with-claude.webp?v=4',
+  cover: '/blog/from-idea-to-pptx-xlsx-with-claude.webp?v=6',
   coverAlt: {
     ar: 'غلاف مقال: من فكرة إلى عرض تقديمي وملف Excel مع Claude',
     en: 'Cover: from an idea to a PowerPoint deck and Excel file with Claude',
