@@ -3,7 +3,7 @@ import type { BlogPost } from '../types'
 export const post: BlogPost = {
   slug: 'github-repos-before-you-subscribe',
   date: '2026-11-11',
-  cover: '/blog/github-repos-before-you-subscribe.webp?v=1',
+  cover: '/blog/github-repos-before-you-subscribe.webp?v=7',
   coverAlt: {
     ar: 'غلاف مقال: ابحث في GitHub قبل أن تدفع اشتراكًا جديدًا',
     en: 'Cover: search GitHub before you pay for a new subscription',
