@@ -11,6 +11,7 @@ import { post as anthropicCourses } from './posts/anthropic-courses'
 import { post as twoHours } from './posts/two-hours-claude'
 import { post as agentsRoadmap } from './posts/ai-agents-roadmap'
 import { post as pptxXlsx } from './posts/claude-pptx-xlsx'
+import { post as githubBeforeSubscribe } from './posts/github-before-subscribe'
 
 export type { BlogPost, BlogLocale, BlogSection, BlogPrompt } from './types'
 
@@ -39,11 +40,12 @@ export const BLOG_POSTS: BlogPost[] = [
   twoHours,
   agentsRoadmap,
   pptxXlsx,
+  githubBeforeSubscribe,
 ].sort((a, b) => (a.date < b.date ? 1 : -1))
 
 /** 1200x630 social-share variant of the cover (portrait image centred on a blurred backdrop). */
 export function blogOgImage(post: BlogPost) {
-  return `/blog/og/${post.slug}.jpg?v=6`
+  return `/blog/og/${post.slug}.jpg?v=9`
 }
 
 export function getBlogPost(slug: string) {
