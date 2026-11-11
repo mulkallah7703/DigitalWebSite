@@ -3,7 +3,7 @@ import type { BlogPost } from '../types'
 export const post: BlogPost = {
   slug: 'skilling-africa-with-google-free-hub',
   date: '2026-11-12',
-  cover: '/blog/skilling-africa-with-google-free-hub.webp?v=1',
+  cover: '/blog/skilling-africa-with-google-free-hub.webp?v=2',
   coverAlt: {
     ar: 'غلاف مقال منصة Skilling Africa with Google المجانية مع مساعد SCOUT',
     en: 'Cover: the free Skilling Africa with Google hub and the SCOUT companion',
