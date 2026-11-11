@@ -14,14 +14,14 @@ export function Footer() {
       { label: t('nav.categories'), href: '/categories' },
       { label: t('footer.newArrivals'), href: '/products?sort=newest' },
       { label: t('footer.bestSellers'), href: '/products?sort=popular' },
-      { label: t('nav.deals'), href: '/deals' },
+      { label: t('nav.deals'), href: '/store' },
     ],
     company: [
       { label: t('nav.home'), href: '/' },
       { label: t('nav.about'), href: '/about' },
       { label: t('nav.portfolio'), href: '/portfolio' },
       { label: t('footer.contact'), href: '/contact' },
-      { label: t('footer.careers'), href: '/careers' },
+      { label: t('footer.careers'), href: '/about' },
       { label: t('footer.blog'), href: '/blog' },
     ],
     support: [

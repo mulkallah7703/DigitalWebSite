@@ -12,7 +12,7 @@ export function generateStaticParams() {
 
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const post = getBlogPost(params.slug)
-  if (!post) return {}
+  if (!post) notFound()
   const url = `/blog/${post.slug}`
   return {
     title: { absolute: `${post.ar.title} | Alsadi` },

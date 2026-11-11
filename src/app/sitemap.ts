@@ -6,7 +6,7 @@ import { BLOG_POSTS } from '@/content/blog'
 // Rebuilt at most once an hour so new products show up without a redeploy.
 export const revalidate = 3600
 
-const STATIC_PATHS = ['/', '/portfolio', '/store', '/blog', '/about', '/contact', '/products', '/categories', '/terms', '/privacy']
+const STATIC_PATHS = ['/', '/portfolio', '/store', '/blog', '/about', '/contact', '/products', '/categories', '/terms', '/privacy', '/refund-policy', '/cookies', '/license', '/faqs', '/help']
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = siteUrl()

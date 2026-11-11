@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   const product = await safeDb('product-metadata', () => getProductBySlug(params.slug), null)
 
   if (!product) {
-    return { title: 'Product Not Found' }
+    notFound()
   }
 
   return {
