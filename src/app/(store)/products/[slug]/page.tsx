@@ -1,14 +1,14 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
-import dynamic from 'next/dynamic'
+import nextDynamic from 'next/dynamic'
 import { db, safeDb } from '@/lib/db'
 import { getProductBySlug, getRelatedProducts, incrementViewCount } from '@/lib/cache'
 import { ProductDetails } from '@/components/products/product-details'
 import { Skeleton } from '@/components/ui/skeleton'
 
 // Lazy load related products
-const RelatedProducts = dynamic(
+const RelatedProducts = nextDynamic(
   () => import('@/components/products/related-products').then(mod => ({ default: mod.RelatedProducts })),
   {
     loading: () => (
@@ -29,6 +29,8 @@ interface ProductPageProps {
 }
 
 // Generate static params for popular products
+export const dynamic = 'force-dynamic'
+
 export async function generateStaticParams() {
   const products = await safeDb('product-params', () => db.product.findMany({
     where: { status: 'PUBLISHED' },

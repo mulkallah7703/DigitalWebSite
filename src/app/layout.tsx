@@ -1,3 +1,6 @@
+// Do not add a root loading.tsx. It wraps every route in a Suspense
+// boundary, so notFound() streams the fallback with HTTP 200 (soft 404s).
+
 import type { Metadata } from 'next'
 import { cookies } from 'next/headers'
 import { Inter } from 'next/font/google'

@@ -4,8 +4,6 @@ import { BlogArticle } from '@/components/blog/blog-pages'
 import { BLOG_AUTHOR, BLOG_POSTS, blogOgImage, getBlogPost } from '@/content/blog'
 import { siteUrl } from '@/lib/site-url'
 
-export const dynamicParams = false
-
 export function generateStaticParams() {
   return BLOG_POSTS.map((post) => ({ slug: post.slug }))
 }

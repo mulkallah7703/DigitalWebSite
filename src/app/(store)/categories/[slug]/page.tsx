@@ -17,6 +17,8 @@ interface CategoryPageProps {
 }
 
 // Generate static params for visible categories
+export const dynamic = 'force-dynamic'
+
 export async function generateStaticParams() {
   const categories = await safeDb('category-params', () => db.category.findMany({
     where: { 
