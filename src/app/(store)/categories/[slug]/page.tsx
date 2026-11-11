@@ -48,9 +48,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   }), null)
 
   if (!category) {
-    return {
-      title: 'Category Not Found',
-    }
+    notFound()
   }
 
   return {

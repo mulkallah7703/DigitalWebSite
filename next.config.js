@@ -53,14 +53,59 @@ const nextConfig = {
     ],
   },
 
-  // Blog articles renamed in the practical-prompts rewrite keep their old links working.
+  // Permanent redirects for renamed or removed public URLs. Trailing slashes are
+  // already normalized to the slashless form before these rules run.
   async redirects() {
     return [
+      // Blog slugs renamed in the practical-prompts rewrite
       { source: '/blog/master-ai-tools-by-building', destination: '/blog/learn-claude-step-by-step', permanent: true },
       { source: '/blog/turn-free-certificates-into-proof', destination: '/blog/meta-courses-and-certificates-guide', permanent: true },
       { source: '/blog/linkedin-profile-checklist-for-tech-students', destination: '/blog/linkedin-profile-review-with-claude', permanent: true },
       { source: '/blog/ai-learning-path-for-developers', destination: '/blog/anthropic-academy-free-courses', permanent: true },
       { source: '/blog/your-first-week-with-ai', destination: '/blog/two-hours-to-learn-claude', permanent: true },
+      // First blog slugs, before the original-content rewrite
+      { source: '/blog/anthropic-free-ai-courses', destination: '/blog/anthropic-academy-free-courses', permanent: true },
+      { source: '/blog/cisco-data-analytics-essentials', destination: '/blog/data-analytics-roadmap-for-beginners', permanent: true },
+      { source: '/blog/claude-for-academic-research', destination: '/blog/ai-research-assistant-workflow', permanent: true },
+      { source: '/blog/claude-for-excel-word-powerpoint', destination: '/blog/ai-for-everyday-office-work', permanent: true },
+      { source: '/blog/learn-claude-the-right-way', destination: '/blog/learn-claude-step-by-step', permanent: true },
+      { source: '/blog/make-ai-writing-sound-human', destination: '/blog/write-in-your-own-voice-with-ai', permanent: true },
+      { source: '/blog/meta-free-courses-with-certificates', destination: '/blog/meta-courses-and-certificates-guide', permanent: true },
+      { source: '/blog/notebooklm-personal-learning-system', destination: '/blog/active-study-with-notebooklm', permanent: true },
+      { source: '/blog/two-hours-learning-claude', destination: '/blog/two-hours-to-learn-claude', permanent: true },
+      // Static HTML paths from the previous site
+      { source: '/index.html', destination: '/', permanent: true },
+      { source: '/blog/index.html', destination: '/blog', permanent: true },
+      { source: '/about/index.html', destination: '/about', permanent: true },
+      { source: '/about.html', destination: '/about', permanent: true },
+      { source: '/contact.html', destination: '/contact', permanent: true },
+      { source: '/privacy.html', destination: '/privacy', permanent: true },
+      { source: '/privacy-policy.html', destination: '/privacy', permanent: true },
+      { source: '/privacy-policy', destination: '/privacy', permanent: true },
+      { source: '/terms.html', destination: '/terms', permanent: true },
+      { source: '/refund-policy.html', destination: '/refund-policy', permanent: true },
+      { source: '/products/index.html', destination: '/products', permanent: true },
+      { source: '/blog/ai-profit.html', destination: '/blog', permanent: true },
+      { source: '/blog/digital-brand.html', destination: '/blog', permanent: true },
+      { source: '/blog/ecommerce-client-tips.html', destination: '/blog', permanent: true },
+      { source: '/blog/marketing-gulf.html', destination: '/blog', permanent: true },
+      { source: '/blog/productivity-tools-designers.html', destination: '/blog', permanent: true },
+      { source: '/blog/sample-article.html', destination: '/blog', permanent: true },
+      { source: '/blog/template.html', destination: '/blog', permanent: true },
+      // Footer and common aliases
+      { source: '/deals', destination: '/store', permanent: true },
+      { source: '/careers', destination: '/about', permanent: true },
+      { source: '/home', destination: '/', permanent: true },
+      { source: '/services', destination: '/about', permanent: true },
+      { source: '/login', destination: '/auth/login', permanent: true },
+      { source: '/register', destination: '/auth/register', permanent: true },
+      { source: '/signup', destination: '/auth/register', permanent: true },
+      { source: '/faq', destination: '/faqs', permanent: true },
+      { source: '/cookie-policy', destination: '/cookies', permanent: true },
+      { source: '/refunds', destination: '/refund-policy', permanent: true },
+      { source: '/refund', destination: '/refund-policy', permanent: true },
+      // Retired product slug (no current equivalent)
+      { source: '/products/the-complete-guide-to-working-on-jamroad-platform', destination: '/store', permanent: true },
     ]
   },
 
