@@ -13,6 +13,7 @@ import { post as agentsRoadmap } from './posts/ai-agents-roadmap'
 import { post as pptxXlsx } from './posts/claude-pptx-xlsx'
 import { post as githubBeforeSubscribe } from './posts/github-before-subscribe'
 import { post as skillingAfrica } from './posts/skilling-africa'
+import { post as harvardFreeAi } from './posts/harvard-free-ai-lectures'
 
 export type { BlogPost, BlogLocale, BlogSection, BlogPrompt } from './types'
 
@@ -43,6 +44,7 @@ export const BLOG_POSTS: BlogPost[] = [
   pptxXlsx,
   githubBeforeSubscribe,
   skillingAfrica,
+  harvardFreeAi,
 ].sort((a, b) => (a.date < b.date ? 1 : -1))
 
 /** 1200x630 social-share variant of the cover (portrait image centred on a blurred backdrop). */
