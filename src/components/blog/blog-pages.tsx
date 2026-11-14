@@ -106,7 +106,7 @@ export function BlogArticle({ post }: { post: BlogPost }) {
             <Sparkles className="mt-1 h-5 w-5 shrink-0 text-primary" />
             <div>
               <p className="mb-1 text-sm font-bold text-primary">{ar ? 'ماذا ستحصل عليه' : 'What you will get'}</p>
-              <p className="leading-relaxed text-foreground/90">{locale.hook}</p>
+              <p className="break-words leading-relaxed text-foreground/90">{locale.hook}</p>
             </div>
           </div>
         )}
@@ -119,7 +119,7 @@ export function BlogArticle({ post }: { post: BlogPost }) {
                 </h2>
               )}
               {section.paragraphs.map((p, j) => (
-                <p key={j} className="mb-5 text-foreground/85">
+                <p key={j} className="mb-5 break-words text-foreground/85">
                   {p}
                 </p>
               ))}
@@ -128,7 +128,7 @@ export function BlogArticle({ post }: { post: BlogPost }) {
                   {section.list.map((item, j) => (
                     <li key={j} className="flex gap-3 text-foreground/85">
                       <span className="mt-[0.85em] h-2 w-2 shrink-0 rounded-full bg-gradient-to-br from-indigo-500 to-pink-500" />
-                      <span>{item}</span>
+                      <span className="min-w-0 break-words">{item}</span>
                     </li>
                   ))}
                 </ul>
